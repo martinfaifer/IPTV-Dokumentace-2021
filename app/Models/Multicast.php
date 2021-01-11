@@ -16,6 +16,7 @@ class Multicast extends Model
         'zdrojId',
         'isBackup',
         'multiplexerId',
-        'deviceId'
+        'deviceId',
+        'deviceInterface'
     ];
 }

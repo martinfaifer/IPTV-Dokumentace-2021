@@ -16,7 +16,6 @@ class CreateH265STable extends Migration
         Schema::create('h265_s', function (Blueprint $table) {
             $table->id();
             $table->foreignId('channelId')->index();
-            $table->string('ip')->index();
             $table->string('deviceId')->index();
             $table->string('status')->nullable();
             $table->timestamps();

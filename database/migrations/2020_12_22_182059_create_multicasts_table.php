@@ -19,9 +19,10 @@ class CreateMulticastsTable extends Migration
             $table->string('stb_ip')->index();
             $table->string('multicast_ip')->index();
             $table->foreignId('zdrojId')->index();
-            $table->string('isBackup')->index();
+            $table->string('isBackup')->nullable();
             $table->string('multiplexerId')->nullable();
             $table->string('deviceId')->nullable();
+            $table->string('deviceInterface')->nullable();
             $table->timestamps();
         });
     }

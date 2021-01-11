@@ -16,6 +16,8 @@ class Device extends Model
         'ip',
         'login_user',
         'login_password',
-        'status'
+        'status',
+        'sablona',
+        'haveInterface'
     ];
 }

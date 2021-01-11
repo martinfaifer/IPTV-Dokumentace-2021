@@ -22,6 +22,8 @@ class CreateDevicesTable extends Migration
             $table->string('login_user')->nullable();
             $table->string('login_password')->nullable();
             $table->string('status')->nullable();
+            $table->longText('sablona')->nullable();
+            $table->longText('haveInterface')->nullable();
             $table->timestamps();
         });
     }

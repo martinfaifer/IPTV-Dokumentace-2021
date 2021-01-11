@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{-- csrf kontrola formu --}}
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        {{-- <link rel="shortcut icon" href="img/icon/favicon.ico" type="image/x-icon"> --}}
         <title>{{ config('app.name') }}</title>
         <script>
             window.Laravel = {!! json_encode([
@@ -21,7 +20,7 @@
         {{-- css --}}
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        {{-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> --}}
         <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">
         <style> *{ text-transform: none !important; } </style>
         <style>

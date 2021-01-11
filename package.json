@@ -33,7 +33,7 @@
         "vue-chartkick": "^0.6.1",
         "vue-router": "^3.4.9",
         "vue-trend-chart": "^0.15.3",
-        "vuetify": "^2.3.21",
+        "vuetify": "^2.4.0",
         "vuex": "^3.6.0"
     }
 }
