@@ -70,7 +70,7 @@
             </v-card-text>
         </v-card>
 
-         <v-menu
+        <v-menu
             dense
             v-model="showMenu"
             :position-x="x"
@@ -80,7 +80,7 @@
         >
             <!-- menu -->
             <v-list dense>
-                <v-list-item @click="">
+                <v-list-item @click="openEditDialog()">
                     <v-list-item-icon>
                         <v-icon x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
@@ -90,13 +90,53 @@
                 </v-list-item>
             </v-list>
         </v-menu>
+
+        <v-row justify="center">
+            <v-dialog v-model="editDataDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Změnit transcoder</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-combobox
+                                        v-model="transcoder.name"
+                                        label="Výber transcodéru"
+                                        :items="transcoders"
+                                        required
+                                        clearable
+                                    ></v-combobox>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn color="green darken-1" text @click="savedata()">
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-row>
     </v-main>
 </template>
 <script>
 export default {
     data() {
         return {
-            transcoder: null,
+            editDataDialog: false,
+            transcoder: [],
+            transcoders: [],
             showMenu: false,
             x: 0,
             y: 0
@@ -106,6 +146,27 @@ export default {
         this.loadTranscoder();
     },
     methods: {
+        closeDialog() {
+            this.editDataDialog = false;
+        },
+        savedata() {
+            axios
+                .post("h264/transcoder/update", {
+                    channelId: this.$route.params.id,
+                    transcoder: this.transcoder.name
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.editDataDialog = false;
+                    this.loadTranscoder();
+                });
+        },
+        openEditDialog() {
+            axios.get("device/transcoders").then(response => {
+                this.transcoders = response.data;
+                this.editDataDialog = true;
+            });
+        },
         show(e) {
             e.preventDefault();
             this.showMenu = false;

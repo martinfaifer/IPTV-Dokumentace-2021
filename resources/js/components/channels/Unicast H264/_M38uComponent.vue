@@ -69,7 +69,7 @@
         >
             <!-- menu -->
             <v-list dense>
-                <v-list-item @click="">
+                <v-list-item @click="editDataDialog = true">
                     <v-list-item-icon>
                         <v-icon x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
@@ -79,13 +79,63 @@
                 </v-list-item>
             </v-list>
         </v-menu>
+
+        <v-row justify="center">
+            <v-dialog v-model="editDataDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Upravení m3u8</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="m3u8s.kdekoliv"
+                                        label="m3u8 pro HLS kdekoliv"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="m3u8s.local"
+                                        label="m3u8 pro HLS local"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="m3u8s.mobile"
+                                        label="m3u8 pro HLS mobile"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn color="green darken-1" text @click="savedata()">
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-row>
     </v-main>
 </template>
 <script>
 export default {
     data() {
         return {
-            m3u8s: null,
+            editDataDialog: false,
+            m3u8s: [],
             showMenu: false,
             x: 0,
             y: 0
@@ -95,6 +145,24 @@ export default {
         this.loadOutputKvality();
     },
     methods: {
+        closeDialog() {
+            this.editDataDialog = false;
+        },
+        savedata() {
+            axios
+                .post("h264/channel/m3u8/update", {
+                    channelId: this.$route.params.id,
+                    kdekoliv: this.m3u8s.kdekoliv,
+                    local: this.m3u8s.local,
+                    mobile: this.m3u8s.mobile,
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+
+                    this.loadOutputKvality();
+                    this.editDataDialog = false;
+                });
+        },
         show(e) {
             e.preventDefault();
             this.showMenu = false;

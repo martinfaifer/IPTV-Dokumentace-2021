@@ -85,10 +85,18 @@ Route::post('unicast/chunkStoreId', [UnicastChunkStoreIdController::class, 'retu
 Route::post('unicast/chunkStoreId/edit', [UnicastChunkStoreIdController::class, 'edit']);
 // output pro kvality v h264
 Route::post('h264/channel/kvality', [UnicastKvalitaChannelOutputController::class, 'return_output_by_channel']);
+// kvality pro editaci
+Route::post('h264/channel/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h264_output_for_edit']);
+// kvality update
+Route::post('h264/channel/kvality/update', [UnicastKvalitaChannelOutputController::class, 'h264_update']);
 // output pro získání m38u v h264
 Route::post('h264/channel/m3u8', [M3u8Controller::class, 'return_m38u_by_id']);
+// update m3u8
+Route::post('h264/channel/m3u8/update', [M3u8Controller::class, 'update_m3u8_h264']);
 // transcoder
 Route::post('h264/transcoder', [H264Controller::class, 'return_transcoder_information']);
+// update transcoderu
+Route::post('h264/transcoder/update', [H264Controller::class, 'update_transcoder']);
 Route::post('h265/transcoder', [H265Controller::class, 'return_transcoder_information']);
 
 // výpis kategrií

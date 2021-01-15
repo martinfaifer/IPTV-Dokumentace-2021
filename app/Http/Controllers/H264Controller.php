@@ -184,4 +184,33 @@ class H264Controller extends Controller
             ];
         }
     }
+
+
+    public function update_transcoder(Request $request): array
+    {
+        try {
+            H264::where('channelId', $request->channelId)->update(
+                [
+                    'deviceId' => Device::where('name', $request->transcoder)->first()->id
+                ]
+            );
+
+
+            return [
+                'status' => "success",
+                'alert' => array(
+                    'status' => "success",
+                    'msg' => "Změněno"
+                )
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Nepodařilo se změnit"
+                )
+            ];
+        }
+    }
 }
