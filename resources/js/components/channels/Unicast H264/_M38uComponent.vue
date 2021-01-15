@@ -1,6 +1,11 @@
 <template>
     <v-main>
-        <v-card flat color="#F5F5F7" v-if="m3u8s != null">
+        <v-card
+            flat
+            color="#F5F5F7"
+            v-if="m3u8s != null"
+            @contextmenu="show($event)"
+        >
             <v-card-subtitle>
                 <strong>
                     Výstup v m3u8
@@ -53,19 +58,53 @@
                 </v-container>
             </v-card-text>
         </v-card>
+
+        <v-menu
+            dense
+            v-model="showMenu"
+            :position-x="x"
+            :position-y="y"
+            absolute
+            offset-y
+        >
+            <!-- menu -->
+            <v-list dense>
+                <v-list-item @click="">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-pencil</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Upravit výstupní m3u8
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
     </v-main>
 </template>
 <script>
 export default {
     data() {
         return {
-            m3u8s: null
+            m3u8s: null,
+            showMenu: false,
+            x: 0,
+            y: 0
         };
     },
     created() {
         this.loadOutputKvality();
     },
     methods: {
+        show(e) {
+            e.preventDefault();
+            this.showMenu = false;
+            this.x = e.clientX;
+            this.y = e.clientY;
+            this.$nextTick(() => {
+                this.showMenu = true;
+            });
+        },
+
         loadOutputKvality() {
             axios
                 .post("h264/channel/m3u8", {

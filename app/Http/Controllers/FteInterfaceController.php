@@ -116,4 +116,23 @@ class FteInterfaceController extends Controller
             ];
         }
     }
+
+
+    public static function check_device_if_exist_and_create_or_delete(string $deviceId, string $action): void
+    {
+        if ($action === "create") {
+            if (!FteInterface::where('deviceId', $deviceId)->first()) {
+                FteInterface::create([
+                    'deviceId' => $deviceId
+                ]);
+            }
+        }
+
+
+        if ($action === "delete") {
+            if (FteInterface::where('deviceId', $deviceId)->first()) {
+                FteInterface::where('deviceId', $deviceId)->first()->delete();
+            }
+        }
+    }
 }

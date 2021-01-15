@@ -22,4 +22,40 @@ class UnicastChunkStoreIdController extends Controller
 
         return UnicastChunkStoreId::where('channelId', $request->channelId)->first()->chunkStoreId;
     }
+
+
+    public function edit(Request $request): array
+    {
+        if (!UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Neexistuje kanál s vazbou na chunk store ID "
+                )
+            ];
+        }
+
+        UnicastChunkStoreId::where('channelId', $request->channelId)->update(
+            [
+                'chunkStoreId' => $request->chunkStoreId
+            ]
+        );
+
+        return [
+            'status' => "success",
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Kanál byl upraven"
+            )
+        ];
+    }
+
+
+    public static function delete($channelId): void
+    {
+        if ($data = UnicastChunkStoreId::where('channelId', $channelId)->first()) {
+            $data->delete();
+        }
+    }
 }

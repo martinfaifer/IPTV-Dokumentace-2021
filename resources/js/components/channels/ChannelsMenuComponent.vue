@@ -21,24 +21,56 @@
             offset-y
         >
             <v-list dense>
-                <v-list-item @click="openDialogEditCurrentChannel">
+                <v-list-item @click="editChannelNameDialog()">
                     <v-list-item-icon>
                         <v-icon x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
-                        Upravit
+                        Změnit název kanálu
                     </v-list-item-title>
                 </v-list-item>
-                <v-list-item @click="">
+                <v-list-item @click="addMultiplexer()">
                     <v-list-item-icon>
-                        <v-icon x-small>mdi-plus</v-icon>
+                        <v-icon x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
-                        Přidat nový kanál
+                        Přidat Multiplexer
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="addPrijem()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-pencil</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat příjem
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="addBackupPrijem()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-pencil</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat záložní příjem
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="addEvent()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-calendar</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat událost
                     </v-list-item-title>
                 </v-list-item>
                 <v-divider></v-divider>
-                <v-list-item @click="">
+                <v-list-item @click="createNewChannelDialog()">
+                    <v-list-item-icon>
+                        <v-icon color="green" x-small>mdi-plus</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Založit nový kanál
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="removeChannel()">
                     <v-list-item-icon>
                         <v-icon color="red" x-small>mdi-delete</v-icon>
                     </v-list-item-icon>
@@ -50,254 +82,434 @@
         </v-menu>
         <!-- konec menu -->
 
-        <!-- edit dialog -->
+        <!-- create dialogy -->
+        <v-row justify="center">
+            <v-dialog
+                v-model="createMultiplexerDialog"
+                persistent
+                max-width="1000px"
+            >
+                <v-card>
+                    <v-card-title>
+                        <span class="headline"
+                            >Přidání multiplexoru ke kanálu</span
+                        >
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-combobox
+                                        dense
+                                        v-model="multiplexer"
+                                        label="Multiplexor"
+                                        :items="editMultiplexors"
+                                        item-text="name"
+                                        item-value="id"
+                                        required
+                                        clearable
+                                    ></v-combobox>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="saveMultiplexerdata()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
 
-        <template>
-            <v-row justify="center">
-                <v-dialog v-model="editDialog" persistent max-width="1000px">
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline"
-                                >Editace {{ editChannel.name }}</span
-                            >
-                        </v-card-title>
-                        <v-card-text>
-                            <v-container>
-                                <!-- menu na priklik mezi multicastem, H264 a H265 -->
-                                <v-tabs centered v-model="channelTabForEdit">
-                                    <v-tabs-slider></v-tabs-slider>
-                                    <v-tab href="#tab-1">Multicast</v-tab>
-                                    <v-tab href="#tab-2">H264</v-tab>
-                                    <v-tab href="#tab-3">H265</v-tab>
-                                    <!-- konec menu -->
+            <v-dialog
+                v-model="createPrijemDialog"
+                persistent
+                max-width="1000px"
+            >
+                <v-card>
+                    <v-card-title>
+                        <span class="headline"
+                            >Přidání přijímače ke kanálu</span
+                        >
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-combobox
+                                        dense
+                                        v-model="prijem"
+                                        @change="
+                                            GetMoreInformationAboutThisDevice(
+                                                prijem
+                                            )
+                                        "
+                                        label="Zařízení na kterých je možné přijímat kanály"
+                                        :items="prijems"
+                                        required
+                                        clearable
+                                    ></v-combobox>
+                                </v-col>
+                                <v-col
+                                    cols="12"
+                                    v-if="deviceInformation != null"
+                                >
+                                    <v-combobox
+                                        v-if="
+                                            deviceInformation.outputInterfaces !=
+                                                null
+                                        "
+                                        v-model="prijemInterfaces"
+                                        :items="
+                                            deviceInformation.outputInterfaces
+                                        "
+                                        item-text="interface"
+                                        item-value="id"
+                                        label="Vyberte interface / interfacy, kde se kanál nalézá"
+                                        hint="Vyberte interface / interfacy, kde se kanál nalézá"
+                                        clearable
+                                        multiple
+                                    ></v-combobox>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="savePrijemData()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
 
-                                    <v-tab-item
-                                        v-model="channelTabForEdit"
-                                        class="mt-2"
-                                    >
-                                        <v-row>
-                                            <v-col cols="12">
-                                                <v-text-field
-                                                    label="Název kanálu*"
-                                                    v-model="editChannel.name"
-                                                    required
-                                                ></v-text-field>
-                                            </v-col>
-                                            <!-- zdroj -->
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-combobox
-                                                    v-model="
-                                                        editChannel.multicastZdroj
-                                                    "
-                                                    :items="
-                                                        editMulticastSources
-                                                    "
-                                                    item-text="zdroj"
-                                                    item-value="id"
-                                                    label="Zdroj multicastu*"
-                                                    hint="Vyhledejte zdroj příjmu"
-                                                    clearable
-                                                    required
-                                                ></v-combobox>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    label="Zdrojová multicastová adresa*"
-                                                    v-model="
-                                                        editChannel.multicast_ip
-                                                    "
-                                                    required
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    label="Multicastová adresa k STB*"
-                                                    v-model="editChannel.stb_ip"
-                                                    required
-                                                ></v-text-field>
-                                            </v-col>
-                                            <!-- konec zdroje -->
-                                            <!-- defince zalozniho zdroje -->
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-combobox
-                                                    v-model="
-                                                        editChannel.backup_multicastZdroj
-                                                    "
-                                                    :items="
-                                                        editMulticastSources
-                                                    "
-                                                    item-text="zdroj"
-                                                    item-value="id"
-                                                    label="Zdroj záložního multicastu"
-                                                    hint="Vyhledejte založní zdroj příjmu"
-                                                    clearable
-                                                    required
-                                                ></v-combobox>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    label="Zdrojová záložní multicastová adresa"
-                                                    v-model="
-                                                        editChannel.backup_multicast_ip
-                                                    "
-                                                ></v-text-field>
-                                            </v-col>
-                                            <!-- konec zalozniho zdroje -->
-                                            <!-- multiplexor -->
-                                            <v-col cols="12">
-                                                <v-combobox
-                                                    v-model="
-                                                        editChannel.multiplexor
-                                                    "
-                                                    :items="editMultiplexors"
-                                                    item-text="name"
-                                                    item-value="id"
-                                                    label="Multiplexor"
-                                                    hint="Vyhledejte multiplexor"
-                                                    clearable
-                                                    required
-                                                ></v-combobox>
-                                            </v-col>
-                                            <!-- konec multiplexoru -->
-                                            <!-- prijem -->
-                                            <v-col cols="12" sm="6">
-                                                <v-combobox
-                                                    @change="
-                                                        GetMoreInformationAboutThisDevice(
-                                                            editChannel.prijem
-                                                        )
-                                                    "
-                                                    v-model="editChannel.prijem"
-                                                    :items="editPrijem"
-                                                    item-text="name"
-                                                    item-value="id"
-                                                    label="Příjem*"
-                                                    hint="Vyberte přijímač"
-                                                    clearable
-                                                ></v-combobox>
-                                            </v-col>
-                                            <v-col
-                                                cols="12"
-                                                sm="6"
-                                                v-if="
-                                                    deviceInformation != null &&
-                                                        deviceInformation.outputInterfaces !=
-                                                            null
-                                                "
-                                            >
-                                                <v-combobox
-                                                    v-model="
-                                                        editChannel.deviceInterfaceBelongsToChannel
-                                                    "
-                                                    :items="
-                                                        deviceInformation.outputInterfaces
-                                                    "
-                                                    item-text="interface"
-                                                    item-value="id"
-                                                    label="Vyberte interface / interfacy, kde se kanál nalézá"
-                                                    hint="Vyberte interface / interfacy, kde se kanál nalézá"
-                                                    clearable
-                                                    multiple
-                                                ></v-combobox>
-                                            </v-col>
+            <v-dialog
+                v-model="createBackupPrijemDialog"
+                persistent
+                max-width="1000px"
+            >
+                <v-card>
+                    <v-card-title>
+                        <span class="headline"
+                            >Přidání záložního přijímače ke kanálu</span
+                        >
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-combobox
+                                        dense
+                                        v-model="backup"
+                                        @change="
+                                            GetMoreInformationAboutThisDevice(
+                                                backup
+                                            )
+                                        "
+                                        label="Zařízení na kterých je možné přijímat kanály"
+                                        :items="prijems"
+                                        required
+                                        clearable
+                                    ></v-combobox>
+                                </v-col>
+                                <v-col
+                                    cols="12"
+                                    v-if="deviceInformation != null"
+                                >
+                                    <v-combobox
+                                        v-if="
+                                            deviceInformation.outputInterfaces !=
+                                                null
+                                        "
+                                        v-model="prijemInterfaces"
+                                        :items="
+                                            deviceInformation.outputInterfaces
+                                        "
+                                        item-text="interface"
+                                        item-value="id"
+                                        label="Vyberte interface / interfacy, kde se kanál nalézá"
+                                        hint="Vyberte interface / interfacy, kde se kanál nalézá"
+                                        clearable
+                                        multiple
+                                    ></v-combobox>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="saveBackupPrijemData()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
 
-                                            <!-- knec prijmu -->
-                                            <!-- backup -->
-                                            <v-col cols="12" sm="6">
-                                                <v-combobox
-                                                    v-model="
-                                                        editChannel.backup_prijem
-                                                    "
-                                                    :items="editPrijem"
-                                                    item-text="name"
-                                                    item-value="id"
-                                                    label="Záložní příjem"
-                                                    hint="Vyberte záložní přijímač"
-                                                    clearable
-                                                ></v-combobox>
-                                            </v-col>
+            <v-dialog v-model="createEventDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Přidání nové události</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="6">
+                                    <v-text-field
+                                        label="Den začátku události"
+                                        type="date"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="6">
+                                    <v-text-field
+                                        label="Čas začátku události"
+                                        type="time"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="6">
+                                    <v-text-field
+                                        label="Den konce události"
+                                        type="date"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="6">
+                                    <v-text-field
+                                        label="Čas konce události"
+                                        type="time"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
 
-                                            <v-col
-                                                cols="12"
-                                                sm="6"
-                                                v-if="
-                                                    backupdeviceInformation !=
-                                                        null &&
-                                                        backupdeviceInformation.outputInterfaces !=
-                                                            null
-                                                "
-                                            >
-                                                <v-combobox
-                                                    v-model="
-                                                        editChannel.backupdeviceInterface
-                                                    "
-                                                    :items="
-                                                        backupdeviceInformation.outputInterfaces
-                                                    "
-                                                    item-text="interface"
-                                                    item-value="id"
-                                                    label="Vyberte interface / interfacy, kde se kanál nalézá"
-                                                    hint="Vyberte interface / interfacy, kde se kanál nalézá"
-                                                    clearable
-                                                    multiple
-                                                ></v-combobox>
-                                            </v-col>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Popis události"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
 
-                                            <!-- konec backupu -->
-                                            <v-col cols="12">
-                                                <v-combobox
-                                                    v-model="iptv_package"
-                                                    :items="packages"
-                                                    item-text="main_package"
-                                                    item-value="id"
-                                                    label="Vyberte IPTV balíček"
-                                                    hint="Přiřazení kanálu k balíčku"
-                                                    required
-                                                    multiple
-                                                    clearable
-                                                ></v-combobox>
-                                            </v-col>
-                                            <v-col cols="12">
-                                                <v-checkbox
-                                                    label="Založit do dohledu"
-                                                    color="info"
-                                                    hide-details
-                                                ></v-checkbox>
-                                            </v-col>
-                                        </v-row>
-                                    </v-tab-item>
-                                </v-tabs>
-                            </v-container>
-                            <small>pole s * jsou nutná k vyplnění</small>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                color="blue darken-1"
-                                text
-                                @click="editDialog = false"
-                            >
-                                Zavřít
-                            </v-btn>
-                            <v-btn
-                                color="green darken-1"
-                                text
-                                @click="editDialog = false"
-                            >
-                                Uložit
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-row>
-        </template>
-        <!-- konec edit dialogu -->
+                                <v-col cols="12">
+                                    <v-switch
+                                        v-model="vypadek"
+                                        label="Kanál bude mít výpadek"
+                                    ></v-switch>
+                                </v-col>
+
+                                <v-col cols="12" v-if="vypadek === true">
+                                    <v-checkbox
+                                        v-model="checkbox_create_to_dohled"
+                                        label="
+                                            Propsání události do dohledu
+                                        "
+                                    ></v-checkbox>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn color="green darken-1" text @click="saveEvent()">
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="editChannelName" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Změna názvu kanálu</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Název kanálu"
+                                        v-model="channelName"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="saveChannelName()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- CREATE NEW CHANNEL  DIALOG-->
+
+            <v-dialog v-model="createNewChannel" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Vytvoření nového kanálu</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Název kanálu"
+                                        v-model="channelName"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4">
+                                    <v-combobox
+                                        dense
+                                        v-model="multicastZdroj"
+                                        label="Zdroj multicastu"
+                                        item-text="zdroj"
+                                        item-value="id"
+                                        :items="sources"
+                                        required
+                                        clearable
+                                    ></v-combobox>
+                                </v-col>
+
+                                <v-col cols="12" sm="6" md="4">
+                                    <v-text-field
+                                        dense
+                                        v-model="multicast_ip"
+                                        label="Multicastová IP"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" sm="6" md="4">
+                                    <v-text-field
+                                        dense
+                                        v-model="stb_ip"
+                                        label="IP k STB"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" sm="6" md="4">
+                                    <v-combobox
+                                        dense
+                                        v-model="backup_multicastZdroj"
+                                        label="Záložní zdroj multicastu"
+                                        item-text="zdroj"
+                                        item-value="id"
+                                        :items="sources"
+                                        required
+                                        clearable
+                                    ></v-combobox>
+                                </v-col>
+
+                                <v-col cols="12" sm="6" md="4">
+                                    <v-text-field
+                                        dense
+                                        v-model="backup_multicast_ip"
+                                        label="Multicastová IP"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="saveNewChannel()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!--  -->
+        </v-row>
+
+        <!-- konec create dialogu -->
     </v-main>
 </template>
 <script>
 export default {
     data() {
         return {
+            vypadek: false,
+            checkbox_create_to_dohled: false,
+            editChannelName: false,
+            createNewChannel: false,
+            createMultiplexerDialog: false,
+            createPrijemDialog: false,
+            createBackupPrijemDialog: false,
+            createEventDialog: false,
+            multiplexer: null,
+            multiplexers: [],
+            backup: null,
+            prijem: "",
+            prijems: [],
+            event: null,
             channelTabForEdit: null,
             channels: null,
             channelId: null,
@@ -312,7 +524,16 @@ export default {
             editMultiplexors: [],
             editMulticastSources: [],
             deviceInformation: null,
-            backupdeviceInformation: null
+            backupdeviceInformation: null,
+            deviceInformation: null,
+            prijemInterfaces: null,
+            backup_multicast_ip: null,
+            backup_multicastZdroj: null,
+            stb_ip: null,
+            multicast_ip: null,
+            multicastZdroj: null,
+            sources: [],
+            channelName: null
         };
     },
 
@@ -320,6 +541,216 @@ export default {
         this.loadchannels();
     },
     methods: {
+        saveChannelName() {
+            axios
+                .post("channel/name/edit", {
+                    channelId: this.channelId,
+                    channelName: this.channelName
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    if (response.data.status === "success") {
+                        this.editChannelName = false;
+                        this.loadchannels();
+
+                        this.$router.push("/").catch(err => {});
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
+                });
+        },
+        editChannelNameDialog() {
+            axios
+                .post("channel/name", {
+                    channelId: this.channelId
+                })
+                .then(response => {
+                    this.channelName = response.data;
+                    this.editChannelName = true;
+                });
+        },
+
+        createNewChannelDialog() {
+            axios.get("sources").then(response => {
+                this.sources = response.data;
+                this.createNewChannel = true;
+            });
+        },
+
+        saveNewChannel() {
+            axios
+                .post("channel/create", {
+                    channelName: this.channelName,
+                    multicastZdroj: this.multicastZdroj,
+                    multicast_ip: this.multicast_ip,
+                    stb_ip: this.stb_ip,
+                    backup_multicastZdroj: this.backup_multicastZdroj,
+                    backup_multicast_ip: this.backup_multicast_ip
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    if (response.data.status === "success") {
+                        this.loadchannels();
+                        this.createNewChannel = false;
+                        this.channelName = null;
+                        this.multicastZdroj = null;
+                        this.multicast_ip = null;
+                        this.stb_ip = null;
+                        this.backup_multicastZdroj = null;
+                        this.backup_multicast_ip = null;
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
+                });
+        },
+
+        addEvent() {
+            this.createEventDialog = true;
+        },
+
+        saveEvent() {
+            this.createEventDialog = false;
+        },
+        addMultiplexer() {
+            axios
+                .post("channel/check", {
+                    channelId: this.channelId,
+                    param: "multiplexor"
+                })
+                .then(response => {
+                    if (response.data.status === "success") {
+                        // je mozné pridat multiplerox
+                        this.createMultiplexerDialog = true;
+                        this.getMultiplexors();
+                    } else {
+                        this.$store.state.alerts = response.data.alert;
+                    }
+                });
+        },
+
+        GetMoreInformationAboutThisDevice(data) {
+            axios
+                .post("device/info", {
+                    deviceName: data
+                })
+                .then(response => {
+                    this.deviceInformation = response.data;
+                });
+        },
+
+        addBackupPrijem() {
+            axios
+                .post("channel/check", {
+                    channelId: this.channelId,
+                    param: "backup"
+                })
+                .then(response => {
+                    if (response.data.status === "success") {
+                        this.createBackupPrijemDialog = true;
+                        this.getPrijemDevices();
+                    } else {
+                        this.$store.state.alerts = response.data.alert;
+                    }
+                });
+        },
+
+        addPrijem() {
+            axios
+                .post("channel/check", {
+                    channelId: this.channelId,
+                    param: "prijem"
+                })
+                .then(response => {
+                    if (response.data.status === "success") {
+                        // je mozné pridat multiplerox
+                        this.createPrijemDialog = true;
+                        this.getPrijemDevices();
+                    } else {
+                        this.$store.state.alerts = response.data.alert;
+                    }
+                });
+        },
+        saveBackupPrijemData() {
+            axios
+                .post("device/backup/edit", {
+                    channelId: this.channelId,
+                    deviceName: this.backup,
+                    channelToInterface: this.prijemInterfaces,
+                    checkIfDeviceHasInterface: this.deviceInformation
+                        .outputInterfaces
+                })
+                .then(response => {
+                    this.backup = null;
+                    this.channelToInterface = null;
+                    this.$store.state.alerts = response.data.alert;
+                    this.createBackupPrijemDialog = false;
+                    if (response.data.status === "success") {
+                        this.$router.push("/").catch(err => {});
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
+                });
+        },
+        savePrijemData() {
+            axios
+                .post("device/prijem/edit", {
+                    channelId: this.channelId,
+                    deviceName: this.prijem,
+                    channelToInterface: this.prijemInterfaces,
+                    checkIfDeviceHasInterface: this.deviceInformation
+                        .outputInterfaces
+                })
+                .then(response => {
+                    this.prijem = null;
+                    this.channelToInterface = null;
+                    this.$store.state.alerts = response.data.alert;
+                    this.createPrijemDialog = false;
+                    if (response.data.status === "success") {
+                        this.$router.push("/").catch(err => {});
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
+                });
+        },
+
+        saveMultiplexerdata() {
+            axios
+                .post("channel/multiplexer/edit", {
+                    channelId: this.channelId,
+                    deviceName: this.multiplexer.name
+                })
+                .then(response => {
+                    this.multiplexer = null;
+                    this.$store.state.alerts = response.data.alert;
+                    this.createMultiplexerDialog = false;
+                    if (response.data.status === "success") {
+                        this.$router.push("/").catch(err => {});
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
+                });
+        },
+
+        closeDialog() {
+            this.editChannelName = false;
+            this.createNewChannel = false;
+            this.createMultiplexerDialog = false;
+            this.createPrijemDialog = false;
+            this.createBackupPrijemDialog = false;
+            this.createEventDialog = false;
+            this.multiplexer = null;
+            this.multiplexers = [];
+            this.prijem = null;
+            this.prijems = [];
+            this.backup = null;
+            this.event = null;
+        },
+
         loadchannels() {
             axios.get("channels").then(response => {
                 this.channels = response.data;
@@ -358,8 +789,8 @@ export default {
             });
         },
         getPrijemDevices() {
-            axios.get("devices/withoutMultiplexor").then(response => {
-                this.editPrijem = response.data;
+            axios.get("device/prijem").then(response => {
+                this.prijems = response.data;
             });
         },
         getMultiplexors() {
@@ -369,21 +800,22 @@ export default {
         },
         getMulticastSources() {
             axios.get("sources").then(response => {
-                this.editMulticastSources = response.data;
+                this.deviceInformation = response.data;
             });
         },
-        // fn pro vyhledání informací o zdroji
-        // napríklad -> pokud bude zdroj poIp nebudou se nabízet zadne dalsi informace o zařízení
-        // pokud bude napriklad zdroj Blankom zobrazí se informace o umístení kanalu
-        GetMoreInformationAboutThisDevice(data) {
+
+        removeChannel() {
             axios
-                .post("device/info", {
-                    deviceId: data.id
+                .post("channel/delete", {
+                    channelId: this.channelId
                 })
                 .then(response => {
-                    this.deviceInformation = response.data;
+                        this.$store.state.alerts = response.data.alert;
+                    if (response.data.status === "success") {
+                        this.loadchannels();
+                        this.$router.push("/").catch(err => {});
+                    }
                 });
-            // console.log(data.id);
         }
     }
 };

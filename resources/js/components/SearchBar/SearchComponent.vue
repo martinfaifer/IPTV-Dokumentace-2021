@@ -56,8 +56,8 @@
 export default {
     data() {
         return {
+            descriptionLimit: 60,
             searchDialogInput: false,
-
             hints: true,
             isLoading: false,
             model: null,
@@ -65,11 +65,9 @@ export default {
             entries: []
         };
     },
-
     computed: {
         fields() {
             if (!this.model) return [];
-
             return Object.keys(this.model).map(key => {
                 return {
                     key,
@@ -80,15 +78,13 @@ export default {
         items() {
             return this.entries.map(entry => {
                 const result =
-                    entry.result.length > this.result
-                        ? entry.result.slice(0, this.result) + "..."
+                    entry.result.length > this.descriptionLimit
+                        ? entry.result.slice(0, this.descriptionLimit) + '...'
                         : entry.result;
-
                 return Object.assign({}, entry, { result });
             });
         }
     },
-
     created() {},
     methods: {
         searchDialog() {
@@ -97,7 +93,6 @@ export default {
             this.model = null;
         }
     },
-
     mounted() {
         var self = this;
         window.addEventListener("keyup", function(event) {
@@ -109,7 +104,6 @@ export default {
     },
     watch: {
         $route(to, from) {},
-
         search() {
             if (this.items.length > 0) return;
             this.isLoading = true;
@@ -129,9 +123,9 @@ export default {
             if (this.model == undefined) {
                 // nic
             } else {
+                this.$router.push("/channel");
                 this.$router.push("/" + this.model.url);
                 this.searchDialogInput = false;
-
                 this.search = null;
                 this.model = null;
             }

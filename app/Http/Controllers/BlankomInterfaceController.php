@@ -119,4 +119,30 @@ class BlankomInterfaceController extends Controller
             ];
         }
     }
+
+
+    /**
+     * zalození nebo odebrání zarizení
+     *
+     * @param string $deviceId
+     * @param string $action
+     * @return void
+     */
+    public static function check_device_if_exist_and_create_or_delete(string $deviceId, string $action): void
+    {
+        if ($action === "create") {
+            if (!BlankomInterface::where('deviceId', $deviceId)->first()) {
+                BlankomInterface::create([
+                    'deviceId' => $deviceId
+                ]);
+            }
+        }
+
+
+        if ($action === "delete") {
+            if (BlankomInterface::where('deviceId', $deviceId)->first()) {
+                BlankomInterface::where('deviceId', $deviceId)->first()->delete();
+            }
+        }
+    }
 }

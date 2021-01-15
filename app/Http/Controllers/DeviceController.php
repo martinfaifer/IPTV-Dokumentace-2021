@@ -31,6 +31,27 @@ class DeviceController extends Controller
         return Device::where('id', $request->deviceId)->first()->name;
     }
 
+
+    /**
+     * fn pro získání id, dle názvu
+     *
+     * @return array [status , deviceId]
+     */
+    public static function return_deviceId_by_name(Request $request): array
+    {
+        // $request->deviceName
+        if (!Device::where('name', $request->deviceName)->first()) {
+            return [
+                'status' => "error"
+            ];
+        }
+
+        return [
+            'status' => "success",
+            'deviceId' => Device::where('name', $request->deviceName)->first()->id
+        ];
+    }
+
     /**
      * fn pro výpis všech zařízení, kde se vrací id a název (name)
      * 
@@ -73,9 +94,28 @@ class DeviceController extends Controller
                 'login_user' => $device->login_user,
                 'login_password' => $device->login_password,
                 'status' => $device->status,
-                'interfaces' => DeviceInterfaceController::return_interfaces_belongs_to_channel_collapse_array(
-                    Multicast::where('channelId', $channelId)->first()->deviceInterface ?? null
-                )
+                'interfaces' => DeviceInterfaceController::return_interface_names_belongsToChannel(Multicast::where('channelId', $channelId)->first()->deviceInterface ?? null)
+            )
+        ];
+    }
+
+    public static function try_to_find_backup_device_belongsTochannel(string $deviceId, $channelId): array
+    {
+        if (!Device::where('id', $deviceId)->first()) {
+            return self::$result;
+        }
+
+        $device = Device::where('id', $deviceId)->first();
+        return [
+            'status' => "success",
+            'data' => array(
+                'id' => $device->id,
+                'ip' => $device->ip,
+                'name' => $device->name,
+                'login_user' => $device->login_user,
+                'login_password' => $device->login_password,
+                'status' => $device->status,
+                'interfaces' => DeviceInterfaceController::return_interface_names_belongsToChannel(Multicast::where('channelId', $channelId)->where('isBackup', '!=', null)->first()->deviceInterface ?? null)
             )
         ];
     }
@@ -107,6 +147,60 @@ class DeviceController extends Controller
         ];
     }
 
+
+    public function return_only_multiplexors(): array
+    {
+        $multiplexorId = DeviceCategoryController::find_category_by_type_and_return_id('multiplexor');
+        if ($multiplexorId === "0") {
+            // neexistuje žádný multiplexor
+            return [];
+        }
+
+        foreach (Device::where('category', $multiplexorId)->get(['id', 'name']) as $multiplexor) {
+            $output[] = $multiplexor->name;
+        }
+
+        return $output;
+    }
+
+    /**
+     * vrácení názvů pouze prijímačů
+     *
+     * @return array
+     */
+    public static function return_only_prijem(): array
+    {
+        // satelit 2 , poIP 4 , linux 5
+
+        foreach (Device::where('category', '2')
+            ->orWhere('category', '4')
+            ->Orwhere('category', '5')
+            ->get(['id', 'name']) as $device) {
+            $output[] = $device->name;
+        }
+
+        return $output;
+    }
+
+    /**
+     * fn pro výpis pole, teré obsahuje názvy transcoderů
+     *
+     * @return array
+     */
+    public function return_only_transcoders(): array
+    {
+        $transcoderId = DeviceCategoryController::find_category_by_type_and_return_id('transcoder');
+        if ($transcoderId === "0") {
+            // neexistuje žádný multiplexor
+            return [];
+        }
+
+        foreach (Device::where('category', $transcoderId)->get(['id', 'name']) as $transcoder) {
+            $output[] = $transcoder->name;
+        }
+
+        return $output;
+    }
 
     /**
      * fn pro vypsání všech zařízení, které nejosu multiplexor
@@ -144,13 +238,23 @@ class DeviceController extends Controller
      */
     public static function device_info(Request $request)
     {
+        // vyhledávání dle $deviceId nebo deviceName
 
-        if (!Device::where('id', $request->deviceId)->first()) {
-            return [];
+        if (isset($request->deviceId)) {
+            if (!Device::where('id', $request->deviceId)->first()) {
+                return [];
+            }
+
+            $deviceId = $request->deviceId;
         }
 
+        if (isset($request->deviceName)) {
+            // vyhledáni deviceId podle jména
+            $device = self::return_deviceId_by_name($request);
+            $deviceId = $device['deviceId'];
+        }
         // zarizení o danem id ( id, nazev, category, vendor, ip, login_user, login_password, status, sablona)
-        $device = Device::where('id', $request->deviceId)->first();
+        $device = Device::where('id', $deviceId)->first();
 
         // výpis výrobce
         $vendor = VendorController::return_vendor_by_id($device->vendor);
@@ -347,6 +451,64 @@ class DeviceController extends Controller
 
 
 
+    public function return_device_interfaces(Request $request): array
+    {
+
+        if (!Device::where('id', $request->deviceId)->first()) {
+            return [
+                'status' => "empty"
+            ];
+        }
+
+        $interfaces = DeviceInterfaceController::return_interfaces_belongsToDevice(Device::where('id', $request->deviceId)->first()->haveInterface);
+
+        if (is_null($interfaces)) {
+            return [
+                'status' => "empty"
+            ];
+        }
+
+
+        return [
+            'status' => "success",
+            'data' => $interfaces
+        ];
+    }
+
+    /**
+     * výpis dat pro editaci
+     *
+     * @param Request $request->deviceId
+     * @return array
+     */
+    public function return_data_for_base_edit(Request $request): array
+    {
+        if (!Device::where('id', $request->deviceId)->first()) {
+            return [];
+        }
+
+        // name, category, vendor, ip, login_ser, login_password, haveInterface 
+        foreach (Device::where('id', $request->deviceId)->get() as $device) {
+
+            $category = DeviceCategoryController::return_device_category_info($device->category);
+
+            $output = array(
+                'name' => $device->name,
+                'ip' => $device->ip,
+                'login_user' => $device->login_user,
+                'login_password' => $device->login_password,
+                // vyhledání dat
+                'haveInterface' => DeviceInterfaceController::return_interfaces_belongsToDevice(Device::where('id', $request->deviceId)->first()->haveInterface),
+                'vendor' => VendorController::return_vendor_by_id($device->vendor),
+                'category' => $category[0]['name']
+            );
+        }
+
+        return $output;
+    }
+
+
+
     /**
      * EDITACE 
      */
@@ -415,5 +577,339 @@ class DeviceController extends Controller
                 'msg' => "Selhala editace! ERROR 500"
             ];
         }
+    }
+
+    /**
+     * vytvoření zařízení do systému
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function device_create(Request $request): array
+    {
+
+
+        // overení, že existuji nutné proměnné
+        if (
+            is_null($request->deviceName) || empty($request->deviceName) ||
+            is_null($request->vendor) || empty($request->vendor) ||
+            is_null($request->category) || empty($request->category)
+        ) {
+            return [
+                'alert' => array(
+                    'status' => "warning",
+                    'msg' => "Nejsou vyplněny všechny hodnoty!"
+                ),
+
+            ];
+        }
+
+
+        // overení že názve zařízení jiz neexistuje
+        if (Device::where('name', $request->deviceName)->first()) {
+            return [
+                'alert' => array(
+                    'status' => "warning",
+                    'msg' => "Zařízení s tímto názvem již existuje"
+                ),
+
+            ];
+        }
+
+        if (is_null($request->interfaces) || empty($request->interfaces)) {
+            $interfaces = null;
+        } else {
+
+            foreach ($request->interfaces as $interface) {
+                $interfaces[] = $interface['id'];
+            }
+
+            $interfaces = json_encode($interfaces);
+        }
+
+        try {
+            if (is_string($request->vendor)) {
+                $vendor = $request->vendor;
+            } else {
+                $vendor = $request->vendor["vendor"];
+            }
+
+            if (is_string($request->category)) {
+                $category = $request->category;
+            } else {
+                $category = $request->category["name"];
+            }
+
+
+            Device::create(
+                [
+                    'name' => $request->deviceName,
+                    'category' => DeviceCategory::where('name', $category)->first()->id,
+                    'vendor' => Vendor::where('vendor', $vendor)->first()->id,
+                    'ip' => $request->deviceIp,
+                    'login_user' => $request->deviceUser,
+                    'login_password' => $request->devicePassword,
+                    'haveInterface' => $interfaces
+                ]
+            );
+            $deviceId = Device::where('name', $request->deviceName)->first()->id;
+            VendorController::check_if_vendor_is_know($vendor, $deviceId, "create");
+
+            dispatch(new SendNotificationJob(Auth::user()->name, $request->deviceName, "vytvořil"));
+
+            return [
+                'alert' => array(
+                    'status' => "success",
+                    'msg' => "Zařízení bylo vytvořeno"
+                ),
+                'status' => "success",
+                'deviceId' => $deviceId
+            ];
+        } catch (\Throwable $th) {
+
+
+            return [
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Selhala editace! ERROR 500"
+                ),
+
+            ];
+        }
+    }
+
+    /**
+     * uprava interfacu dle zařízení
+     *
+     * @param Request $request
+     * @return void
+     */
+    public static function edit_interface(Request $request)
+    {
+        if (is_null($request->interfaces) || empty($request->interfaces)) {
+            $interfaces = null;
+        } else {
+
+            foreach ($request->interfaces as $interface) {
+                $interfaces[] = $interface['id'];
+            }
+
+            $interfaces = json_encode($interfaces);
+
+            // update
+            if (!Device::where('id', $request->deviceId)->first()) {
+                return [
+                    'status' => "deviceNotExist"
+                ];
+            }
+
+            try {
+                Device::where('id', $request->deviceId)->update(
+                    [
+                        'haveInterface' => $interfaces
+                    ]
+                );
+
+                dispatch(new SendNotificationJob(Auth::user()->name, Device::where('id', $request->deviceId)->first()->name, "editoval"));
+
+                return [
+                    'alert' => array(
+                        'status' => "success",
+                        'msg' => "Zařízení bylo upraveno"
+                    ),
+                    'status' => "success",
+                ];
+            } catch (\Throwable $th) {
+                return [
+                    'alert' => array(
+                        'status' => "error",
+                        'msg' => "Selhala editace! ERROR 500"
+                    ),
+
+                ];
+            }
+        }
+    }
+
+
+    public function remove_interfaces(Request $request): array
+    {
+        Device::where('id', $request->deviceId)->update(
+            [
+                'haveInterface' => null
+            ]
+        );
+
+        return [
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Zařízení upraveno"
+            ),
+            'status' => "remove",
+        ];
+    }
+
+
+
+    /**
+     * editace zarízení
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function edit_device(Request $request): array
+    {
+        // overení, že existuji nutné proměnné
+        if (
+            is_null($request->name) || empty($request->name) ||
+            is_null($request->vendor) || empty($request->vendor) ||
+            is_null($request->category) || empty($request->category)
+        ) {
+            return [
+                'alert' => array(
+                    'status' => "warning",
+                    'msg' => "Nejsou vyplněny všechny hodnoty!"
+                ),
+
+            ];
+        }
+
+
+        if (is_null($request->haveInterface) || empty($request->haveInterface)) {
+            $interfaces = null;
+        } else {
+
+            foreach ($request->haveInterface as $interface) {
+                $interfaces[] = $interface['id'];
+            }
+
+            $interfaces = json_encode($interfaces);
+        }
+
+        try {
+            if (is_string($request->vendor)) {
+                $vendor = $request->vendor;
+            } else {
+                $vendor = $request->vendor["vendor"];
+                // overení zda se jedná o známého vendora
+                VendorController::check_if_vendor_is_know($vendor, $request->deviceId, "create");
+            }
+
+            if (is_string($request->category)) {
+                $category = $request->category;
+            } else {
+                $category = $request->category["name"];
+            }
+
+
+            Device::where('id', $request->deviceId)->update(
+                [
+                    'name' => $request->name,
+                    'category' => DeviceCategory::where('name', $category)->first()->id,
+                    'vendor' => Vendor::where('vendor', $vendor)->first()->id,
+                    'ip' => $request->ip,
+                    'login_user' => $request->login_user,
+                    'login_password' => $request->login_password,
+                    'haveInterface' => $interfaces
+                ]
+            );
+
+            dispatch(new SendNotificationJob(Auth::user()->name, $request->name, "vytvořil"));
+
+            return [
+                'alert' => array(
+                    'status' => "success",
+                    'msg' => "Zařízení bylo upraveno"
+                ),
+                'status' => "success",
+                'deviceId' => $request->deviceId
+            ];
+        } catch (\Throwable $th) {
+
+
+            return [
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Selhala editace! ERROR 500"
+                ),
+
+            ];
+        }
+    }
+
+
+
+    /**
+     * fn pro odebrní zařízení ze systému 
+     *
+     * @param Request $request->deviceId
+     * @return array
+     */
+    public function delete_device(Request $request): array
+    {
+        if (!Device::where('id', $request->deviceId)->first()) {
+            return [
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Neexistuje zařízení"
+                ),
+                'status' => "error",
+            ];
+        }
+
+        $device = Device::where('id', $request->deviceId)->first();
+
+
+        // vyhledání zda na zařízení neexistuje vazba 
+        if (Multicast::where('deviceId', $request->deviceId)->orWhere('multiplexerId', $request->deviceId)->first()) {
+            // zarizení je evidováno na kanále
+            $multicast = "fail";
+        } else {
+            // multicast je cistý
+            $multicast = "success";
+        }
+
+
+        if (H264::where('deviceId', $request->deviceId)->first()) {
+            // zarizení je evidováno na kanále
+            $h264 = "fail";
+        } else {
+            // multicast je cistý
+            $h264 = "success";
+        }
+
+        if (H265::where('deviceId', $request->deviceId)->first()) {
+            // zarizení je evidováno na kanále
+            $h265 = "fail";
+        } else {
+            // multicast je cistý
+            $h265 = "success";
+        }
+
+
+        if ($multicast === "fail" || $h264 === "fail" || $h265 === "fail") {
+            return [
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Na zařízení je vytvořena vazba"
+                ),
+                'status' => "error",
+            ];
+        }
+
+        // vyhledání a smazání vazeb
+        VendorController::check_if_vendor_is_know(Vendor::where('id', $device->vendor)->first()->vendor, $request->deviceId, "delete");
+
+        $device->delete();
+
+        dispatch(new SendNotificationJob(Auth::user()->name, $device->name, "smazal"));
+
+        return [
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Zařízení bylo odstraněno"
+            ),
+            'status' => "success",
+        ];
     }
 }

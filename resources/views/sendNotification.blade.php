@@ -1,11 +1,11 @@
 @component('mail::message')
 
-@component('mail::panel')
+{{-- @component('mail::panel') --}}
     <p>
         Uživatel {{$user}} {{$type}}  {{$item}}
 
 </p>
 
-@endcomponent
+{{-- @endcomponent --}}
 
 @endcomponent

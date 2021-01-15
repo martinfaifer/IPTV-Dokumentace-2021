@@ -16,7 +16,7 @@ class CreateMulticastsTable extends Migration
         Schema::create('multicasts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('channelId')->index();
-            $table->string('stb_ip')->index();
+            $table->string('stb_ip')->nullable()->index();
             $table->string('multicast_ip')->index();
             $table->foreignId('zdrojId')->index();
             $table->string('isBackup')->nullable();

@@ -109,4 +109,23 @@ class PowerVuInterfaceController extends Controller
             ];
         }
     }
+
+
+    public static function check_device_if_exist_and_create_or_delete(string $deviceId, string $action): void
+    {
+        if ($action === "create") {
+            if (!PowerVuInterface::where('deviceId', $deviceId)->first()) {
+                PowerVuInterface::create([
+                    'deviceId' => $deviceId
+                ]);
+            }
+        }
+
+
+        if ($action === "delete") {
+            if (PowerVuInterface::where('deviceId', $deviceId)->first()) {
+                PowerVuInterface::where('deviceId', $deviceId)->first()->delete();
+            }
+        }
+    }
 }

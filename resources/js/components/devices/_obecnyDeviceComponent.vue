@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-container fluid class="ml-3">
+        <v-container fluid class="ml-3" >
             <div>
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ deviceName }}</h2>
@@ -14,12 +14,25 @@
                 </v-col>
             </v-row>
 
+            <v-row class=" mt-4">
+                <v-col>
+                    <!-- component pro nacteni zobecných informací -->
+                    <interfaces-component></interfaces-component>
+                </v-col>
+            </v-row>
+
             <v-row class="mt-4">
                 <v-col>
                     <!-- sablona component -->
-                    <blankominputs-component v-if="deviceVendor === 'Blankom'"></blankominputs-component>
-                    <fteinputs-component v-if="deviceVendor === 'FTE'"></fteinputs-component>
-                    <powervu-component v-if="deviceVendor === 'Cisco'"></powervu-component>
+                    <blankominputs-component
+                        v-if="deviceVendor === 'Blankom'"
+                    ></blankominputs-component>
+                    <fteinputs-component
+                        v-if="deviceVendor === 'FTE'"
+                    ></fteinputs-component>
+                    <powervu-component
+                        v-if="deviceVendor === 'Cisco'"
+                    ></powervu-component>
                 </v-col>
             </v-row>
 
@@ -46,6 +59,7 @@
 import BlankomInputsComponent from "./Interfaces/_blankomInterfacesComponent";
 import FteInputsComponent from "./Interfaces/_fteInterfacesComponent";
 import PowerVuComponent from "./Interfaces/_powerVuInterfacesComponent";
+import InterfacesComponent from "./Interfaces/_interfacesforChannelsComponent";
 
 import deviceInformationComponent from "./_deviceInfoComponent";
 import deviceTemplateComponent from "./_deviceTemplateComponent";
@@ -65,7 +79,8 @@ export default {
         "channelsondevice-component": channelsOnDeviceComponent,
         "blankominputs-component": BlankomInputsComponent,
         "fteinputs-component": FteInputsComponent,
-        "powervu-component": PowerVuComponent
+        "powervu-component": PowerVuComponent,
+        "interfaces-component": InterfacesComponent
     },
     created() {
         this.loadDeviceNameById();
@@ -83,11 +98,13 @@ export default {
         },
 
         loadDeviceVendor() {
-            axios.post("device/vendor", {
-                deviceId: this.$route.params.id
-            }).then(response => {
-                this.deviceVendor = response.data;
-            });
+            axios
+                .post("device/vendor", {
+                    deviceId: this.$route.params.id
+                })
+                .then(response => {
+                    this.deviceVendor = response.data;
+                });
         }
     },
     watch: {

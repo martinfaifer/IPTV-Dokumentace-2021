@@ -8,6 +8,21 @@ use Illuminate\Support\Arr;
 
 class DeviceInterfaceController extends Controller
 {
+
+    /**
+     * fn pro vypsání vsech interfaců. které jsou dostupné
+     *
+     * @return array
+     */
+    public function return_interfaces(): array
+    {
+        if (!DeviceInterface::first()) {
+            return [];
+        }
+
+        return DeviceInterface::get(['id', 'interface'])->toArray();
+    }
+
     /**
      * Undocumented function
      *

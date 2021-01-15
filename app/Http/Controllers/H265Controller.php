@@ -42,4 +42,36 @@ class H265Controller extends Controller
             H265::where('channelId', $request->channelId)->first()->deviceId
         );
     }
+
+
+    /**
+     * odebrání kanálu 
+     *
+     * @param string $channelId
+     * @return array
+     */
+    public static function delete(string $channelId): array
+    {
+        if ($h265 = H265::where('channelId', $channelId)->first()) {
+            ParedTagController::delete_tags('h264Id', $h265->id);
+            $h265->delete();
+
+            return [
+                'status' => "success",
+                'alert' => array(
+                    'status' => "success",
+                    'msg' => "Odebráno"
+                )
+            ];
+        } else {
+
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Nepodařilo se odebrat"
+                )
+            ];
+        }
+    }
 }

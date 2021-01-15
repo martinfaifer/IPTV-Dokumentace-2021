@@ -34,7 +34,7 @@ export default {
             if(this.alert != null) {
                 setTimeout(function() {
                     this.$store.state.alerts = null;
-                }.bind(this), 2000)
+                }.bind(this), 4000)
             } else {
                 return;
             }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\DeviceCategoryController;
 use App\Http\Controllers\DeviceTemplateController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\DeviceInterfaceController;
 use App\Http\Controllers\DVBController;
 use App\Http\Controllers\FteInterfaceController;
 use App\Http\Controllers\H264Controller;
@@ -32,6 +33,14 @@ Route::get('search', [SearchController::class, 'search']);
 
 // Sekce  kanály
 Route::get('channels', [ChannelController::class, 'get_channels']);
+// Obecná funkce na kontrolu, zda exituje jiz device / parametr na kanálu
+Route::post('channel/check', [ChannelController::class, 'check_channel']);
+// zalozeni noveho kanálu
+Route::post('channel/create', [ChannelController::class, 'create']);
+// získání multicatových informací
+Route::post('channel/multicast', [ChannelController::class, 'return_multicast_informations']);
+// editace multicastu
+Route::post('channel/multicast/edit', [MulticastController::class, 'update']);
 // získání názvu kanálu
 Route::post('channel/name', [ChannelController::class, 'get_channel_name']);
 // získání multicastových infomrací
@@ -44,6 +53,22 @@ Route::post('prijem', [MulticastController::class, 'return_device_by_channel']);
 Route::post('backup', [MulticastController::class, 'return_backup_device_by_channel']);
 // editace stávajícího kanálu
 Route::post('channel', [ChannelController::class, 'this_channel']);
+// editace multiplexoru na kanálu
+Route::post('channel/multiplexer/edit', [ChannelController::class, 'edit_multiplexor']);
+// editace prijmu kanalu
+Route::post('device/prijem/edit', [ChannelController::class, 'edit_prijem']);
+// editace backup prijmu
+Route::post('device/backup/edit', [ChannelController::class, 'edit_backup']);
+// odebrání zálohy
+Route::post('device/backup/remove', [ChannelController::class, 'remove_backup']);
+// Pdebrání prijmu
+Route::post('device/prijem/remove', [ChannelController::class, 'remove_prijem']);
+// Odebrání multiplexoru od kanálu
+Route::post('channel/multiplexer/remove', [ChannelController::class, 'remove_multiplexor']);
+// zmena názvu kanálu
+Route::post('channel/name/edit', [ChannelController::class, 'change_channel_name']);
+// odebrání kanálu
+Route::post('channel/delete', [ChannelController::class, 'delete_channel']);
 
 /**
  * Unicast 
@@ -52,8 +77,12 @@ Route::post('channel', [ChannelController::class, 'this_channel']);
 Route::post('h265/check', [H265Controller::class, 'check_if_exist']);
 Route::post('h264/check', [H264Controller::class, 'check_if_exist']);
 
+// založení H264 outputu
+Route::post('h264/create', [H264Controller::class, 'create']);
 //  získání chunk store id dle id kanálu
 Route::post('unicast/chunkStoreId', [UnicastChunkStoreIdController::class, 'return_chunkStoreId']);
+// editace chaunk store id
+Route::post('unicast/chunkStoreId/edit', [UnicastChunkStoreIdController::class, 'edit']);
 // output pro kvality v h264
 Route::post('h264/channel/kvality', [UnicastKvalitaChannelOutputController::class, 'return_output_by_channel']);
 // output pro získání m38u v h264
@@ -94,8 +123,30 @@ Route::get('packages', [IptvPackageController::class, 'return_packages']);
 
 
 // Zařízení
+// výpis všech interfaců. které se dají napátovat na zařízení
+Route::get('device/allInterfaces', [DeviceInterfaceController::class, 'return_interfaces']);
+// vyhledání pouze multiplexorů
+Route::get('device/multiplexors', [DeviceController::class, 'return_only_multiplexors']);
+// výpis piuze transcoderu
+Route::get('device/transcoders', [DeviceController::class, 'return_only_transcoders']);
+// výpis pouze satelitních prijímacu, po IP, linuxu
+Route::get('device/prijem', [DeviceController::class, 'return_only_prijem']);
+// odebrání zařízení
+Route::post('device/remove', [DeviceController::class, 'delete_device']);
+// získání portů, na které má zařízení vazbu
+Route::post('device/currentInterfaces', [DeviceController::class, 'return_device_interfaces']);
+// editace zařízení ( zakladní editace, detailní je v karte zarizení)
+Route::post('device/baseEdit', [DeviceController::class, 'edit_device']);
+// výpis zakladních infromací pro jednoduchou editaci
+Route::post('device/getInfoForBaseEdit', [DeviceController::class, 'return_data_for_base_edit']);
+// editace interfaců na zařízení
+Route::post('device/interfaces/edit', [DeviceController::class, 'edit_interface']);
+// odebrání interfaců ze zařízení
+Route::post('device/interfaces/delete', [DeviceController::class, 'remove_interfaces']);
 // výpis vsech zařízení 
 Route::get('devices', [DeviceController::class, 'return_devices']);
+// vytviření nového zařízení
+Route::post('device/create', [DeviceController::class, 'device_create']);
 // vyhledání názvu zařízení
 Route::post('device/name', [DeviceController::class, 'return_deviceName']);
 // obecný výpis informací o zařízení ( veškeré informace až na šablony a interfacy )

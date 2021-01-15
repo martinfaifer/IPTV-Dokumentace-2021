@@ -110,6 +110,9 @@
                                                 :class="{
                                                     'white--text':
                                                         componentType ===
+                                                        'channels',
+                                                    'grey--text':
+                                                        componentType !=
                                                         'channels'
                                                 }"
                                                 >mdi-television-box</v-icon
@@ -129,6 +132,9 @@
                                                 :class="{
                                                     'white--text':
                                                         componentType ===
+                                                        'devices',
+                                                    'grey--text':
+                                                        componentType !=
                                                         'devices'
                                                 }"
                                                 >mdi-devices</v-icon
@@ -147,7 +153,9 @@
                                                 :class="{
                                                     'white--text':
                                                         componentType ===
-                                                        'cards'
+                                                        'cards',
+                                                    'grey--text':
+                                                        componentType != 'cards'
                                                 }"
                                                 >mdi-card-text-outline</v-icon
                                             >
@@ -164,7 +172,10 @@
                                                 @click="componentType = 'wiki'"
                                                 :class="{
                                                     'white--text':
-                                                        componentType === 'wiki'
+                                                        componentType ===
+                                                        'wiki',
+                                                    'grey--text':
+                                                        componentType != 'wiki'
                                                 }"
                                                 >mdi-wikipedia</v-icon
                                             >
@@ -306,7 +317,7 @@ export default {
     methods: {
         logOut() {
             window.axios("logout").then(response => {
-                this.$router.push("/login");
+                this.$route.push("/login");
             });
         },
         getUser() {
@@ -323,6 +334,7 @@ export default {
                     if (response.data.status == "error") {
                         this.logOut();
                     } else {
+                        this.$store.state.user = response.data.data;
                         this.user = response.data.data;
                     }
                 }
@@ -330,6 +342,12 @@ export default {
         },
 
         loadWriteDataByUri() {
+
+            if(this.$route.path === "/") {
+                this.$router.push("/channel");
+                this.componentType = "channels";
+            }
+
             if (this.$route.path.match("/channel.*")) {
                 this.componentType = "channels";
             }
@@ -345,16 +363,7 @@ export default {
             if (this.$route.path.match("/wiki.*")) {
                 this.componentType = "wiki";
             }
-        },
-    },
-
-    mounted() {
-        this.interval = setInterval(
-            function() {
-                this.getUser();
-            }.bind(this),
-            60000
-        );
+        }
     },
 
     watch: {
