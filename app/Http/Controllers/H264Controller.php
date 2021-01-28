@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChannelsToTranscoder;
+use App\Models\ChannelToDohled;
 use App\Models\Device;
 use App\Models\H264;
 use App\Models\M3u8;
@@ -41,26 +43,71 @@ class H264Controller extends Controller
         );
     }
 
+    public static function try_to_get_stream_status(Request $request): array
+    {
+        if (!H264::where('channelId', $request->channelId)->first()) {
+            return [
+                'status' => "empty"
+            ];
+        }
+
+        if ($streamId = ChannelsToTranscoder::where(
+            'H264Id',
+            H264::where('channelId', $request->channelId)->first()->id
+        )->first()) {
+            return [
+                'status' => "success",
+                'streamStatus' => ApiController::get_streamStatus_from_transcoder($streamId->transcoderId)
+            ];
+        } else {
+            return [
+                'status' => "error",
+                'streamStatus' => null
+            ];
+        }
+    }
+
+
+    /**
+     * odebrání z webu
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function delete_from_web(Request $request): array
+    {
+        return $this->delete($request->channelId);
+    }
+
     /**
      * odebrání kanálu
      *
-     * @param string $channelId
+     * @param string $channelId 
      * @return array
      */
     public static function delete(string $channelId): array
     {
         if ($h264 = H264::where('channelId', $channelId)->first()) {
+
+            // delete m3u8
+            M3u8::where('h264id', $h264->id)->first()->delete();
+
+            // unicast
+            foreach (UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->get() as $kvalita) {
+                UnicastKvalitaChannelOutput::where('id', $kvalita->id)->first()->delete();
+            }
+
             ParedTagController::delete_tags('h264Id', $h264->id);
             $h264->delete();
 
-            UnicastChunkStoreIdController::delete($channelId);
 
             return [
                 'status' => "success",
                 'alert' => array(
                     'status' => "success",
                     'msg' => "Odebráno"
-                )
+                ),
+                'channelId' => $channelId
             ];
         } else {
 
@@ -69,7 +116,8 @@ class H264Controller extends Controller
                 'alert' => array(
                     'status' => "error",
                     'msg' => "Nepodařilo se odebrat"
-                )
+                ),
+                'channelId' => $channelId
             ];
         }
     }
@@ -82,6 +130,17 @@ class H264Controller extends Controller
      */
     public function create(Request $request): array
     {
+
+        if (is_null($request->transcoder) || empty($request->transcoder)) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "warning",
+                    'msg' => "Není vyplněno zařízení"
+                )
+            ];
+        }
+
         // overení existence 
         if (H264::where('channelId', $request->channelId)->first()) {
             return [
@@ -94,19 +153,13 @@ class H264Controller extends Controller
         }
 
         if (UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Kanál má již uložen chunk store id"
-                )
-            ];
+            // nic nedelat
+        } else {
+            UnicastChunkStoreId::create([
+                'channelId' => $request->channelId,
+                'chunkStoreId' => $request->chunkStoreId
+            ]);
         }
-
-        UnicastChunkStoreId::create([
-            'channelId' => $request->channelId,
-            'chunkStoreId' => $request->chunkStoreId
-        ]);
 
         H264::create(
             [
@@ -148,7 +201,7 @@ class H264Controller extends Controller
             UnicastKvalitaChannelOutput::create(
                 [
                     'kvalitaId' => "1",
-                    'h264id' => $h264Id,
+                    'h264Id' => $h264Id,
                     'output' => $request->output1080
                 ]
             );
@@ -158,7 +211,7 @@ class H264Controller extends Controller
             UnicastKvalitaChannelOutput::create(
                 [
                     'kvalitaId' => "2",
-                    'h264id' => $h264Id,
+                    'h264Id' => $h264Id,
                     'output' => $request->output720
                 ]
             );
@@ -172,17 +225,16 @@ class H264Controller extends Controller
                     'output' => $request->output576
                 ]
             );
-
-
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Výstup vytvořen"
-                ),
-                'channelId' => $request->channelId
-            ];
         }
+
+        return [
+            'status' => "success",
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Výstup vytvořen"
+            ),
+            'channelId' => $request->channelId
+        ];
     }
 
 
@@ -212,5 +264,57 @@ class H264Controller extends Controller
                 )
             ];
         }
+    }
+
+    /**
+     * editace h264
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function edit(Request $request): array
+    {
+        try {
+            UnicastKvalitaChannelOutputController::h264_update($request);
+
+            M3u8Controller::update_m3u8_h264($request);
+
+            // chunk store Id 
+            UnicastChunkStoreIdController::edit($request);
+
+            return [
+                'status' => "success",
+                'alert' => array(
+                    'status' => "success",
+                    'msg' => "Změněno"
+                )
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Error 500"
+                )
+            ];
+        }
+    }
+
+
+    public static function return_dohled_data(Request $request): array
+    {
+        // vyhledání H264
+        if (!H264::where('channelId', $request->channelId)->first()) {
+            return [];
+        }
+
+        // overení existence id v ChannelsToDohled
+        if (!ChannelToDohled::where('H264Id', H264::where('channelId', $request->channelId)->first()->id)->first()) {
+            return [];
+        }
+
+        return ApiController::return_information_about_channel(
+            ChannelToDohled::where('H264Id', H264::where('channelId', $request->channelId)->first()->id)->first()->dohledId
+        );
     }
 }

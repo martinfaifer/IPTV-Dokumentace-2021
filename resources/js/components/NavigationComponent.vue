@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <v-card flat color="transparent">
+            <event-component></event-component>
             <v-toolbar fixed dense flat class="ml-16">
                 <v-spacer></v-spacer>
 
@@ -144,7 +145,7 @@
                                     </v-tooltip>
                                 </v-list-item>
 
-                                <v-list-item link v-bind:to="'/cards'">
+                                <v-list-item link v-bind:to="'/card'">
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on }">
                                             <v-icon
@@ -194,6 +195,14 @@
                         <devicessidemenu-component
                             v-show="componentType === 'devices'"
                         ></devicessidemenu-component>
+
+                        <cardsmenu-component
+                            v-show="componentType === 'cards'"
+                        ></cardsmenu-component>
+
+                        <settingsmenu-component
+                            v-if="componentType === 'settings'"
+                        ></settingsmenu-component>
                     </v-row>
                 </v-navigation-drawer>
                 <!-- konec navigace -->
@@ -212,15 +221,50 @@
             fixed
             temporary
         >
-            <div>
-                <div id="alerty" class="pl-2 pr-2">
+            <div v-if="alertCount != '0'">
+                <div
+                    id="alerty"
+                    class="pl-2 pr-2"
+                    v-for="alert in alerts"
+                    :key="alert.id"
+                >
                     <v-alert
+                        v-if="alertCount != '0'"
                         dense
                         border="left"
-                        type="error"
+                        :type="alert.status"
                         class="body-2 mt-2"
                     >
-                        <strong>Alert z dohledu</strong>
+                        <strong>{{ alert.msg }}</strong>
+                        <div v-show="alert.data">
+                            <p
+                                class="ml-1"
+                                v-for="issueData in alert.data"
+                                :key="issueData.id"
+                            >
+                                <small>
+                                    <strong>
+                                        {{ issueData.message }}
+                                    </strong>
+                                </small>
+                            </p>
+                        </div>
+                    </v-alert>
+                </div>
+            </div>
+            <!--  -->
+            <div v-else>
+                <div class="pl-2 pr-2">
+                    <v-alert
+                        transition="slide-x-transition"
+                        dense
+                        border="left"
+                        type="success"
+                        class="body-2 mt-2"
+                    >
+                        <strong
+                            >Všechny dohledované streamy jsou funknčí</strong
+                        >
                     </v-alert>
                 </div>
             </div>
@@ -255,10 +299,16 @@ import AlertComponent from "./Alerts/AlertComponent";
 import ChannelsMenuComponent from "./channels/ChannelsMenuComponent";
 import DevicesMenuComponent from "./devices/DevicesMenuComponent";
 import SearchCompoennt from "../components/SearchBar/SearchComponent";
+import CardsMenuComponent from "./Cards/CardMenuComponent";
+import EventComponent from "./Alerts/EventComponent";
+
+import SettingsMenuComponent from "./Settings/SettingsMenuComponent";
 
 export default {
     data() {
         return {
+            alerts: [],
+            alertCount: "0",
             snackbar: false,
             text: "Prosím reloadněte si stránku!",
             vertical: true,
@@ -307,21 +357,40 @@ export default {
         "alert-component": AlertComponent,
         "channelssidemenu-component": ChannelsMenuComponent,
         "devicessidemenu-component": DevicesMenuComponent,
-        "search-compoennt": SearchCompoennt
+        "search-compoennt": SearchCompoennt,
+        "cardsmenu-component": CardsMenuComponent,
+        "event-component": EventComponent,
+        "settingsmenu-component": SettingsMenuComponent
     },
 
     created() {
         this.getUser();
         this.loadWriteDataByUri();
+        this.getAlertsFromDohled();
     },
     methods: {
-        logOut() {
-            window.axios("logout").then(response => {
-                this.$route.push("/login");
-            });
+        async getAlertsFromDohled() {
+            try {
+                await axios.get("/api/iptv/alerts").then(response => {
+                    if (response.data.length === 0) {
+                        this.alerts = response.data;
+                        this.alertCount = "0";
+                    } else {
+                        this.alerts = response.data;
+                        this.alertCount = response.data.length;
+                    }
+                });
+            } catch (error) {}
+        },
+        async logOut() {
+            try {
+                await axios.get("logout").then(response => {
+                    this.$router.push("/login");
+                });
+            } catch (error) {}
         },
         getUser() {
-            window.axios.get("user").then(response => {
+            axios.get("user").then(response => {
                 // overení pokud není problem s overením csrf tokenu
 
                 if (response.status === 419) {
@@ -332,7 +401,7 @@ export default {
                     // není problem s csrf pokracujeme dále
 
                     if (response.data.status == "error") {
-                        this.logOut();
+                        this.$router.push("/login");
                     } else {
                         this.$store.state.user = response.data.data;
                         this.user = response.data.data;
@@ -342,8 +411,7 @@ export default {
         },
 
         loadWriteDataByUri() {
-
-            if(this.$route.path === "/") {
+            if (this.$route.path === "/") {
                 this.$router.push("/channel");
                 this.componentType = "channels";
             }
@@ -356,14 +424,29 @@ export default {
                 this.componentType = "devices";
             }
 
-            if (this.$route.path.match("/cards.*")) {
+            if (this.$route.path.match("/card.*")) {
                 this.componentType = "cards";
             }
 
             if (this.$route.path.match("/wiki.*")) {
                 this.componentType = "wiki";
             }
+
+            if (this.$route.path.match("/settings.*")) {
+                this.componentType = "settings";
+            }
         }
+    },
+
+    mounted() {
+        setInterval(
+            function() {
+                try {
+                    this.getAlertsFromDohled();
+                } catch (error) {}
+            }.bind(this),
+            10000
+        );
     },
 
     watch: {

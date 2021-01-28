@@ -10,7 +10,10 @@ import Vuetify from "vuetify";
 import VueRouter from "vue-router";
 import Vue from "vue";
 import TrendChart from "vue-trend-chart";
+import VueAxios from "vue-axios";
+import axios from "axios";
 
+Vue.use(VueAxios, axios);
 Vue.use(TrendChart);
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -21,15 +24,41 @@ Vue.component("apexchart", VueApexCharts);
 
 // Auth
 // Login
-import LoginComponent from "./components/Auth/LoginComponent";
+const LoginComponent = () =>
+    import(
+        "./components/Auth/LoginComponent" /* webpackChunkName: "resource/js/components/Auth/LoginComponent" */
+    );
 
-import NavigationComponent from "./components/NavigationComponent.vue";
-import ChannelComponent from "./components/channels/ChannelComponent.vue";
+const NavigationComponent = () =>
+    import(
+        "./components/NavigationComponent" /* webpackChunkName: "resource/js/components/NavigationComponent" */
+    );
 
-import DeviceComponent from "./components/devices/DeviceComponent";
+const ChannelComponent = () =>
+    import(
+        "./components/channels/ChannelComponent.vue" /* webpackChunkName: "resource/js/components/channels/ChannelComponent.vue" */
+    );
 
+const DeviceComponent = () =>
+    import(
+        "./components/devices/DeviceComponent" /* webpackChunkName: "resource/js/components/devices/DeviceComponent" */
+    );
 
-import PageNotFoundComponent from "./components/PageNotFoundComponent";
+const CardComponent = () =>
+    import(
+        "./components/Cards/CardComponent" /* webpackChunkName: "resource/js/components/Cards/CardComponent" */
+    );
+
+const SettinsComponent = () =>
+    import(
+        "./components/Settings/_obecneSettingsComponent" /* webpackChunkName: "resource/js/components/Settings/_obecneSettingsComponent" */
+    );
+
+const PageNotFoundComponent = () =>
+    import(
+        "./components/PageNotFoundComponent" /* webpackChunkName: "resource/js/components/PageNotFoundComponent" */
+    );
+
 let routes = [
     {
         path: "/",
@@ -37,7 +66,7 @@ let routes = [
         children: [
             {
                 path: "/channel",
-                component: ChannelComponent, 
+                component: ChannelComponent,
                 children: [
                     {
                         path: "/channel/:id",
@@ -64,6 +93,26 @@ let routes = [
                     {
                         path: "/device/:id",
                         component: DeviceComponent
+                    }
+                ]
+            },
+            {
+                path: "card",
+                component: CardComponent,
+                children: [
+                    {
+                        path: "/card/:id",
+                        component: CardComponent
+                    }
+                ]
+            },
+            {
+                path: "/settings",
+                component: SettinsComponent,
+                children: [
+                    {
+                        path: "/settings/:name",
+                        component: SettinsComponent
                     }
                 ]
             }

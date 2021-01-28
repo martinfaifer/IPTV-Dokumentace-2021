@@ -161,8 +161,8 @@ export default {
         this.loadInterfaces();
     },
     methods: {
-        loadAllInterfaces() {
-            axios.get("device/allInterfaces").then(response => {
+        async loadAllInterfaces() {
+            await axios.get("device/allInterfaces").then(response => {
                 this.allInterfaces = response.data;
             });
         },
@@ -175,8 +175,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadInterfaces() {
-            axios
+        async loadInterfaces() {
+            await axios
                 .post("device/currentInterfaces", {
                     deviceId: this.$route.params.id
                 })
@@ -193,8 +193,8 @@ export default {
             this.loadAllInterfaces();
         },
 
-        saveDeviceInfo() {
-            axios
+        async saveDeviceInfo() {
+            await axios
                 .post("device/interfaces/edit", {
                     deviceId: this.$route.params.id,
                     interfaces: this.deviceInterfaces
@@ -215,8 +215,8 @@ export default {
             this.deleteDeviceData = true;
         },
 
-        saveDeleteDeviceInfo() {
-            axios
+        async saveDeleteDeviceInfo() {
+            await axios
                 .post("device/interfaces/delete", {
                     deviceId: this.$route.params.id
                 })

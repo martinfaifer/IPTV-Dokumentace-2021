@@ -1,11 +1,18 @@
 <template>
     <v-main>
-        <v-container fluid class="ml-3" >
+        <v-container fluid class="ml-3">
             <div>
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ deviceName }}</h2>
                 <v-divider class="mr-10" inline> </v-divider>
             </div>
+
+            <v-row class="mt-4" v-if="deviceVendor === 'nVidia'">
+                <v-col cols="12">
+                    <!-- informace o transcoerech / hw usage -->
+                    <transcoder-compoennt></transcoder-compoennt>
+                </v-col>
+            </v-row>
 
             <v-row class=" mt-6">
                 <v-col>
@@ -43,15 +50,6 @@
                     <channelsondevice-component></channelsondevice-component>
                 </v-col>
             </v-row>
-
-            <v-row class="mt-4">
-                <v-col>
-                    <!-- kalendar component -->
-                </v-col>
-                <v-col>
-                    <!-- note component -->
-                </v-col>
-            </v-row>
         </v-container>
     </v-main>
 </template>
@@ -64,6 +62,7 @@ import InterfacesComponent from "./Interfaces/_interfacesforChannelsComponent";
 import deviceInformationComponent from "./_deviceInfoComponent";
 import deviceTemplateComponent from "./_deviceTemplateComponent";
 import channelsOnDeviceComponent from "./_channelsOnDeviceComponent";
+import TranscoderCompoennt from "./Transcoder/TranscoderComponent";
 
 export default {
     data() {
@@ -80,15 +79,16 @@ export default {
         "blankominputs-component": BlankomInputsComponent,
         "fteinputs-component": FteInputsComponent,
         "powervu-component": PowerVuComponent,
-        "interfaces-component": InterfacesComponent
+        "interfaces-component": InterfacesComponent,
+        "transcoder-compoennt": TranscoderCompoennt
     },
     created() {
         this.loadDeviceNameById();
         this.loadDeviceVendor();
     },
     methods: {
-        loadDeviceNameById() {
-            axios
+        async loadDeviceNameById() {
+            await axios
                 .post("device/name", {
                     deviceId: this.$route.params.id
                 })
@@ -97,8 +97,8 @@ export default {
                 });
         },
 
-        loadDeviceVendor() {
-            axios
+        async loadDeviceVendor() {
+            await axios
                 .post("device/vendor", {
                     deviceId: this.$route.params.id
                 })

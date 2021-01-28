@@ -60,6 +60,45 @@
                                 >
                             </v-tooltip>
                         </span>
+
+                        <v-col
+                            cols="12"
+                            v-if="transcoderStatus != null"
+                            class="ml-3"
+                        >
+                            <span
+                                v-if="
+                                    transcoderStatus.streamStatus === 'active'
+                                "
+                            >
+                            Stav streamu z transcoderu: 
+                                <span class="green--text">
+                                    <strong>
+                                        Transcoduje
+                                    </strong>
+                                </span>
+                            </span>
+
+                            <span
+                                v-else-if="
+                                    transcoderStatus.streamStatus === 'STOP'
+                                "
+                            >
+                                <span class="blue--text">
+                                    <strong>
+                                        Transcoding je zastaven
+                                    </strong>
+                                </span>
+                            </span>
+
+                            <span v-else>
+                                <span class="red--text">
+                                    <strong>
+                                        Problém s transcodingem
+                                    </strong>
+                                </span>
+                            </span>
+                        </v-col>
                     </v-row>
                     <v-row v-else>
                         <strong class="blue--text">
@@ -134,6 +173,7 @@
 export default {
     data() {
         return {
+            transcoderStatus: null,
             editDataDialog: false,
             transcoder: [],
             transcoders: [],
@@ -144,13 +184,14 @@ export default {
     },
     created() {
         this.loadTranscoder();
+        this.loadStatusFromTramscoder();
     },
     methods: {
         closeDialog() {
             this.editDataDialog = false;
         },
-        savedata() {
-            axios
+        async savedata() {
+            await axios
                 .post("h264/transcoder/update", {
                     channelId: this.$route.params.id,
                     transcoder: this.transcoder.name
@@ -161,8 +202,8 @@ export default {
                     this.loadTranscoder();
                 });
         },
-        openEditDialog() {
-            axios.get("device/transcoders").then(response => {
+        async openEditDialog() {
+            await axios.get("device/transcoders").then(response => {
                 this.transcoders = response.data;
                 this.editDataDialog = true;
             });
@@ -176,8 +217,21 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadTranscoder() {
-            axios
+        async loadStatusFromTramscoder() {
+            await axios
+                .post("h264/transcoder/status", {
+                    channelId: this.$route.params.id
+                })
+                .then(response => {
+                    if(response.data.status === 'success') {
+                        this.transcoderStatus = response.data;
+                    } else {
+                        this.transcoderStatus = null;
+                    }
+                });
+        },
+        async loadTranscoder() {
+            await axios
                 .post("h264/transcoder", {
                     channelId: this.$route.params.id
                 })
@@ -193,6 +247,7 @@ export default {
     watch: {
         $route(to, from) {
             this.loadTranscoder();
+            this.loadStatusFromTramscoder();
         }
     }
 };

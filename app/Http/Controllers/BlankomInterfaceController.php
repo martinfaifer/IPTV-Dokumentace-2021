@@ -95,7 +95,7 @@ class BlankomInterfaceController extends Controller
                     "rf" . $request->interfaceId . "_fec" => $request->fec,
                     "rf" . $request->interfaceId . "_freq" => $request->freq,
                     "rf" . $request->interfaceId . "_pol" => $polarizace,
-                    "CI" . $request->interfaceId => $request->ci
+                    "CI" . $request->interfaceId => $request->ci["card_number"] ?? null
                 ]
             );
 

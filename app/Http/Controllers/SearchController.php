@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Channel;
 use App\Models\Device;
 use App\Models\Multicast;
+use App\Models\SatelitCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -40,6 +41,13 @@ class SearchController extends Controller
             $sumArr[] = array(
                 'result' => $device->name,
                 'url' => "device/{$device->id}"
+            );
+        }
+
+        foreach (SatelitCard::get(['id', 'card_number']) as $card) {
+            $sumArr[] = array(
+                'result' => $card->card_number,
+                'url' => "card/{$card->id}"
             );
         }
 

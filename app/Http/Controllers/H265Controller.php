@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChannelsToTranscoder;
+use App\Models\ChannelToDohled;
+use App\Models\Device;
+use App\Models\H264;
 use App\Models\H265;
+use App\Models\UnicastKvalitaChannelOutput;
 use Illuminate\Http\Request;
 
 class H265Controller extends Controller
@@ -44,6 +49,30 @@ class H265Controller extends Controller
     }
 
 
+    public static function try_to_get_stream_status(Request $request): array
+    {
+        if (!H265::where('channelId', $request->channelId)->first()) {
+            return [
+                'status' => "empty"
+            ];
+        }
+        if ($streamId = ChannelsToTranscoder::where(
+            'H265Id',
+            H265::where('channelId', $request->channelId)->first()->id
+        )->first()) {
+            return [
+                'status' => "success",
+                'streamStatus' => ApiController::get_streamStatus_from_transcoder($streamId->transcoderId)
+            ];
+        } else {
+            return [
+                'status' => "error",
+                'streamStatus' => null
+            ];
+        }
+    }
+
+
     /**
      * odebrání kanálu 
      *
@@ -73,5 +102,128 @@ class H265Controller extends Controller
                 )
             ];
         }
+    }
+
+
+    public static function create(Request $request): array
+    {
+        // $request->channelId , addToTranscoder , transcoder, output1080 , output720
+
+        if (is_null($request->transcoder) || empty($request->transcoder)) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "warning",
+                    'msg' => "Není vyplněno zařízení"
+                )
+            ];
+        }
+
+
+        if (H265::where('channelId', $request->channelId)->first()) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Kanál má již H265 výstup"
+                )
+            ];
+        }
+
+        // zalození
+        $h265 = H265::create(
+            [
+                'channelId' => $request->channelId,
+                'deviceId' => Device::where('name', $request->transcoder)->first()->id
+            ]
+        );
+
+
+
+        // zallzení kvalit
+
+        if (
+            !is_null($request->output1080) || !empty($request->output1080) ||
+            !is_null($request->output720) || !empty($request->output720)
+        ) {
+
+            // zalození + validace
+
+            if (!is_null($request->output1080) || !empty($request->output1080)) {
+                UnicastKvalitaChannelOutput::create(
+                    [
+                        'kvalitaId' => "4",
+                        'h265Id' => $h265->id,
+                        'output' => $request->output1080
+                    ]
+                );
+            }
+
+            if (!is_null($request->output720) || !empty($request->output720)) {
+                UnicastKvalitaChannelOutput::create(
+                    [
+                        'kvalitaId' => "5",
+                        'h265Id' => $h265->id,
+                        'output' => $request->output720
+                    ]
+                );
+            }
+        }
+
+
+        return [
+            'status' => "success",
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Výstup vytvořen"
+            ),
+            'channelId' => $request->channelId
+        ];
+    }
+
+
+    public function update_transcoder(Request $request): array
+    {
+        try {
+            H265::where('channelId', $request->channelId)->update(
+                [
+                    'deviceId' => Device::where('name', $request->transcoder)->first()->id
+                ]
+            );
+
+
+            return [
+                'status' => "success",
+                'alert' => array(
+                    'status' => "success",
+                    'msg' => "Změněno"
+                )
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Nepodařilo se změnit"
+                )
+            ];
+        }
+    }
+
+    public static function return_dohled_data(Request $request): array
+    {
+        // vyhledání H264
+        if (!H265::where('channelId', $request->channelId)->first()) {
+            return [];
+        }
+
+        // overení existence id v ChannelsToDohled
+        if (!ChannelToDohled::where('H265Id', H265::where('channelId', $request->channelId)->first()->id)->first()) {
+            return [];
+        }
+
+        return ApiController::return_information_about_channel(
+            ChannelToDohled::where('H265Id', H265::where('channelId', $request->channelId)->first()->id)->first()->dohledId
+        );
     }
 }

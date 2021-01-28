@@ -3,7 +3,21 @@
         <v-container fluid class="ml-3">
             <div>
                 <!-- Zobrazení názvu kanálu -->
-                <h2>{{ channelName }} - H264</h2>
+                <h2>
+                    {{ channelName }} - H264
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon
+                                v-on="on"
+                                @click="removeH264()"
+                                small
+                                color="red"
+                                >mdi-delete</v-icon
+                            >
+                        </template>
+                        <span>Odebrání H264</span>
+                    </v-tooltip>
+                </h2>
                 <v-divider inline> </v-divider>
             </div>
 
@@ -11,15 +25,7 @@
                 <v-row class="mt-4">
                     <v-col>
                         <!-- component pro získání chunk store id -->
-                        <chunkstoreid-component></chunkstoreid-component>
-                    </v-col>
-                    <v-col>
-                        <!-- kvality component -->
-                        <kvalityoutput-component></kvalityoutput-component>
-                    </v-col>
-                    <v-col>
-                        <!-- m3u8 component -->
-                        <m3u8-component></m3u8-component>
+                        <h264info-component></h264info-component>
                     </v-col>
                 </v-row>
 
@@ -28,8 +34,12 @@
                         <!-- transcoder component -->
                         <transcoder-component></transcoder-component>
                     </v-col>
+                </v-row>
+
+                <v-row class="mt-4">
                     <v-col>
-                        <!-- note component -->
+                        <!-- dohled component -->
+                        <dohled-component></dohled-component>
                     </v-col>
                 </v-row>
             </div>
@@ -177,10 +187,9 @@
     </v-main>
 </template>
 <script>
-import chunkStoreIdComponent from "./_chunkStoreIdComponent";
-import kvalityOutputComponent from "./_kvalityOutputComponent";
-import m3u8Component from "./_M38uComponent";
+import H264InfoComponent from "./H264InfoCoomponent";
 import transcoderComponent from "./_unicastDeviceComponent";
+import DohledComponent from "../Dohled/DohledH264Component";
 
 export default {
     data() {
@@ -204,42 +213,57 @@ export default {
         };
     },
     components: {
-        "chunkstoreid-component": chunkStoreIdComponent,
-        "kvalityoutput-component": kvalityOutputComponent,
-        "m3u8-component": m3u8Component,
-        "transcoder-component": transcoderComponent
+        "h264info-component": H264InfoComponent,
+        "transcoder-component": transcoderComponent,
+        "dohled-component": DohledComponent
     },
     created() {
         this.loadChannelNameById();
         this.checkIfIs();
     },
     methods: {
-        createOutput() {
-            axios.get("device/transcoders").then(response => {
+        async removeH264() {
+            await axios
+                .post("h264/delete", {
+                    channelId: this.$route.params.id
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    if (response.data.status === "success") {
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
+                });
+        },
+        async createOutput() {
+            await axios.get("device/transcoders").then(response => {
                 this.transcoders = response.data;
                 this.outputDialog = true;
             });
         },
-        savedata() {
-            axios.post('h264/create', {
-                channelId: this.$route.params.id,
-                addToTranscoder: this.addToTranscoder,
-                chunkStoreId: this.chunkStoreId,
-                transcoder: this.transcoder,
-                output1080: this.output1080,
-                output720: this.output720,
-                output576: this.output576,
-                hlsKdekoliv: this.hlsKdekoliv,
-                hlsLocal: this.hlsLocal,
-                hlsMobile: this.hlsMobile,
-            }).then(response => {
-                this.$store.state.alerts = response.data.alert;
-                if(response.data.status === 'success') {
-                    this.closeDialog();
-                    this.$router.push("/").catch(err => {});
-                    this.$router.push("/channel/" + response.data.channelId + "/h264").catch(err => {});
-                }
-            })
+        async savedata() {
+            await axios
+                .post("h264/create", {
+                    channelId: this.$route.params.id,
+                    addToTranscoder: this.addToTranscoder,
+                    chunkStoreId: this.chunkStoreId,
+                    transcoder: this.transcoder,
+                    output1080: this.output1080,
+                    output720: this.output720,
+                    output576: this.output576,
+                    hlsKdekoliv: this.hlsKdekoliv,
+                    hlsLocal: this.hlsLocal,
+                    hlsMobile: this.hlsMobile
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    // this.$route.push("/");
+                    // this.$route.push("/channel/" + response.data.channelId + "/h264");
+                    this.loadChannelNameById();
+                    this.checkIfIs();
+                    this.outputDialog = false;
+                });
         },
 
         closeDialog() {
@@ -254,8 +278,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadChannelNameById() {
-            axios
+        async loadChannelNameById() {
+            await axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })
@@ -263,8 +287,8 @@ export default {
                     this.channelName = response.data;
                 });
         },
-        checkIfIs() {
-            axios
+        async checkIfIs() {
+            await axios
                 .post("h264/check", {
                     channelId: this.$route.params.id
                 })

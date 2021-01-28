@@ -186,23 +186,29 @@
                                         </v-col>
 
                                         <v-col cols="12">
-                                            <v-text-field
+                                            <v-combobox
                                                 dense
                                                 label="CIA"
+                                                :items="cards"
+                                                item-text="card_number"
+                                                item-value="card_number"
                                                 v-model="cia"
-                                                type="number"
                                                 required
-                                            ></v-text-field>
+                                                clearable
+                                            ></v-combobox>
                                         </v-col>
 
                                         <v-col cols="12">
-                                            <v-text-field
+                                            <v-combobox
                                                 dense
                                                 label="CIB"
+                                                :items="cards"
+                                                item-text="card_number"
+                                                item-value="card_number"
                                                 v-model="cib"
-                                                type="number"
                                                 required
-                                            ></v-text-field>
+                                                clearable
+                                            ></v-combobox>
                                         </v-col>
                                     </span>
                                 </v-container>
@@ -235,6 +241,7 @@
 export default {
     data() {
         return {
+            cards: [],
             polarizaces: [],
             satelits: [],
             dvbs: [],
@@ -277,8 +284,14 @@ export default {
             });
         },
 
-        loadDeviceTemplate() {
-            axios
+        async loadCards() {
+            await axios.get("cards").then(response => {
+                this.cards = response.data;
+            });
+        },
+
+        async loadDeviceTemplate() {
+            await axios
                 .post("device/template", {
                     deviceId: this.$route.params.id
                 })
@@ -291,8 +304,8 @@ export default {
                 });
         },
 
-        getSatelits() {
-            axios.get("satelits").then(response => {
+        async getSatelits() {
+            await axios.get("satelits").then(response => {
                 if (response.data.status === "success") {
                     this.satelits = response.data.data;
                 } else {
@@ -301,8 +314,8 @@ export default {
             });
         },
 
-        getDVBS() {
-            axios.get("dvb").then(response => {
+        async getDVBS() {
+            await axios.get("dvb").then(response => {
                 if (response.data.status === "success") {
                     this.dvbs = response.data.data;
                 } else {
@@ -311,8 +324,8 @@ export default {
             });
         },
 
-        getPolarizace() {
-            axios.get("polarizace").then(response => {
+        async getPolarizace() {
+            await axios.get("polarizace").then(response => {
                 this.polarizaces = response.data;
             });
         },
@@ -321,11 +334,12 @@ export default {
             this.getSatelits();
             this.getDVBS();
             this.getPolarizace();
+            this.loadCards();
             this.editInterfaceSablonaData = true;
         },
 
-        saveInterface() {
-            axios
+        async saveInterface() {
+            await axios
                 .post("device/fte/interface", {
                     deviceId: this.$route.params.id,
                     sat: this.sat,

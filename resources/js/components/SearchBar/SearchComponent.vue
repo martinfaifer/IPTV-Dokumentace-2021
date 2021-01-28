@@ -31,10 +31,8 @@
                     <v-row>
                         <v-autocomplete
                             autofocus
-                            v-model="model"
-                            :items="items"
-                            :loading="isLoading"
-                            :search-input.sync="search"
+                            v-model.lazy="model"
+                            :items="entries"
                             cache-items
                             hide-no-data
                             hide-selected
@@ -56,41 +54,24 @@
 export default {
     data() {
         return {
-            descriptionLimit: 60,
             searchDialogInput: false,
-            hints: true,
+            descriptionLimit: 60,
+            entries: [],
             isLoading: false,
             model: null,
-            search: null,
-            entries: []
+            search: null
         };
-    },
-    computed: {
-        fields() {
-            if (!this.model) return [];
-            return Object.keys(this.model).map(key => {
-                return {
-                    key,
-                    value: this.model[key] || "n/a"
-                };
-            });
-        },
-        items() {
-            return this.entries.map(entry => {
-                const result =
-                    entry.result.length > this.descriptionLimit
-                        ? entry.result.slice(0, this.descriptionLimit) + '...'
-                        : entry.result;
-                return Object.assign({}, entry, { result });
-            });
-        }
     },
     created() {},
     methods: {
-        searchDialog() {
+        async searchDialog() {
             this.searchDialogInput = true;
             this.search = null;
             this.model = null;
+
+            await axios.get('search').then(response => {
+                this.entries = response.data.entries
+            });
         }
     },
     mounted() {
@@ -103,22 +84,6 @@ export default {
         });
     },
     watch: {
-        $route(to, from) {},
-        search() {
-            if (this.items.length > 0) return;
-            this.isLoading = true;
-            // let currentObj = this;
-            fetch("/search")
-                .then(res => res.json())
-                .then(res => {
-                    const { entries } = res;
-                    this.entries = entries;
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => (this.isLoading = false));
-        },
         model() {
             if (this.model == undefined) {
                 // nic
@@ -126,7 +91,6 @@ export default {
                 this.$router.push("/channel");
                 this.$router.push("/" + this.model.url);
                 this.searchDialogInput = false;
-                this.search = null;
                 this.model = null;
             }
         }

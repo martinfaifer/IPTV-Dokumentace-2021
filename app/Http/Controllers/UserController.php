@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,6 +25,20 @@ class UserController extends Controller
         return [
             'status' => "success",
             'data' => Auth::user()
+        ];
+    }
+
+    public function get_users(): array
+    {
+        if (!User::first()) {
+            return [
+                'status' => "empty"
+            ];
+        }
+
+        return [
+            'status' => "success",
+            'users' => User::all()
         ];
     }
 }

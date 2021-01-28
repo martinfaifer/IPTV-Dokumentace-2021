@@ -1,181 +1,205 @@
 <template>
     <v-main>
-        <v-card
-            flat
-            color="#F5F5F7"
-            v-if="multiplexor != null"
-            @contextmenu="show($event)"
-        >
-            <v-card-subtitle>
-                <strong>
-                    Multiplexer
-                </strong>
-            </v-card-subtitle>
-            <v-card-text class="ml-12 text--center">
-                <v-container>
-                    <v-row v-if="multiplexor != null">
-                        <span class="ml-6" v-if="multiplexor.name != null">
-                            {{ multiplexor.name }}
-                            <!-- info -->
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-btn small icon>
-                                        <v-icon
-                                            @click="show = !show"
-                                            small
-                                            v-on="on"
-                                        >
-                                            mdi-information
-                                        </v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>
-                                    <v-container
-                                        v-if="
-                                            multiplexor.ip != null &&
-                                                multiplexor.login_user !=
-                                                    null &&
-                                                multiplexor.login_password !=
-                                                    null
-                                        "
-                                    >
-                                        <v-row>
-                                            <strong>
-                                                IP:
-                                            </strong>
-                                            <span class="ml-2">
-                                                {{ multiplexor.ip }}
-                                            </span>
-                                        </v-row>
-                                        <v-row class="mt-2">
-                                            <strong>Přístup:</strong>
-                                            <span class="ml-2">
-                                                {{ multiplexor.login_user }} /
-                                                {{ multiplexor.login_password }}
-                                            </span>
-                                        </v-row>
-                                    </v-container>
-                                    <v-container v-else>
-                                        Nejsou žádné detailní informace
-                                    </v-container>
-                                </span>
-                            </v-tooltip>
-                            <!-- hyperlink na device -->
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-btn
-                                        small
-                                        icon
-                                        link
-                                        :href="'http://' + multiplexor.ip"
-                                        target="_blank"
-                                    >
-                                        <v-icon small v-on="on">
-                                            mdi-earth
-                                        </v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Přímý proklik na zařízení</span>
-                            </v-tooltip>
-                            <!-- hyperlink v ramci doku -->
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-btn
-                                        small
-                                        icon
-                                        link
-                                        :to="'/device/' + multiplexor.id"
-                                        target="_blank"
-                                    >
-                                        <v-icon small v-on="on">
-                                            mdi-arrow-right
-                                        </v-icon>
-                                    </v-btn>
-                                </template>
+        <v-col>
+            <v-card
+                flat
+                color="#F5F5F7"
+                v-if="multiplexor != null"
+                @contextmenu="show($event)"
+            >
+                <v-card-subtitle>
+                    <strong>
+                        Multiplexer
+                    </strong>
+                </v-card-subtitle>
+                <v-card-text class="ml-12 text--center">
+                    <v-container>
+                        <v-row v-if="multiplexor != null">
+                            <v-col cols="12">
                                 <span
-                                    >Proklik na zařízení v rámci
-                                    dokumentace</span
+                                    class="ml-6"
+                                    v-if="multiplexor.name != null"
                                 >
-                            </v-tooltip>
-                        </span>
-                    </v-row>
-                    <v-row v-else>
-                        <strong class="blue--text">
-                            Není nadefinován
-                        </strong>
-                    </v-row>
-                </v-container>
-            </v-card-text>
-        </v-card>
+                                    {{ multiplexor.name }}
+                                    <!-- info -->
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn small icon>
+                                                <v-icon
+                                                    @click="show = !show"
+                                                    small
+                                                    v-on="on"
+                                                >
+                                                    mdi-information
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>
+                                            <v-container
+                                                v-if="
+                                                    multiplexor.ip != null &&
+                                                        multiplexor.login_user !=
+                                                            null &&
+                                                        multiplexor.login_password !=
+                                                            null
+                                                "
+                                            >
+                                                <v-row>
+                                                    <strong>
+                                                        IP:
+                                                    </strong>
+                                                    <span class="ml-2">
+                                                        {{ multiplexor.ip }}
+                                                    </span>
+                                                </v-row>
+                                                <v-row class="mt-2">
+                                                    <strong>Přístup:</strong>
+                                                    <span class="ml-2">
+                                                        {{
+                                                            multiplexor.login_user
+                                                        }}
+                                                        /
+                                                        {{
+                                                            multiplexor.login_password
+                                                        }}
+                                                    </span>
+                                                </v-row>
+                                            </v-container>
+                                            <v-container v-else>
+                                                Nejsou žádné detailní informace
+                                            </v-container>
+                                        </span>
+                                    </v-tooltip>
+                                    <!-- hyperlink na device -->
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn
+                                                small
+                                                icon
+                                                link
+                                                :href="
+                                                    'http://' + multiplexor.ip
+                                                "
+                                                target="_blank"
+                                            >
+                                                <v-icon small v-on="on">
+                                                    mdi-earth
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Přímý proklik na zařízení</span>
+                                    </v-tooltip>
+                                    <!-- hyperlink v ramci doku -->
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn
+                                                small
+                                                icon
+                                                link
+                                                :to="
+                                                    '/device/' + multiplexor.id
+                                                "
+                                                target="_blank"
+                                            >
+                                                <v-icon small v-on="on">
+                                                    mdi-arrow-right
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span
+                                            >Proklik na zařízení v rámci
+                                            dokumentace</span
+                                        >
+                                    </v-tooltip>
+                                </span>
+                            </v-col>
+                        </v-row>
+                        <v-row v-else>
+                            <strong class="blue--text">
+                                Není nadefinován
+                            </strong>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+            </v-card>
 
-        <v-menu
-            dense
-            v-model="showMenu"
-            :position-x="x"
-            :position-y="y"
-            absolute
-            offset-y
-        >
-            <!-- menu -->
-            <v-list dense>
-                <v-list-item @click="openEditMultiplexor()">
-                    <v-list-item-icon>
-                        <v-icon x-small>mdi-pencil</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        Upravit
-                    </v-list-item-title>
-                </v-list-item>
+            <v-menu
+                dense
+                v-model="showMenu"
+                :position-x="x"
+                :position-y="y"
+                absolute
+                offset-y
+            >
+                <!-- menu -->
+                <v-list dense>
+                    <v-list-item @click="openEditMultiplexor()">
+                        <v-list-item-icon>
+                            <v-icon x-small>mdi-pencil</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            Upravit
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item @click="removeMultiplexor()">
-                    <v-list-item-icon>
-                        <v-icon x-small>mdi-delete</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        Odebrat
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
+                    <v-list-item @click="removeMultiplexor()">
+                        <v-list-item-icon>
+                            <v-icon x-small>mdi-delete</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            Odebrat
+                        </v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
 
-        <v-row justify="center" v-if="multiplexor != null">
-            <v-dialog v-model="editMultiplexor" persistent max-width="1000px">
-                <v-card>
-                    <v-card-title>
-                        <span class="headline">Editace multiplexoru</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-combobox
-                                        dense
-                                        v-model="multiplexor.name"
-                                        label="Multiplexor"
-                                        :items="items"
-                                        required
-                                        clearable
-                                    ></v-combobox>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="closeDialog()"
-                        >
-                            Zavřít
-                        </v-btn>
-                        <v-btn color="green darken-1" text @click="savedata()">
-                            Uložit
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-        </v-row>
+            <v-row justify="center" v-if="multiplexor != null">
+                <v-dialog
+                    v-model="editMultiplexor"
+                    persistent
+                    max-width="1000px"
+                >
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">Editace multiplexoru</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-combobox
+                                            dense
+                                            v-model="multiplexor.name"
+                                            label="Multiplexor"
+                                            :items="items"
+                                            required
+                                            clearable
+                                        ></v-combobox>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                color="blue darken-1"
+                                text
+                                @click="closeDialog()"
+                            >
+                                Zavřít
+                            </v-btn>
+                            <v-btn
+                                color="green darken-1"
+                                text
+                                @click="savedata()"
+                            >
+                                Uložit
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </v-col>
     </v-main>
 </template>
 <script>
@@ -203,13 +227,13 @@ export default {
                 this.showMenu = true;
             });
         },
-        getMultiplexors() {
-            axios.get("device/multiplexors").then(response => {
+        async getMultiplexors() {
+            await axios.get("device/multiplexors").then(response => {
                 this.items = response.data;
             });
         },
-        loadMultiplexor() {
-            axios
+        async loadMultiplexor() {
+            await axios
                 .post("multiplexor", {
                     channelId: this.$route.params.id
                 })
@@ -231,8 +255,8 @@ export default {
             this.editMultiplexor = false;
         },
 
-        savedata() {
-            axios
+        async savedata() {
+            await axios
                 .post("channel/multiplexer/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.multiplexor.name
@@ -248,8 +272,8 @@ export default {
                 });
         },
 
-        removeMultiplexor() {
-            axios
+        async removeMultiplexor() {
+            await axios
                 .post("channel/multiplexer/remove", {
                     channelId: this.$route.params.id
                 })

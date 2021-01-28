@@ -17,6 +17,7 @@ class CreateTagsTable extends Migration
             $table->id();
             $table->string('tagName');
             $table->string('color');
+            $table->integer('system')->nullable();
             $table->timestamps();
         });
     }

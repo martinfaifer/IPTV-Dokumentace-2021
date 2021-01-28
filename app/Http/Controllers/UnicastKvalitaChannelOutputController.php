@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class UnicastKvalitaChannelOutputController extends Controller
 {
 
-    public function h264_update(Request $request): array
+    public static function h264_update(Request $request): array
     {
 
         // validace
@@ -123,6 +123,19 @@ class UnicastKvalitaChannelOutputController extends Controller
             'p1080' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "1")->first()->output ?? null,
             'p720' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "2")->first()->output ?? null,
             'p576' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "3")->first()->output ?? null
+        ];
+    }
+
+
+    public function return_h265_output_for_edit(Request $request): array
+    {
+        // 1080 4, 720 5,
+
+        $h265 = H265::where('channelId', $request->channelId)->first();
+
+        return [
+            'p1080' => UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->where('kvalitaId', "4")->first()->output ?? null,
+            'p720' => UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->where('kvalitaId', "5")->first()->output ?? null,
         ];
     }
 

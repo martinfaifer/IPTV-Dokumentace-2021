@@ -32,6 +32,37 @@
                     </v-row>
                 </v-container>
             </v-card-text>
+
+            <v-divider class="ml-6" width="95%"></v-divider>
+
+            <v-card-subtitle>
+                <strong>
+                    Výstupní kvality
+                </strong>
+            </v-card-subtitle>
+
+            <v-card-text
+                class="ml-12 text--center"
+                v-if="kvalityOutput != null"
+            >
+                <v-container fluid>
+                    <v-list-item
+                        v-for="output in kvalityOutput"
+                        :key="output.output"
+                    >
+                        <v-list-item-content>
+                            <v-list-item-subtitle>
+                                <span>
+                                    <strong> {{ output.format }}p: </strong>
+                                </span>
+                                <span class="ml-3">
+                                    {{ output.output }}
+                                </span>
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-container>
+            </v-card-text>
         </v-card>
 
         <v-menu
@@ -44,35 +75,37 @@
         >
             <!-- menu -->
             <v-list dense>
-                <v-list-item @click="editDataDialog = true">
+                <v-list-item @click="openDialog()">
                     <v-list-item-icon>
                         <v-icon x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
-                        Upravil Chunk store ID
+                        Upravit výstupní kvality
                     </v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-menu>
 
         <v-row justify="center">
-            <v-dialog
-                v-model="editDataDialog"
-                persistent
-                max-width="1000px"
-            >
+            <v-dialog v-model="editDataDialog" persistent max-width="1000px">
                 <v-card>
                     <v-card-title>
-                        <span class="headline">Změna Chunk Store ID </span>
+                        <span class="headline">Upravení kvalit</span>
                     </v-card-title>
                     <v-card-text>
                         <v-container>
                             <v-row>
                                 <v-col cols="12">
                                     <v-text-field
-                                        label="Chunk store ID"
-                                        v-model="chunkStoreId"
-                                        type="number"
+                                        v-model="kvalityForDialog.p1080"
+                                        label="URL pro 1080p"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="kvalityForDialog.p720"
+                                        label="URL pro 720p"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -102,6 +135,8 @@ export default {
         return {
             editDataDialog: false,
             chunkStoreId: null,
+            kvalityOutput: null,
+            kvalityForDialog: [],
             showMenu: false,
             x: 0,
             y: 0
@@ -109,26 +144,40 @@ export default {
     },
     created() {
         this.loadChunkStoreId();
+        this.loadOutputKvality();
     },
     methods: {
-        savedata() {
-            axios
-                .post("unicast/chunkStoreId/edit", {
+         async openDialog() {
+            await axios
+                .post("h265/channel/kvalityForEdit", {
                     channelId: this.$route.params.id,
-                    chunkStoreId: this.chunkStoreId
+                    type: "h265"
+                })
+                .then(response => {
+                    this.kvalityForDialog = response.data;
+                });
+            this.editDataDialog = true;
+        },
+
+        closeDialog() {
+            this.editDataDialog = false;
+            this.kvalityForDialog = [];
+        },
+        async savedata() {
+            await axios
+                .post("h265/channel/kvality/update", {
+                    channelId: this.$route.params.id,
+                    p1080: this.kvalityForDialog.p1080,
+                    p720: this.kvalityForDialog.p720
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
-                    if (response.data.status === "success") {
-                        this.loadChunkStoreId();
-                    }
+
+                    this.loadChunkStoreId();
+                    this.loadOutputKvality();
 
                     this.editDataDialog = false;
                 });
-        },
-        closeDialog() {
-            editDataDialog = false;
-            this.loadChunkStoreId();
         },
         show(e) {
             e.preventDefault();
@@ -139,19 +188,35 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadChunkStoreId() {
-            axios
+
+        async loadChunkStoreId() {
+            await axios
                 .post("unicast/chunkStoreId", {
                     channelId: this.$route.params.id
                 })
                 .then(response => {
                     this.chunkStoreId = response.data;
                 });
+        },
+        async loadOutputKvality() {
+            await axios
+                .post("h264/channel/kvality", {
+                    channelId: this.$route.params.id,
+                    type: "h265"
+                })
+                .then(response => {
+                    if (response.data.status === "success") {
+                        this.kvalityOutput = response.data.data;
+                    } else {
+                        this.kvalityOutput = null;
+                    }
+                });
         }
     },
     watch: {
         $route(to, from) {
             this.loadChunkStoreId();
+            this.loadOutputKvality();
         }
     }
 };

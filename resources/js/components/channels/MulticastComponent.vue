@@ -15,21 +15,17 @@
             </v-row>
 
             <v-row class="mt-4">
-                <v-col>
-                    <!-- multiplexor component -->
-                    <multiplexor-component></multiplexor-component>
-                </v-col>
-                <v-col>
-                    <!-- source component -->
-                    <source-component></source-component>
-                </v-col>
-                <v-col>
-                    <!-- backup component -->
-                    <backup-component></backup-component>
-                </v-col>
+                <!-- multiplexor component -->
+                <multiplexor-component></multiplexor-component>
+
+                <!-- source component -->
+                <source-component></source-component>
+
+                <!-- backup component -->
+                <backup-component></backup-component>
             </v-row>
 
-            <v-row class="mt-4">
+            <v-row class="mt-6">
                 <v-col>
                     <!-- kalendar component -->
                     <calendar-component></calendar-component>
@@ -37,6 +33,13 @@
                 <v-col>
                     <!-- note component -->
                     <note-component></note-component>
+                </v-col>
+            </v-row>
+
+            <!-- TEST napojení na dohled -->
+            <v-row class="mt-">
+                <v-col>
+                    <dohled-component></dohled-component>
                 </v-col>
             </v-row>
         </v-container>
@@ -49,6 +52,7 @@ import SourceComponent from "./Multicast/_sourceComponent";
 import BackupComponent from "./Multicast/_backupComponent";
 import CalendarComponent from "./Multicast/_calendarComponent";
 import NoteComponent from "./Multicast/_noteComponent";
+import TestDohledComponent from "./Dohled/TestDohledComponent";
 export default {
     data() {
         return {
@@ -61,14 +65,15 @@ export default {
         "source-component": SourceComponent,
         "backup-component": BackupComponent,
         "calendar-component": CalendarComponent,
-        "note-component": NoteComponent
+        "note-component": NoteComponent,
+        "dohled-component" : TestDohledComponent
     },
     created() {
         this.loadChannelNameById();
     },
     methods: {
-        loadChannelNameById() {
-            axios
+        async loadChannelNameById() {
+            await axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })

@@ -207,8 +207,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadDeviceInformation() {
-            axios
+        async loadDeviceInformation() {
+            await axios
                 .post("device/info_sum", {
                     deviceId: this.$route.params.id
                 })
@@ -220,8 +220,8 @@ export default {
                     }
                 });
         },
-        loadCategories() {
-            axios.get("device/categories").then(response => {
+        async loadCategories() {
+            await axios.get("device/categories").then(response => {
                 if (response.data.status === "success") {
                     this.categories = response.data.data;
                 } else {
@@ -229,8 +229,8 @@ export default {
                 }
             });
         },
-        loadVendors() {
-            axios.get("vendors").then(response => {
+        async loadVendors() {
+            await axios.get("vendors").then(response => {
                 if (response.data.status === "success") {
                     this.vendors = response.data.data;
                 } else {
@@ -244,8 +244,8 @@ export default {
             this.editDeviceData = true;
         },
 
-        saveDeviceInfo() {
-            axios
+        async saveDeviceInfo() {
+            await axios
                 .post("device/edit", {
                     deviceId: this.$route.params.id,
                     name: this.name,

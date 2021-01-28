@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendNotification;
+use App\Mail\SendRebootStreamNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -15,6 +16,16 @@ class SendNotificationController extends Controller
         if (User::first()) {
             foreach (User::get(['email']) as $to_user) {
                 Mail::to($to_user->email)->queue(new SendNotification($user, $item, $type));
+            }
+        }
+    }
+
+
+    public static function notifyRebootStream(string $streamName, string $status): void
+    {
+        if (User::first()) {
+            foreach (User::get(['email']) as $to_user) {
+                Mail::to($to_user->email)->queue(new SendRebootStreamNotification($streamName, $status));
             }
         }
     }

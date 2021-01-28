@@ -15,10 +15,10 @@ class CreateParedTagsTable extends Migration
     {
         Schema::create('pared_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('deviceId')->index();
-            $table->string('multicastId')->index();
-            $table->string('h264Id')->index();
-            $table->string('h265Id')->index();
+            $table->string('deviceId')->index()->nullable();
+            $table->string('multicastId')->index()->nullable();
+            $table->string('h264Id')->index()->nullable();
+            $table->string('h265Id')->index()->nullable();
             $table->string('tagId')->index();
             $table->timestamps();
         });

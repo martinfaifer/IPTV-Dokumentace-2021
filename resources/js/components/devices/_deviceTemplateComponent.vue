@@ -144,8 +144,8 @@ export default {
             });
         },
 
-        loadDeviceTemplate() {
-            axios
+        async loadDeviceTemplate() {
+            await axios
                 .post("device/template", {
                     deviceId: this.$route.params.id
                 })

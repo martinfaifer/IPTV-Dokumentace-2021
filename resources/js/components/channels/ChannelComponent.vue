@@ -12,7 +12,7 @@
                 <!-- konec štítků -->
 
                 <!-- navigace na přepnutí detailů karnálu ( multicast, h264, h265 , informace z dohledu) -->
-                <v-card flat class="ml-16">
+                <v-card flat class="ml-16 mt-3">
                     <v-tabs centered v-model="channelTab">
                         <v-tabs-slider></v-tabs-slider>
                         <v-tab
@@ -37,14 +37,14 @@
                             href="#tab-3"
                             >H265</v-tab
                         >
-                        <v-tab
+                        <!-- <v-tab
                             link
                             v-bind:to="
                                 '/channel/' + this.$route.params.id + '/dohled'
                             "
                             href="#tab-4"
                             >Informace z dohledu</v-tab
-                        >
+                        > -->
 
                         <v-tab-item v-model="channelTab" class="ml-16 mt-6">
                             <!-- INCLUDE KOMPONENTŮ -->
@@ -77,6 +77,14 @@
                                 "
                             ></h265baseinfo-component>
                             <!-- dohled API komponent -->
+                            <dohled-component
+                                v-if="
+                                    this.$route.path ===
+                                        '/channel/' +
+                                            this.$route.params.id +
+                                            '/dohled'
+                                "
+                            ></dohled-component>
                         </v-tab-item>
                     </v-tabs>
                 </v-card>
@@ -90,6 +98,7 @@ import TagComponent from "../Tags/TagComponent";
 import MulticastComponent from "./MulticastComponent.vue";
 import H264baseInfoComponent from "./Unicast H264/H264baseInfoComponent";
 import H265baseInfoComponent from "./Unicast H265/H265baseInfoComponent";
+import DohledComponent from "./Dohled/DohledChannelComponent";
 export default {
     data() {
         return {
@@ -104,7 +113,8 @@ export default {
         "h264baseinfo-component": H264baseInfoComponent,
         "h265baseinfo-component": H265baseInfoComponent,
         "default-component": DefaultComponent,
-        "tag-component": TagComponent
+        "tag-component": TagComponent,
+        "dohled-component": DohledComponent
     },
     created() {},
     methods: {

@@ -45,8 +45,8 @@ export default {
         this.loadChannelsOnDevice();
     },
     methods: {
-        loadChannelsOnDevice() {
-            axios
+        async loadChannelsOnDevice() {
+            await axios
                 .post("device/channels", {
                     deviceId: this.$route.params.id
                 })

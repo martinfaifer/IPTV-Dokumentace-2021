@@ -70,7 +70,7 @@
                         Založit nový kanál
                     </v-list-item-title>
                 </v-list-item>
-                <v-list-item @click="removeChannel()">
+                <v-list-item @click="removeChannelDialog()">
                     <v-list-item-icon>
                         <v-icon color="red" x-small>mdi-delete</v-icon>
                     </v-list-item-icon>
@@ -84,6 +84,42 @@
 
         <!-- create dialogy -->
         <v-row justify="center">
+            <v-dialog v-model="deleteDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Odebrání kanálu</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <h3>
+                                    Touto akcí smažete veškeré záznamy z
+                                    Multicastu, unicastu, také dojde k
+                                    odstranění z dohledu a Transcodéru
+                                </h3>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="deleteDialog = false"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="removeChannel()"
+                        >
+                            Smazat
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
             <v-dialog
                 v-model="createMultiplexerDialog"
                 persistent
@@ -291,6 +327,7 @@
                                     <v-text-field
                                         label="Den začátku události"
                                         type="date"
+                                        v-model="start_day"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -299,12 +336,14 @@
                                         label="Čas začátku události"
                                         type="time"
                                         required
+                                        v-model="start_time"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
                                     <v-text-field
                                         label="Den konce události"
                                         type="date"
+                                        v-model="end_day"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -312,6 +351,7 @@
                                     <v-text-field
                                         label="Čas konce události"
                                         type="time"
+                                        v-model="end_time"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -319,6 +359,7 @@
                                 <v-col cols="12">
                                     <v-text-field
                                         label="Popis události"
+                                        v-model="event_note"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -463,6 +504,34 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
+                                <v-col cols="12">
+                                    <v-switch
+                                        v-model="zalozitDoDohledu"
+                                        label="Založit do dohledu"
+                                    ></v-switch>
+                                </v-col>
+                                <v-col
+                                    v-if="zalozitDoDohledu === true"
+                                    cols="12"
+                                    sm="12"
+                                    md="6"
+                                >
+                                    <v-checkbox
+                                        v-model="dohledovat"
+                                        label="Dohledovat"
+                                    ></v-checkbox>
+                                </v-col>
+                                <v-col
+                                    v-if="zalozitDoDohledu === true"
+                                    cols="12"
+                                    sm="12"
+                                    md="6"
+                                >
+                                    <v-checkbox
+                                        v-model="vytvaretNahled"
+                                        label="Vytvařet náhledy"
+                                    ></v-checkbox>
+                                </v-col>
                             </v-row>
                         </v-container>
                     </v-card-text>
@@ -496,7 +565,16 @@
 export default {
     data() {
         return {
+            dohledovat: false,
+            vytvaretNahled: false,
+            zalozitDoDohledu: false,
+            start_day: "",
+            start_time: "",
+            end_day: "",
+            end_time: "",
+            event_note: "",
             vypadek: false,
+            deleteDialog: false,
             checkbox_create_to_dohled: false,
             editChannelName: false,
             createNewChannel: false,
@@ -541,8 +619,8 @@ export default {
         this.loadchannels();
     },
     methods: {
-        saveChannelName() {
-            axios
+        async saveChannelName() {
+            await axios
                 .post("channel/name/edit", {
                     channelId: this.channelId,
                     channelName: this.channelName
@@ -560,8 +638,8 @@ export default {
                     }
                 });
         },
-        editChannelNameDialog() {
-            axios
+        async editChannelNameDialog() {
+            await axios
                 .post("channel/name", {
                     channelId: this.channelId
                 })
@@ -571,22 +649,25 @@ export default {
                 });
         },
 
-        createNewChannelDialog() {
-            axios.get("sources").then(response => {
+        async createNewChannelDialog() {
+            await axios.get("sources").then(response => {
                 this.sources = response.data;
                 this.createNewChannel = true;
             });
         },
 
-        saveNewChannel() {
-            axios
+        async saveNewChannel() {
+            await axios
                 .post("channel/create", {
                     channelName: this.channelName,
                     multicastZdroj: this.multicastZdroj,
                     multicast_ip: this.multicast_ip,
                     stb_ip: this.stb_ip,
                     backup_multicastZdroj: this.backup_multicastZdroj,
-                    backup_multicast_ip: this.backup_multicast_ip
+                    backup_multicast_ip: this.backup_multicast_ip,
+                    dohledovat: this.dohledovat,
+                    vytvaretNahled: this.vytvaretNahled,
+                    zalozitDoDohledu: this.zalozitDoDohledu
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
@@ -599,6 +680,9 @@ export default {
                         this.stb_ip = null;
                         this.backup_multicastZdroj = null;
                         this.backup_multicast_ip = null;
+                        this.dohledovat = false;
+                        this.vytvaretNahled = false;
+                        this.zalozitDoDohledu = false;
                         this.$router
                             .push("/channel/" + response.data.channelId)
                             .catch(err => {});
@@ -610,11 +694,30 @@ export default {
             this.createEventDialog = true;
         },
 
-        saveEvent() {
-            this.createEventDialog = false;
+        async saveEvent() {
+            await axios
+                .post("event/create", {
+                    channelId: this.channelId,
+                    start_day: this.start_day,
+                    start_time: this.start_time,
+                    end_day: this.end_day,
+                    end_time: this.end_time,
+                    event_note: this.event_note,
+                    vypadek: this.vypadek,
+                    checkbox_create_to_dohled: this.checkbox_create_to_dohled
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.createEventDialog = false;
+
+                    this.$router.push("/channel");
+                    this.$router
+                        .push("/channel/" + response.data.channelId)
+                        .catch(err => {});
+                });
         },
-        addMultiplexer() {
-            axios
+        async addMultiplexer() {
+            await axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "multiplexor"
@@ -630,8 +733,8 @@ export default {
                 });
         },
 
-        GetMoreInformationAboutThisDevice(data) {
-            axios
+        async GetMoreInformationAboutThisDevice(data) {
+            await axios
                 .post("device/info", {
                     deviceName: data
                 })
@@ -640,8 +743,8 @@ export default {
                 });
         },
 
-        addBackupPrijem() {
-            axios
+        async addBackupPrijem() {
+            await axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "backup"
@@ -656,8 +759,8 @@ export default {
                 });
         },
 
-        addPrijem() {
-            axios
+        async addPrijem() {
+            await axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "prijem"
@@ -672,8 +775,8 @@ export default {
                     }
                 });
         },
-        saveBackupPrijemData() {
-            axios
+        async saveBackupPrijemData() {
+            await axios
                 .post("device/backup/edit", {
                     channelId: this.channelId,
                     deviceName: this.backup,
@@ -694,8 +797,8 @@ export default {
                     }
                 });
         },
-        savePrijemData() {
-            axios
+        async savePrijemData() {
+            await axios
                 .post("device/prijem/edit", {
                     channelId: this.channelId,
                     deviceName: this.prijem,
@@ -717,8 +820,8 @@ export default {
                 });
         },
 
-        saveMultiplexerdata() {
-            axios
+        async saveMultiplexerdata() {
+            await axios
                 .post("channel/multiplexer/edit", {
                     channelId: this.channelId,
                     deviceName: this.multiplexer.name
@@ -751,8 +854,8 @@ export default {
             this.event = null;
         },
 
-        loadchannels() {
-            axios.get("channels").then(response => {
+        async loadchannels() {
+            await axios.get("channels").then(response => {
                 this.channels = response.data;
             });
         },
@@ -766,8 +869,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        openDialogEditCurrentChannel() {
-            axios
+        async openDialogEditCurrentChannel() {
+            await axios
                 .post("channel", {
                     channelId: this.channelId
                 })
@@ -783,34 +886,40 @@ export default {
                     this.editDialog = true;
                 });
         },
-        getIptvPackages() {
-            axios.get("packages").then(response => {
+        // MOZNA ZRUSIT  A PRESUNOUT DO TAGŮ
+        async getIptvPackages() {
+            await axios.get("packages").then(response => {
                 this.packages = response.data;
             });
         },
-        getPrijemDevices() {
-            axios.get("device/prijem").then(response => {
+        async getPrijemDevices() {
+            await axios.get("device/prijem").then(response => {
                 this.prijems = response.data;
             });
         },
-        getMultiplexors() {
-            axios.get("devices/multiplexors").then(response => {
+        async getMultiplexors() {
+            await axios.get("devices/multiplexors").then(response => {
                 this.editMultiplexors = response.data;
             });
         },
-        getMulticastSources() {
-            axios.get("sources").then(response => {
+        async getMulticastSources() {
+            await axios.get("sources").then(response => {
                 this.deviceInformation = response.data;
             });
         },
 
-        removeChannel() {
-            axios
+        removeChannelDialog() {
+            this.deleteDialog = true;
+        },
+
+        async removeChannel() {
+            await axios
                 .post("channel/delete", {
                     channelId: this.channelId
                 })
                 .then(response => {
-                        this.$store.state.alerts = response.data.alert;
+                    this.$store.state.alerts = response.data.alert;
+                    this.deleteDialog = false;
                     if (response.data.status === "success") {
                         this.loadchannels();
                         this.$router.push("/").catch(err => {});

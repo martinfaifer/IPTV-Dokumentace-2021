@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class M3u8Controller extends Controller
 {
 
-    public function update_m3u8_h264(Request $request): array
+    public static function update_m3u8_h264(Request $request): array
     {
         if (is_null($request->kdekoliv) || is_null($request->local) || is_null($request->mobile)) {
             return [

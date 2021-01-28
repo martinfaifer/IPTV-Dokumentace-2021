@@ -24,7 +24,7 @@ class UnicastChunkStoreIdController extends Controller
     }
 
 
-    public function edit(Request $request): array
+    public static function edit(Request $request): array
     {
         if (!UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
             return [

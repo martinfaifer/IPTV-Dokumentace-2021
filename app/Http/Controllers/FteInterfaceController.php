@@ -90,8 +90,8 @@ class FteInterfaceController extends Controller
                     "symbolRate" => $request->symbolrate,
                     "polarizace" => $polarizace,
                     "fec" => $request->fec,
-                    "CIA" . $request->interfaceId => $request->cia,
-                    "CIB" . $request->interfaceId => $request->cib,
+                    "CIA" . $request->interfaceId => $request->cia["card_number"],
+                    "CIB" . $request->interfaceId => $request->cib["card_number"],
                 ]
             );
 

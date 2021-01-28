@@ -185,8 +185,8 @@ export default {
             });
         },
 
-        loadMulticast() {
-            axios
+        async loadMulticast() {
+            await axios
                 .post("multicast", {
                     channelId: this.$route.params.id
                 })
@@ -198,13 +198,13 @@ export default {
                     }
                 });
         },
-        getMulticastSources() {
-            axios.get("sources").then(response => {
+        async getMulticastSources() {
+            await axios.get("sources").then(response => {
                 this.sources = response.data;
             });
         },
-        openMulticastEditDialog() {
-            axios
+        async openMulticastEditDialog() {
+            await axios
                 .post("channel/multicast", {
                     channelId: this.$route.params.id
                 })
@@ -218,8 +218,8 @@ export default {
                     }
                 });
         },
-        savedata() {
-            axios
+        async savedata() {
+            await axios
                 .post("channel/multicast/edit", {
                     channelId: this.$route.params.id,
                     multicastZdroj: this.editData.multicastZdroj,

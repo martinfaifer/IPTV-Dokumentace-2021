@@ -1,13 +1,16 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlankomInterfaceController;
 use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\ChannelToDohledController;
 use App\Http\Controllers\DeviceCategoryController;
 use App\Http\Controllers\DeviceTemplateController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceInterfaceController;
 use App\Http\Controllers\DVBController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FteInterfaceController;
 use App\Http\Controllers\H264Controller;
 use App\Http\Controllers\H265Controller;
@@ -15,18 +18,43 @@ use App\Http\Controllers\IptvPackageController;
 use App\Http\Controllers\M3u8Controller;
 use App\Http\Controllers\MulticastController;
 use App\Http\Controllers\MulticastSourceController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PowerVuInterfaceController;
+use App\Http\Controllers\SatelitCardController;
 use App\Http\Controllers\SatelitController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnicastChunkStoreIdController;
 use App\Http\Controllers\UnicastKvalitaChannelOutputController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
+use App\Models\Channel;
+use App\Models\Event;
+use App\Models\H264;
+use App\Providers\AppServiceProvider;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Route;
+
+use NunoMaduro\LaravelDesktopNotifier\Notification;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::post('tags', [TagController::class, 'return_tags']);
+// výpis všech stítku
+Route::get('tags', [TagController::class, 'get_tags']);
+// vytvoirení nového stitku
+Route::post('tag/create', [TagController::class, 'create']);
+// update stitku
+Route::post('tag/update', [TagController::class, 'update']);
+// odebrání stitku
+Route::post('tag/remove', [TagController::class, 'delete']);
+// pridaná tagu ke kanalu / device ...
+Route::post('tag/add', [TagController::class, 'add_tag']);
+// odebrání tagu z kanalu, device ...
+Route::post('tag/removeFrom', [TagController::class, 'remove_tag_from']);
 
 // searchs => vyhledání v celé aplikaci, pripaveny json s url a popisem pro rychlejší vyhledání
 Route::get('search', [SearchController::class, 'search']);
@@ -69,6 +97,10 @@ Route::post('channel/multiplexer/remove', [ChannelController::class, 'remove_mul
 Route::post('channel/name/edit', [ChannelController::class, 'change_channel_name']);
 // odebrání kanálu
 Route::post('channel/delete', [ChannelController::class, 'delete_channel']);
+// Vyhledání informací z dohledu
+Route::post('channel/dohled', [ChannelController::class, 'return_dohled_data']);
+Route::post('channel/h264/dohled', [H264Controller::class, 'return_dohled_data']);
+Route::post('channel/h265/dohled', [H265Controller::class, 'return_dohled_data']);
 
 /**
  * Unicast 
@@ -77,27 +109,37 @@ Route::post('channel/delete', [ChannelController::class, 'delete_channel']);
 Route::post('h265/check', [H265Controller::class, 'check_if_exist']);
 Route::post('h264/check', [H264Controller::class, 'check_if_exist']);
 
+// zalození H265
+Route::post('h265/create', [H265Controller::class, 'create']);
+
 // založení H264 outputu
 Route::post('h264/create', [H264Controller::class, 'create']);
+// odebrání h264
+Route::post('h264/delete', [H264Controller::class, 'delete_from_web']);
 //  získání chunk store id dle id kanálu
 Route::post('unicast/chunkStoreId', [UnicastChunkStoreIdController::class, 'return_chunkStoreId']);
-// editace chaunk store id
-Route::post('unicast/chunkStoreId/edit', [UnicastChunkStoreIdController::class, 'edit']);
 // output pro kvality v h264
 Route::post('h264/channel/kvality', [UnicastKvalitaChannelOutputController::class, 'return_output_by_channel']);
 // kvality pro editaci
 Route::post('h264/channel/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h264_output_for_edit']);
-// kvality update
-Route::post('h264/channel/kvality/update', [UnicastKvalitaChannelOutputController::class, 'h264_update']);
+Route::post('h265/channel/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h265_output_for_edit']);
 // output pro získání m38u v h264
 Route::post('h264/channel/m3u8', [M3u8Controller::class, 'return_m38u_by_id']);
-// update m3u8
-Route::post('h264/channel/m3u8/update', [M3u8Controller::class, 'update_m3u8_h264']);
 // transcoder
 Route::post('h264/transcoder', [H264Controller::class, 'return_transcoder_information']);
+
+// vyhledání statusu streamu z transcoderu
+Route::post('h264/transcoder/status', [H264Controller::class, 'try_to_get_stream_status']);
+Route::post('h265/transcoder/status', [H265Controller::class, 'try_to_get_stream_status']);
+
 // update transcoderu
 Route::post('h264/transcoder/update', [H264Controller::class, 'update_transcoder']);
 Route::post('h265/transcoder', [H265Controller::class, 'return_transcoder_information']);
+// update H265 transcoderu / devicu
+Route::post('h265/transcoder/update', [H265Controller::class, 'update_transcoder']);
+
+// Editace H264
+Route::post('h264/channel/edit', [H264Controller::class, 'edit']);
 
 // výpis kategrií
 Route::get('device/categories', [DeviceCategoryController::class, 'return_device_category']);
@@ -130,6 +172,15 @@ Route::get('dvb', [DVBController::class, 'return_dvb']);
 Route::get('packages', [IptvPackageController::class, 'return_packages']);
 
 
+
+// Satelitní karty
+Route::get('cards', [SatelitCardController::class, 'return_all']);
+// vyhledání card number dle id
+Route::post('card/number', [SatelitCardController::class, 'return_card_number']);
+// vyhledání zařízení, které má vazbu na kartu
+Route::post('card/device', [SatelitCardController::class, 'return_device_with_this_card']);
+
+
 // Zařízení
 // výpis všech interfaců. které se dají napátovat na zařízení
 Route::get('device/allInterfaces', [DeviceInterfaceController::class, 'return_interfaces']);
@@ -137,6 +188,10 @@ Route::get('device/allInterfaces', [DeviceInterfaceController::class, 'return_in
 Route::get('device/multiplexors', [DeviceController::class, 'return_only_multiplexors']);
 // výpis piuze transcoderu
 Route::get('device/transcoders', [DeviceController::class, 'return_only_transcoders']);
+// vypsání transcoderů a prijimaců (u H265 je mozne chytat primo ze sat)
+Route::get('device/transcodersAndSatelits', [DeviceController::class, 'return_sat_and_transcoders']);
+// výpis transcoderů a linuxu
+Route::get('device/transcodersAndlinux', [DeviceController::class, 'return_transcoders_and_linux']);
 // výpis pouze satelitních prijímacu, po IP, linuxu
 Route::get('device/prijem', [DeviceController::class, 'return_only_prijem']);
 // odebrání zařízení
@@ -176,6 +231,8 @@ Route::post('device/fte/interface', [FteInterfaceController::class, 'edit_interf
 // editace PowerVu
 Route::post('device/powerVu/interface', [PowerVuInterfaceController::class, 'edit_interface']);
 
+Route::post('device/transcoderData', [DeviceController::class, 'return_transcoder_usage']);
+
 // vyhledání multiplexorů
 Route::get('devices/multiplexors', [DeviceController::class, 'return_multiplexors']);
 // vyhledání zdrojů multicastu
@@ -187,7 +244,21 @@ Route::post('login', [AuthController::class, 'logIn']);
 
 // user
 Route::get('user', [UserController::class, 'get_user']);
+// získání všech userů
+Route::get('users', [UserController::class, 'get_users']);
 
 
+// Události
+Route::post('event/create', [EventController::class, 'create']);
+// vyhledání událostí dle channelID
+Route::post('event/channel', [EventController::class, 'search_events_by_channelId']);
+// vapsání událostí v dnesní den
+Route::get('events/today', [EventController::class, 'return_today_event']);
 
-// test
+
+// vyhledání poznámek
+Route::post('notes', [NoteController::class, 'return_notes']);
+
+
+// endpoint to external system
+Route::get('external_endpoints', [ApiController::class, 'return_endpoints']);

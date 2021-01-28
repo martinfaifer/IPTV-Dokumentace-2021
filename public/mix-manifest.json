@@ -1,4 +1,16 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/resource/js/components/Auth/LoginComponent.js": "/resource/js/components/Auth/LoginComponent.js",
+    "/resource/js/components/Cards/CardComponent.js": "/resource/js/components/Cards/CardComponent.js",
+    "/resource/js/components/Cards/CardComponent~resource/js/components/channels/ChannelComponent.vue~reso~a82fdf07.js": "/resource/js/components/Cards/CardComponent~resource/js/components/channels/ChannelComponent.vue~reso~a82fdf07.js",
+    "/resource/js/components/NavigationComponent.js": "/resource/js/components/NavigationComponent.js",
+    "/resource/js/components/PageNotFoundComponent.js": "/resource/js/components/PageNotFoundComponent.js",
+    "/resource/js/components/Settings/_obecneSettingsComponent.js": "/resource/js/components/Settings/_obecneSettingsComponent.js",
+    "/resource/js/components/channels/ChannelComponent.vue.js": "/resource/js/components/channels/ChannelComponent.vue.js",
+    "/resource/js/components/devices/DeviceComponent.js": "/resource/js/components/devices/DeviceComponent.js",
+    "/vendors~resource/js/components/NavigationComponent.js": "/vendors~resource/js/components/NavigationComponent.js",
+    "/vendors~resource/js/components/Cards/CardComponent~resource/js/components/NavigationComponent~resour~dd4c0c2c.js": "/vendors~resource/js/components/Cards/CardComponent~resource/js/components/NavigationComponent~resour~dd4c0c2c.js",
+    "/vendors~resource/js/components/Cards/CardComponent~resource/js/components/NavigationComponent~resour~5c0ad667.js": "/vendors~resource/js/components/Cards/CardComponent~resource/js/components/NavigationComponent~resour~5c0ad667.js",
+    "/vendors~resource/js/components/Auth/LoginComponent~resource/js/components/Cards/CardComponent~resour~d45edfec.js": "/vendors~resource/js/components/Auth/LoginComponent~resource/js/components/Cards/CardComponent~resour~d45edfec.js"
 }

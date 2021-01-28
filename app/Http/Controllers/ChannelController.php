@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendNotificationJob;
 use App\Models\Channel;
+use App\Models\ChannelToDohled;
 use App\Models\Device;
+use App\Models\DeviceHasChild;
 use App\Models\H264;
+use App\Models\LinuxPath;
 use App\Models\Multicast;
 use App\Models\MulticastSource;
 use Illuminate\Http\Request;
@@ -63,6 +66,19 @@ class ChannelController extends Controller
         }
 
         return MulticastController::check_channel($request);
+    }
+
+
+    public static function return_dohled_data(Request $request): array
+    {
+        // overení existence id v ChannelsToDohled
+        if (!ChannelToDohled::where('channelId', $request->channelId)->first()) {
+            return [];
+        }
+
+        return ApiController::return_information_about_channel(
+            ChannelToDohled::where('channelId', $request->channelId)->first()->dohledId
+        );
     }
 
 
@@ -217,6 +233,40 @@ class ChannelController extends Controller
             }
         }
 
+        if (!is_null($request->linuxPath) || !empty($request->linuxPath)) {
+            LinuxPathController::create($request->channelId, $request->linuxPath, $deviceData['deviceId']);
+        } else {
+            LinuxPathController::delete($request->channelId);
+        }
+
+        if (!is_null($request->children)) {
+
+
+            $childrenId = Device::where('name', $request->children)->first()->id;
+
+            if ($dataForUpdate = DeviceHasChild::where('channelId', $request->channelId)->first()) {
+                // kanál má již záznam, dojde k updatu záznamu
+                $dataForUpdate->update(
+                    [
+                        'device_parent' => $deviceData['deviceId'],
+                        'device_child' => $childrenId
+                    ]
+                );
+            } else {
+                // vytvoření záznamu
+                DeviceHasChild::create([
+                    'channelId' => $request->channelId,
+                    'device_parent' => $deviceData['deviceId'],
+                    'device_child' => $childrenId
+                ]);
+            }
+        } else {
+            // kontrola zda existuje a přpadne odebere záznam
+            if ($dataForDelete = DeviceHasChild::where('channelId', $request->channelId)->first()) {
+                $dataForDelete->delete();
+            }
+        }
+
         if (is_null($request->checkIfDeviceHasInterface)) {
             $channelToInterface = null;
         } else {
@@ -319,7 +369,7 @@ class ChannelController extends Controller
 
 
     /**
-     * Undocumented function
+     * založení nového kanáu do systému
      *
      * @param Request $request channelName, multicastZdroj , multicast_ip , stb_ip , backup_multicastZdroj , backup_multicast_ip
      * @return array
@@ -341,7 +391,6 @@ class ChannelController extends Controller
 
         if (
             !filter_var($request->stb_ip, FILTER_VALIDATE_IP) ||
-            !filter_var($request->multicast_ip, FILTER_VALIDATE_IP) ||
             is_null($request->stb_ip) || empty($request->stb_ip) ||
             is_null($request->multicast_ip) || empty($request->multicast_ip)
         ) {
@@ -372,11 +421,21 @@ class ChannelController extends Controller
         );
 
         dispatch(new SendNotificationJob(Auth::user()->name, "kanál " . $request->channelName, "vytvořil"));
+
+        if ($request->zalozitDoDohledu === true) {
+            ApiController::create_channel_to_dohled($request->channelName, $request->stb_ip . ":1234", $request->dohledovat, $request->vytvaretNahled, Channel::where('nazev', $request->channelName)->first()->id);
+        }
         // vyhledání id založeného kanálu pro insert + založení multicastových dat
         return MulticastController::create_new($request, Channel::where('nazev', $request->channelName)->first()->id);
     }
 
 
+    /**
+     * fn pro změnu názvu kanálu
+     *
+     * @param Request $request
+     * @return array
+     */
     public function change_channel_name(Request $request): array
     {
         // overeni existence channelId
@@ -460,6 +519,7 @@ class ChannelController extends Controller
         H265Controller::delete($request->channelId); // maze i tagy
         NoteController::delete_all_notes_by_channelId($request->channelId); // maze poznámky
         ParedTagController::delete_tags('multicastId', $request->channelId); // maze tagy na multicast
+        UnicastChunkStoreIdController::delete($request->channelId); // odebrání chunk store Id 
 
         $channel = Channel::where('id', $request->channelId)->first();
         $channel->delete();

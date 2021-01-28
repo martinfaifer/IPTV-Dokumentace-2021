@@ -25,4 +25,42 @@ class NoteController extends Controller
             }
         }
     }
+
+
+
+    public function return_notes(Request $request): array
+    {
+        // $request->id
+        // $request->dataType 
+        switch ($request->datatype) {
+            case 'channelId':
+                $column = "channelId";
+                break;
+
+            case 'deviceId':
+                $column = "deviceId";
+                break;
+
+            default:
+                return [
+                    'status' => "error"
+                ];
+        }
+
+        if (!Note::where($column, $request->id)->first()) {
+            return ['status' => "error"];
+        }
+
+        foreach (Note::where($column, $request->id)->get() as $note) {
+            $output[] = array(
+                'id' => $note->id,
+                'poznamka' => $note->poznamka,
+            );
+        }
+
+        return [
+            'status' => "success",
+            'notes' => $output
+        ];
+    }
 }

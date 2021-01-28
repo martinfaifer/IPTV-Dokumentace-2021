@@ -6,12 +6,15 @@ use App\Jobs\SendNotificationJob;
 use App\Models\Channel;
 use App\Models\Device;
 use App\Models\DeviceCategory;
+use App\Models\DeviceHasChild;
 use App\Models\H264;
 use App\Models\H265;
+use App\Models\LinuxPath;
 use App\Models\Multicast;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class DeviceController extends Controller
 {
@@ -80,8 +83,36 @@ class DeviceController extends Controller
      */
     public static function try_to_find_device_belongsTochannel(string $deviceId, $channelId): array
     {
-        if (!Device::where('id', $deviceId)->first()) {
+        $path = null;
+
+        if (!$deviceData = Device::where('id', $deviceId)->first()) {
             return self::$result;
+        }
+
+
+        // vyhledání kategorie
+        if (DeviceCategory::find($deviceData->category)->name === 'Linux') {
+            // vyhledání absolutní cesty
+            if ($linuxPath = LinuxPath::where('channelId', $channelId)->first()) {
+                $path = $linuxPath->path;
+            }
+        }
+
+
+        // zjistení zda kanál má zavbu na potomka
+        if ($findingChildren = DeviceHasChild::where('channelId', $channelId)->first()) {
+
+            $childrenData = Device::where('id', $findingChildren->device_child)->first();
+            $children = array(
+                'id' => $childrenData->id,
+                'ip' => $childrenData->ip,
+                'name' => $childrenData->name,
+                'login_user' => $childrenData->login_user,
+                'login_password' => $childrenData->login_password,
+                'status' => $childrenData->status,
+            );
+        } else {
+            $children = null;
         }
 
         $device = Device::where('id', $deviceId)->first();
@@ -94,7 +125,9 @@ class DeviceController extends Controller
                 'login_user' => $device->login_user,
                 'login_password' => $device->login_password,
                 'status' => $device->status,
-                'interfaces' => DeviceInterfaceController::return_interface_names_belongsToChannel(Multicast::where('channelId', $channelId)->first()->deviceInterface ?? null)
+                'interfaces' => DeviceInterfaceController::return_interface_names_belongsToChannel(Multicast::where('channelId', $channelId)->first()->deviceInterface ?? null),
+                'children' => $children,
+                'path' => $path
             )
         ];
     }
@@ -145,6 +178,18 @@ class DeviceController extends Controller
                 'ip' => $transcoder->ip
             )
         ];
+    }
+
+
+    public function return_transcoders_and_linux(): array
+    {
+        foreach (Device::where('category', '3')
+            ->Orwhere('category', '5')
+            ->get(['id', 'name']) as $device) {
+            $output[] = $device->name;
+        }
+
+        return $output;
     }
 
 
@@ -202,6 +247,28 @@ class DeviceController extends Controller
         return $output;
     }
 
+    public function return_sat_and_transcoders(): array
+    {
+
+        $transcoderId = DeviceCategoryController::find_category_by_type_and_return_id('transcoder');
+        if ($transcoderId === "0") {
+            // neexistuje žádný multiplexor
+            return [];
+        }
+
+        $satId = DeviceCategoryController::find_category_by_type_and_return_id('satelit');
+        if ($satId === "0") {
+            // neexistuje žádný multiplexor
+            return [];
+        }
+
+        foreach (Device::where('category', $transcoderId)->orWhere('category', $satId)->get(['id', 'name']) as $transcoder) {
+            $output[] = $transcoder->name;
+        }
+
+        return $output;
+    }
+
     /**
      * fn pro vypsání všech zařízení, které nejosu multiplexor
      *
@@ -253,6 +320,8 @@ class DeviceController extends Controller
             $device = self::return_deviceId_by_name($request);
             $deviceId = $device['deviceId'];
         }
+
+
         // zarizení o danem id ( id, nazev, category, vendor, ip, login_user, login_password, status, sablona)
         $device = Device::where('id', $deviceId)->first();
 
@@ -260,19 +329,33 @@ class DeviceController extends Controller
         $vendor = VendorController::return_vendor_by_id($device->vendor);
 
         // vyhledání katergorie
-        DeviceCategoryController::return_device_category_info($device->category);
+        // $category = DeviceCategoryController::return_device_category_info($device->category);
+
+        if ($device->category === 5) {
+            return [
+                'status' => "linux"
+            ];
+        }
+
+        if ($device->category == 4) {
+            return [
+                "status" => "poIP"
+            ];
+        }
 
         // výpis sablony
-        $sablona = json_decode($device->sablona, true);
+        // $sablona = json_decode($device->sablona, true);
 
         // výpis dat
         return array(
-            'name' => $device->name,
-            'vendor' => $vendor,
-            'ip' => $device->ip,
-            'status' => $device->status,
-            'sablona' => $sablona,
-            'outputInterfaces' => DeviceInterfaceController::return_interfaces_belongsToDevice($device->haveInterface)
+            "status" => "sat",
+            "data" => array(
+                'name' => $device->name,
+                'vendor' => $vendor,
+                'ip' => $device->ip,
+                'status' => $device->status,
+                'outputInterfaces' => DeviceInterfaceController::return_interfaces_belongsToDevice($device->haveInterface)
+            )
         );
     }
 
@@ -393,7 +476,8 @@ class DeviceController extends Controller
         if (
             Multicast::where('deviceId', $request->deviceId)->first() &&
             H264::where('deviceId', $request->deviceId)->first() &&
-            H265::where('deviceId', $request->deviceId)->first()
+            H265::where('deviceId', $request->deviceId)->first() &&
+            Multicast::where('multiplexerId', $request->deviceId)->first()
         ) {
             return [
                 'status' => "empty"
@@ -408,6 +492,18 @@ class DeviceController extends Controller
                 $outputArr[] = array(
                     'id' => $multicast->channelId,
                     'nazev' => Channel::where('id', $multicast->channelId)->first()->nazev
+                );
+            }
+        }
+
+        // multiplexor
+        if (Multicast::where('multiplexerId', $request->deviceId)->first()) {
+
+            foreach (Multicast::where('multiplexerId', $request->deviceId)->get() as $multiplexor) {
+                // dle id vyhledání nazvu
+                $outputArr[] = array(
+                    'id' => $multiplexor->channelId,
+                    'nazev' => Channel::where('id', $multiplexor->channelId)->first()->nazev
                 );
             }
         }
@@ -911,5 +1007,24 @@ class DeviceController extends Controller
             ),
             'status' => "success",
         ];
+    }
+
+    /**
+     * fn pro výpis hw vyuzití pouze u transcoderů Q0x, které mají vendora 4 (nVidia)
+     *
+     * @param Request $request->deviceId
+     * @return mixed
+     */
+    public function return_transcoder_usage(Request $request)
+    {
+        // $request->deviceId
+        if ($device = Device::where('id', $request->deviceId)->first()) {
+
+            if ($device->vendor === 4) {
+                $transcoderIp = ApiController::return_transcoder_ip($device->name);
+
+                return Http::get('http://' . $transcoderIp . '/tcontrol.php?CMD=NVSTATS');
+            }
+        }
     }
 }

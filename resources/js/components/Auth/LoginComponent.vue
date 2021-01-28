@@ -76,9 +76,9 @@ export default {
         this.getUser();
     },
     methods: {
-        login() {
+        async login() {
             let currentObj = this;
-            axios
+            await axios
                 .post("login", {
                     email: this.email,
                     password: this.password
