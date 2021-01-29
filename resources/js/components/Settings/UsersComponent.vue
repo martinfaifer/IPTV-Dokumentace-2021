@@ -5,7 +5,7 @@
                 <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
-                    label="Hledání"
+                    label="Vyhledat uživatele"
                     single-line
                     hide-details
                 ></v-text-field>

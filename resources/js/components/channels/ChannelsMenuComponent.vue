@@ -413,6 +413,14 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
+                                <!-- nice to have -->
+                                <!-- <v-col cols="12">
+                                    <v-file-input
+                                        accept="image/png, image/jpeg, image/bmp"
+                                        label="Logo"
+                                        @change="selectFile()"
+                                    ></v-file-input>
+                                </v-col> -->
                             </v-row>
                         </v-container>
                     </v-card-text>
@@ -611,7 +619,8 @@ export default {
             multicast_ip: null,
             multicastZdroj: null,
             sources: [],
-            channelName: null
+            channelName: null,
+            photo: null,
         };
     },
 
@@ -619,6 +628,11 @@ export default {
         this.loadchannels();
     },
     methods: {
+        selectFile(event) {
+            // `files` is always an array because the file input may be in multiple mode
+            this.photo = event.target.files[0];
+        },
+
         async saveChannelName() {
             await axios
                 .post("channel/name/edit", {

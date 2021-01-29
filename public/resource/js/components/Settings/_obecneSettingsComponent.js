@@ -351,23 +351,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -390,28 +390,41 @@ __webpack_require__.r(__webpack_exports__);
     return {
       search: "",
       headers: [{
-        text: "Balíček",
+        text: "Zdroj",
         align: "start",
-        value: "main_package"
+        value: "zdroj"
       }, {
-        text: "Sub balíček",
-        value: "sub_package"
-      } // { text: "Akce", value: "akce" }
-      ],
-      packages: []
+        text: "Akce",
+        value: "akce"
+      }],
+      sources: []
     };
   },
   components: {},
   created: function created() {
-    this.getPackages();
+    this.getSources();
   },
   methods: {
-    getPackages: function getPackages() {
+    getSources: function getSources() {
       var _this = this;
 
-      axios.get("packages").then(function (response) {
-        _this.packages = response.data;
-      });
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("sources").then(function (response) {
+                  _this.sources = response.data;
+                });
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   },
   watch: {
@@ -433,7 +446,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TagComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TagComponent */ "./resources/js/components/Settings/TagComponent.vue");
 /* harmony import */ var _UsersComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UsersComponent */ "./resources/js/components/Settings/UsersComponent.vue");
 /* harmony import */ var _ApiComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ApiComponent */ "./resources/js/components/Settings/ApiComponent.vue");
-/* harmony import */ var _IptvPackagesComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IptvPackagesComponent */ "./resources/js/components/Settings/IptvPackagesComponent.vue");
+/* harmony import */ var _MulticastSourcesComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MulticastSourcesComponent */ "./resources/js/components/Settings/MulticastSourcesComponent.vue");
 /* harmony import */ var _Devices_DvbComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Devices/DvbComponent */ "./resources/js/components/Settings/Devices/DvbComponent.vue");
 /* harmony import */ var _Devices_SatelitsComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Devices/SatelitsComponent */ "./resources/js/components/Settings/Devices/SatelitsComponent.vue");
 /* harmony import */ var _Devices_CategoryComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Devices/CategoryComponent */ "./resources/js/components/Settings/Devices/CategoryComponent.vue");
@@ -479,8 +492,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
+ // import IptvPakcagesComponent from "./IptvPackagesComponent";
 
  // devices
 
@@ -495,10 +515,11 @@ __webpack_require__.r(__webpack_exports__);
     "tag-component": _TagComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     "users-component": _UsersComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
     "api-component": _ApiComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    "iptvpakcages-component": _IptvPackagesComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
+    // "iptvpakcages-component": IptvPakcagesComponent,
     "dvbs-component": _Devices_DvbComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
     "satelits-component": _Devices_SatelitsComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
-    "category-component": _Devices_CategoryComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
+    "category-component": _Devices_CategoryComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
+    "multicastsources-component": _MulticastSourcesComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   created: function created() {
     this.redirectToTags();
@@ -528,6 +549,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -711,13 +740,27 @@ __webpack_require__.r(__webpack_exports__);
     getTags: function getTags() {
       var _this = this;
 
-      axios.get("tags").then(function (response) {
-        if (response.data.status === "success") {
-          _this.tags = response.data.tags;
-        } else {
-          _this.tags = [];
-        }
-      });
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("tags").then(function (response) {
+                  if (response.data.status === "success") {
+                    _this.tags = response.data.tags;
+                  } else {
+                    _this.tags = [];
+                  }
+                });
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     },
     // radoby contstruktor pro editaci
     openEditDialog: function openEditDialog() {
@@ -726,41 +769,85 @@ __webpack_require__.r(__webpack_exports__);
     deleteTag: function deleteTag(tagId) {
       var _this2 = this;
 
-      axios.post("tag/remove", {
-        tagId: tagId
-      }).then(function (response) {
-        _this2.$store.state.alerts = response.data.alert;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post("tag/remove", {
+                  tagId: tagId
+                }).then(function (response) {
+                  _this2.$store.state.alerts = response.data.alert;
 
-        _this2.getTags();
-      });
+                  _this2.getTags();
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     },
     SaveNewTag: function SaveNewTag() {
       var _this3 = this;
 
-      axios.post("tag/create", {
-        tagName: this.tagName,
-        tagColor: this.tagColor
-      }).then(function (response) {
-        _this3.$store.state.alerts = response.data.alert;
-        _this3.NewTagDialog = false;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.post("tag/create", {
+                  tagName: _this3.tagName,
+                  tagColor: _this3.tagColor
+                }).then(function (response) {
+                  _this3.$store.state.alerts = response.data.alert;
+                  _this3.NewTagDialog = false;
 
-        _this3.getTags();
-      });
+                  _this3.getTags();
+                });
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     },
     SaveEditTag: function SaveEditTag() {
       var _this4 = this;
 
-      axios.post('tag/update', {
-        tagId: this.tagId,
-        tagName: this.tagName,
-        tagColor: this.tagColor
-      }).then(function (response) {
-        _this4.$store.state.alerts = response.data.alert;
-        _this4.EditTagDialog = false;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios.post('tag/update', {
+                  tagId: _this4.tagId,
+                  tagName: _this4.tagName,
+                  tagColor: _this4.tagColor
+                }).then(function (response) {
+                  _this4.$store.state.alerts = response.data.alert;
+                  _this4.EditTagDialog = false;
 
-        _this4.getTags();
-      });
-      this.EditTagDialog = false;
+                  _this4.getTags();
+                });
+
+              case 2:
+                _this4.EditTagDialog = false;
+
+              case 3:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
   },
   watch: {
@@ -945,7 +1032,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat endpoint",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -1006,7 +1093,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat kategorii",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -1071,7 +1158,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat typ",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -1132,7 +1219,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat satelit",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -1169,10 +1256,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=template&id=2429c646&":
-/*!*********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=template&id=2429c646& ***!
-  \*********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1197,7 +1284,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat zdroj",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -1216,26 +1303,9 @@ var render = function() {
           _c("v-data-table", {
             attrs: {
               headers: _vm.headers,
-              items: _vm.packages,
+              items: _vm.sources,
               search: _vm.search
-            },
-            scopedSlots: _vm._u([
-              {
-                key: "item.sub_package",
-                fn: function(ref) {
-                  var item = ref.item
-                  return [
-                    item.sub_package === "yes"
-                      ? _c("v-icon", { attrs: { color: "info" } }, [
-                          _vm._v(
-                            "\n                    mdi-check\n                "
-                          )
-                        ])
-                      : _vm._e()
-                  ]
-                }
-              }
-            ])
+            }
           })
         ],
         1
@@ -1277,7 +1347,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
-            { staticClass: "mt-4" },
+            { staticClass: "mt-4 mr-10" },
             [
               _c(
                 "v-col",
@@ -1291,12 +1361,12 @@ var render = function() {
                     ? _c("users-component")
                     : _vm._e(),
                   _vm._v(" "),
-                  this.$route.params.name === "api"
-                    ? _c("api-component")
+                  this.$route.params.name === "multicast_sources"
+                    ? _c("multicastsources-component")
                     : _vm._e(),
                   _vm._v(" "),
-                  this.$route.params.name === "iptv_package"
-                    ? _c("iptvpakcages-component")
+                  this.$route.params.name === "api"
+                    ? _c("api-component")
                     : _vm._e(),
                   _vm._v(" "),
                   this.$route.params.name === "dvb"
@@ -1360,7 +1430,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat štítek",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -1819,7 +1889,7 @@ var render = function() {
               _c("v-text-field", {
                 attrs: {
                   "append-icon": "mdi-magnify",
-                  label: "Hledání",
+                  label: "Vyhledat uživatele",
                   "single-line": "",
                   "hide-details": ""
                 },
@@ -2183,17 +2253,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Settings/IptvPackagesComponent.vue":
-/*!********************************************************************!*\
-  !*** ./resources/js/components/Settings/IptvPackagesComponent.vue ***!
-  \********************************************************************/
+/***/ "./resources/js/components/Settings/MulticastSourcesComponent.vue":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/Settings/MulticastSourcesComponent.vue ***!
+  \************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _IptvPackagesComponent_vue_vue_type_template_id_2429c646___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IptvPackagesComponent.vue?vue&type=template&id=2429c646& */ "./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=template&id=2429c646&");
-/* harmony import */ var _IptvPackagesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IptvPackagesComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _MulticastSourcesComponent_vue_vue_type_template_id_7670bc5c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c& */ "./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c&");
+/* harmony import */ var _MulticastSourcesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MulticastSourcesComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -2203,9 +2273,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _IptvPackagesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _IptvPackagesComponent_vue_vue_type_template_id_2429c646___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _IptvPackagesComponent_vue_vue_type_template_id_2429c646___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _MulticastSourcesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MulticastSourcesComponent_vue_vue_type_template_id_7670bc5c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _MulticastSourcesComponent_vue_vue_type_template_id_7670bc5c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -2215,38 +2285,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Settings/IptvPackagesComponent.vue"
+component.options.__file = "resources/js/components/Settings/MulticastSourcesComponent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************/
+/***/ "./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IptvPackagesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./IptvPackagesComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IptvPackagesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MulticastSourcesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./MulticastSourcesComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MulticastSourcesComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=template&id=2429c646&":
-/*!***************************************************************************************************!*\
-  !*** ./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=template&id=2429c646& ***!
-  \***************************************************************************************************/
+/***/ "./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c& ***!
+  \*******************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IptvPackagesComponent_vue_vue_type_template_id_2429c646___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./IptvPackagesComponent.vue?vue&type=template&id=2429c646& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/IptvPackagesComponent.vue?vue&type=template&id=2429c646&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IptvPackagesComponent_vue_vue_type_template_id_2429c646___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MulticastSourcesComponent_vue_vue_type_template_id_7670bc5c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings/MulticastSourcesComponent.vue?vue&type=template&id=7670bc5c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MulticastSourcesComponent_vue_vue_type_template_id_7670bc5c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IptvPackagesComponent_vue_vue_type_template_id_2429c646___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MulticastSourcesComponent_vue_vue_type_template_id_7670bc5c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

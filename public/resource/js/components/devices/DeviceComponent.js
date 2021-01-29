@@ -2639,12 +2639,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6935,12 +6929,6 @@ var render = function() {
             "v-card",
             { staticClass: "mr-10", attrs: { flat: "" } },
             [
-              _c("v-card-subtitle", [
-                _c("strong", [
-                  _vm._v("\n                Kanály na zařízení\n            ")
-                ])
-              ]),
-              _vm._v(" "),
               _c(
                 "v-card-text",
                 [

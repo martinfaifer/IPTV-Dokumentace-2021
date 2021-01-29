@@ -50,7 +50,8 @@ export default {
                     icon: "mdi-account-multiple",
                     route: "accounts"
                 },
-                { title: "IPTV Balíčky", icon: "mdi-package-variant-closed", route: "iptv_package" },
+                // { title: "IPTV Balíčky", icon: "mdi-package-variant-closed", route: "iptv_package" },
+                { title: "Zdroje multicastu", icon: "mdi-semantic-web", route: "multicast_sources" },
                 { title: "API", icon: "mdi-arrow-collapse", route: "api" }
             ],
             devices: [

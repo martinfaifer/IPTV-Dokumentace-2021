@@ -1,12 +1,6 @@
 <template>
     <v-main>
         <v-card flat v-if="channels != null" class="mr-10">
-            <v-card-subtitle>
-                <strong>
-                    Kanály na zařízení
-                </strong>
-            </v-card-subtitle>
-
             <v-card-text>
                 <v-text-field
                     v-model="search"

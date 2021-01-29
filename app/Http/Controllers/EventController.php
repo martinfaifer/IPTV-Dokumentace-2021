@@ -97,8 +97,24 @@ class EventController extends Controller
 
     public static function delete(Request $request): array
     {
-        // delete fn
-        return [];
+        if (!$event = Event::find($request->eventId)) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Událost neexistuje"
+                )
+            ];
+        }
+
+        $event->delete();
+        return [
+            'status' => "success",
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Událost smazána"
+            )
+        ];
     }
 
     public static function search_events_by_channelId(Request $request)
@@ -116,5 +132,15 @@ class EventController extends Controller
                 'id', 'start_day', 'start_time', 'end_day', 'end_time', 'note'
             ])->toArray()
         ];
+    }
+
+    public static function delete_passed_events(): void
+    {
+        if (Event::where('end_day', "<", date("Y-m-d"))->first()) {
+            // delete
+            foreach (Event::where('end_day', "<", date("Y-m-d"))->get() as $event) {
+                $event->delete();
+            }
+        }
     }
 }

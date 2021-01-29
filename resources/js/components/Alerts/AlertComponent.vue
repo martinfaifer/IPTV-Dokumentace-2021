@@ -9,6 +9,17 @@
             :color="alert.status"
             right
         >
+        <v-icon v-if="alert.status === 'success'">
+            mdi-check
+        </v-icon>
+
+         <v-icon v-if="alert.status === 'error'">
+            mdi-close
+        </v-icon>
+
+         <v-icon v-if="alert.status === 'warning' || alert.status === 'info'">
+            mdi-exclamation
+        </v-icon>
             <strong>
                 {{ alert.msg }}
             </strong>

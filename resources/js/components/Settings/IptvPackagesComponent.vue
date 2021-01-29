@@ -45,8 +45,8 @@ export default {
         this.getPackages();
     },
     methods: {
-        getPackages() {
-            axios.get("packages").then(response => {
+        async getPackages() {
+            await axios.get("packages").then(response => {
                 this.packages = response.data;
             });
         }

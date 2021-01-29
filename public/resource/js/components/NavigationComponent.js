@@ -27,6 +27,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     alert: function alert() {
@@ -985,10 +996,11 @@ __webpack_require__.r(__webpack_exports__);
         title: "Uživatelé",
         icon: "mdi-account-multiple",
         route: "accounts"
-      }, {
-        title: "IPTV Balíčky",
-        icon: "mdi-package-variant-closed",
-        route: "iptv_package"
+      }, // { title: "IPTV Balíčky", icon: "mdi-package-variant-closed", route: "iptv_package" },
+      {
+        title: "Zdroje multicastu",
+        icon: "mdi-semantic-web",
+        route: "multicast_sources"
       }, {
         title: "API",
         icon: "mdi-arrow-collapse",
@@ -1022,6 +1034,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1628,12 +1648,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       editMulticastSources: [],
       deviceInformation: null,
       backupdeviceInformation: null
-    }, _defineProperty(_ref, "deviceInformation", null), _defineProperty(_ref, "prijemInterfaces", null), _defineProperty(_ref, "backup_multicast_ip", null), _defineProperty(_ref, "backup_multicastZdroj", null), _defineProperty(_ref, "stb_ip", null), _defineProperty(_ref, "multicast_ip", null), _defineProperty(_ref, "multicastZdroj", null), _defineProperty(_ref, "sources", []), _defineProperty(_ref, "channelName", null), _ref;
+    }, _defineProperty(_ref, "deviceInformation", null), _defineProperty(_ref, "prijemInterfaces", null), _defineProperty(_ref, "backup_multicast_ip", null), _defineProperty(_ref, "backup_multicastZdroj", null), _defineProperty(_ref, "stb_ip", null), _defineProperty(_ref, "multicast_ip", null), _defineProperty(_ref, "multicastZdroj", null), _defineProperty(_ref, "sources", []), _defineProperty(_ref, "channelName", null), _defineProperty(_ref, "photo", null), _ref;
   },
   created: function created() {
     this.loadchannels();
   },
   methods: {
+    selectFile: function selectFile(event) {
+      // `files` is always an array because the file input may be in multiple mode
+      this.photo = event.target.files[0];
+    },
     saveChannelName: function saveChannelName() {
       var _this = this;
 
@@ -2825,10 +2849,23 @@ var render = function() {
               }
             },
             [
+              _vm.alert.status === "success"
+                ? _c("v-icon", [_vm._v("\n        mdi-check\n    ")])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.alert.status === "error"
+                ? _c("v-icon", [_vm._v("\n        mdi-close\n    ")])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.alert.status === "warning" || _vm.alert.status === "info"
+                ? _c("v-icon", [_vm._v("\n        mdi-exclamation\n    ")])
+                : _vm._e(),
+              _vm._v(" "),
               _c("strong", [
                 _vm._v("\n            " + _vm._s(_vm.alert.msg) + "\n        ")
               ])
-            ]
+            ],
+            1
           )
         : _vm._e()
     ],

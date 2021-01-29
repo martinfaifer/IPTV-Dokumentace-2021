@@ -22,8 +22,10 @@
                                     <v-list-item-content class="pt-1">
                                         <v-list-item-title>
                                             <v-textarea
-                                                dense   
-                                                @contextmenu="show($event)"
+                                                dense
+                                                @contextmenu="
+                                                    show($event, item.id)
+                                                "
                                                 readonly
                                                 filled
                                                 prepend-icon="mdi-comment"
@@ -41,9 +43,13 @@
                                                 offset-y
                                             >
                                                 <v-list dense>
-                                                    <v-list-item>
+                                                    <v-list-item
+                                                        @click="deleteNote()"
+                                                    >
                                                         <v-list-item-icon>
-                                                            <v-icon x-small
+                                                            <v-icon
+                                                                x-small
+                                                                color="red"
                                                                 >mdi-delete</v-icon
                                                             >
                                                         </v-list-item-icon>
@@ -71,9 +77,9 @@
                 offset-y
             >
                 <v-list dense>
-                    <v-list-item>
+                    <v-list-item @click="newNoteDialog = true">
                         <v-list-item-icon>
-                            <v-icon x-small>mdi-plus</v-icon>
+                            <v-icon x-small color="green">mdi-plus</v-icon>
                         </v-list-item-icon>
                         <v-list-item-title>
                             Nová poznámka
@@ -82,12 +88,41 @@
                 </v-list>
             </v-menu>
         </v-card>
+
+        <v-dialog v-model="newNoteDialog" persistent max-width="1000px">
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Nová poznámka</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-textarea v-model="noteText"></v-textarea>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDialog()">
+                        Zavřít
+                    </v-btn>
+                    <v-btn color="green darken-1" text @click="saveNote()">
+                        Uložit
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-main>
 </template>
 <script>
 export default {
     data() {
         return {
+            newNoteDialog: false,
+            noteText: null,
+            noteId: null,
             notes: [],
             showMenu: false,
             showMenuCreate: false,
@@ -110,14 +145,42 @@ export default {
                 this.showMenuCreate = true;
             });
         },
-        show(e) {
+        show(e, noteId) {
             e.preventDefault();
+            this.noteId = noteId;
             this.showMenu = false;
             this.x = e.clientX;
             this.y = e.clientY;
             this.$nextTick(() => {
                 this.showMenu = true;
             });
+        },
+        async saveNote() {
+            await axios
+                .post("note/create", {
+                    note: this.noteText,
+                    id: this.$route.params.id,
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.newNoteDialog = false;
+                    this.noteText = null;
+                    this.loadNotes();
+                });
+        },
+        closeDialog() {
+            this.newNoteDialog = false;
+            this.noteText = null;
+        },
+        async deleteNote() {
+            await axios
+                .post("note/delete", {
+                    noteId: this.noteId
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.loadNotes();
+                });
         },
         async loadNotes() {
             // obecná fn , kdy se bude hlídat uri a dle toho se bude hledat tag pro daný source

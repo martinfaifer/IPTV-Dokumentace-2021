@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('dohled:getStatuses_andTryToReboot')->everyMinute(); // získání statusů streamů z dohledu, včetně uatomatického pokusu o restart
+        $schedule->command('events:delete')->dailyAt('01:00');
     }
 
     /**

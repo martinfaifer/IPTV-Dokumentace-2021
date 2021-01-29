@@ -1115,18 +1115,140 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      events: null
+      showMenu: false,
+      x: 0,
+      y: 0,
+      events: null,
+      start_day: "",
+      start_time: "",
+      end_day: "",
+      end_time: "",
+      event_note: "",
+      vypadek: false,
+      checkbox_create_to_dohled: false,
+      createEventDialog: false
     };
   },
   created: function created() {
     this.getEvents();
   },
   methods: {
-    getEvents: function getEvents() {
+    show: function show(e) {
       var _this = this;
+
+      e.preventDefault();
+      this.showMenu = false;
+      this.x = e.clientX;
+      this.y = e.clientY;
+      this.$nextTick(function () {
+        _this.showMenu = true;
+      });
+    },
+    getEvents: function getEvents() {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -1135,12 +1257,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return axios.post("event/channel", {
-                  channelId: _this.$route.params.id
+                  channelId: _this2.$route.params.id
                 }).then(function (response) {
                   if (response.data.status === "success") {
-                    _this.events = response.data.data;
+                    _this2.events = response.data.data;
                   } else {
-                    _this.events = null;
+                    _this2.events = null;
                   }
                 });
 
@@ -1150,6 +1272,74 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
+      }))();
+    },
+    closeDialog: function closeDialog() {
+      this.start_day = "";
+      this.start_time = "";
+      this.end_day = "";
+      this.end_time = "";
+      this.event_note = "";
+      this.vypadek = false;
+      this.checkbox_create_to_dohled = false;
+      this.createEventDialog = false;
+    },
+    saveEvent: function saveEvent() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post("event/create", {
+                  channelId: _this3.$route.params.id,
+                  start_day: _this3.start_day,
+                  start_time: _this3.start_time,
+                  end_day: _this3.end_day,
+                  end_time: _this3.end_time,
+                  event_note: _this3.event_note,
+                  vypadek: _this3.vypadek,
+                  checkbox_create_to_dohled: _this3.checkbox_create_to_dohled
+                }).then(function (response) {
+                  _this3.$store.state.alerts = response.data.alert;
+                  _this3.createEventDialog = false;
+
+                  _this3.getEvents();
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    deleteEvent: function deleteEvent(eventId) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.post('event/delete', {
+                  eventId: eventId
+                }).then(function (response) {
+                  _this4.$store.state.alerts = response.data.alert;
+
+                  _this4.getEvents();
+                });
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     }
   },
@@ -1960,9 +2150,44 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      newNoteDialog: false,
+      noteText: null,
+      noteId: null,
       notes: [],
       showMenu: false,
       showMenuCreate: false,
@@ -1987,10 +2212,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this.showMenuCreate = true;
       });
     },
-    show: function show(e) {
+    show: function show(e, noteId) {
       var _this2 = this;
 
       e.preventDefault();
+      this.noteId = noteId;
       this.showMenu = false;
       this.x = e.clientX;
       this.y = e.clientY;
@@ -1998,7 +2224,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this2.showMenu = true;
       });
     },
-    loadNotes: function loadNotes() {
+    saveNote: function saveNote() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -2007,15 +2233,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post("notes", {
-                  id: _this3.$route.params.id,
-                  datatype: _this3.checkUri()
+                return axios.post("note/create", {
+                  note: _this3.noteText,
+                  id: _this3.$route.params.id
                 }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.notes = response.data.notes;
-                  } else {
-                    _this3.notes = null;
-                  }
+                  _this3.$store.state.alerts = response.data.alert;
+                  _this3.newNoteDialog = false;
+                  _this3.noteText = null;
+
+                  _this3.loadNotes();
                 });
 
               case 2:
@@ -2024,6 +2250,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
+      }))();
+    },
+    closeDialog: function closeDialog() {
+      this.newNoteDialog = false;
+      this.noteText = null;
+    },
+    deleteNote: function deleteNote() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post("note/delete", {
+                  noteId: _this4.noteId
+                }).then(function (response) {
+                  _this4.$store.state.alerts = response.data.alert;
+
+                  _this4.loadNotes();
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    loadNotes: function loadNotes() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.post("notes", {
+                  id: _this5.$route.params.id,
+                  datatype: _this5.checkUri()
+                }).then(function (response) {
+                  if (response.data.status === "success") {
+                    _this5.notes = response.data.notes;
+                  } else {
+                    _this5.notes = null;
+                  }
+                });
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     },
     checkUri: function checkUri() {
@@ -6169,9 +6452,17 @@ var render = function() {
         "v-card",
         { attrs: { flat: "", color: "#F5F5F7", height: "250" } },
         [
-          _c("v-card-subtitle", [
-            _c("strong", [_vm._v("\n                Kalendář\n            ")])
-          ]),
+          _c(
+            "v-card-subtitle",
+            {
+              on: {
+                contextmenu: function($event) {
+                  return _vm.show($event)
+                }
+              }
+            },
+            [_c("strong", [_vm._v("\n                Kalendář\n            ")])]
+          ),
           _vm._v(" "),
           _c(
             "v-card-text",
@@ -6190,7 +6481,7 @@ var render = function() {
                             [
                               _c("strong", [
                                 _vm._v(
-                                  "\n                             Den začátku\n                         "
+                                  "\n                            Den začátku\n                        "
                                 )
                               ])
                             ]
@@ -6330,7 +6621,14 @@ var render = function() {
                               [
                                 _c(
                                   "v-icon",
-                                  { attrs: { small: "", color: "red" } },
+                                  {
+                                    attrs: { small: "", color: "red" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteEvent(event.id)
+                                      }
+                                    }
+                                  },
                                   [
                                     _vm._v(
                                       "\n                            mdi-delete\n                        "
@@ -6349,9 +6647,297 @@ var render = function() {
                   )
                 : _c("v-container", [
                     _vm._v(
-                      " \n                Neexistuje žádná událost\n            "
+                      "\n                Neexistuje žádná událost\n            "
                     )
                   ])
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-menu",
+        {
+          attrs: {
+            dense: "",
+            "position-x": _vm.x,
+            "position-y": _vm.y,
+            absolute: "",
+            "offset-y": ""
+          },
+          model: {
+            value: _vm.showMenu,
+            callback: function($$v) {
+              _vm.showMenu = $$v
+            },
+            expression: "showMenu"
+          }
+        },
+        [
+          _c(
+            "v-list",
+            { attrs: { dense: "" } },
+            [
+              _c(
+                "v-list-item",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.createEventDialog = true
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "v-list-item-icon",
+                    [
+                      _c("v-icon", { attrs: { "x-small": "" } }, [
+                        _vm._v("mdi-plus")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [
+                    _vm._v(
+                      "\n                    Přidat událost\n                "
+                    )
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", "max-width": "1000px" },
+          model: {
+            value: _vm.createEventDialog,
+            callback: function($$v) {
+              _vm.createEventDialog = $$v
+            },
+            expression: "createEventDialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _c("span", { staticClass: "headline" }, [
+                  _vm._v("Přidání nové události")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Den začátku události",
+                                  type: "date",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.start_day,
+                                  callback: function($$v) {
+                                    _vm.start_day = $$v
+                                  },
+                                  expression: "start_day"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Čas začátku události",
+                                  type: "time",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.start_time,
+                                  callback: function($$v) {
+                                    _vm.start_time = $$v
+                                  },
+                                  expression: "start_time"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Den konce události",
+                                  type: "date",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.end_day,
+                                  callback: function($$v) {
+                                    _vm.end_day = $$v
+                                  },
+                                  expression: "end_day"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Čas konce události",
+                                  type: "time",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.end_time,
+                                  callback: function($$v) {
+                                    _vm.end_time = $$v
+                                  },
+                                  expression: "end_time"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Popis události",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.event_note,
+                                  callback: function($$v) {
+                                    _vm.event_note = $$v
+                                  },
+                                  expression: "event_note"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c("v-switch", {
+                                attrs: { label: "Kanál bude mít výpadek" },
+                                model: {
+                                  value: _vm.vypadek,
+                                  callback: function($$v) {
+                                    _vm.vypadek = $$v
+                                  },
+                                  expression: "vypadek"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _vm.vypadek === true
+                            ? _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-checkbox", {
+                                    attrs: {
+                                      label:
+                                        "\n                                        Propsání události do dohledu\n                                    "
+                                    },
+                                    model: {
+                                      value: _vm.checkbox_create_to_dohled,
+                                      callback: function($$v) {
+                                        _vm.checkbox_create_to_dohled = $$v
+                                      },
+                                      expression: "checkbox_create_to_dohled"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.closeDialog()
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Zavřít\n                ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.saveEvent()
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Uložit\n                ")]
+                  )
+                ],
+                1
+              )
             ],
             1
           )
@@ -7476,7 +8062,10 @@ var render = function() {
                                                     contextmenu: function(
                                                       $event
                                                     ) {
-                                                      return _vm.show($event)
+                                                      return _vm.show(
+                                                        $event,
+                                                        item.id
+                                                      )
                                                     }
                                                   }
                                                 }),
@@ -7506,6 +8095,15 @@ var render = function() {
                                                       [
                                                         _c(
                                                           "v-list-item",
+                                                          {
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.deleteNote()
+                                                              }
+                                                            }
+                                                          },
                                                           [
                                                             _c(
                                                               "v-list-item-icon",
@@ -7515,7 +8113,9 @@ var render = function() {
                                                                   {
                                                                     attrs: {
                                                                       "x-small":
-                                                                        ""
+                                                                        "",
+                                                                      color:
+                                                                        "red"
                                                                     }
                                                                   },
                                                                   [
@@ -7594,13 +8194,22 @@ var render = function() {
                 [
                   _c(
                     "v-list-item",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.newNoteDialog = true
+                        }
+                      }
+                    },
                     [
                       _c(
                         "v-list-item-icon",
                         [
-                          _c("v-icon", { attrs: { "x-small": "" } }, [
-                            _vm._v("mdi-plus")
-                          ])
+                          _c(
+                            "v-icon",
+                            { attrs: { "x-small": "", color: "green" } },
+                            [_vm._v("mdi-plus")]
+                          )
                         ],
                         1
                       ),
@@ -7612,6 +8221,103 @@ var render = function() {
                       ])
                     ],
                     1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", "max-width": "1000px" },
+          model: {
+            value: _vm.newNoteDialog,
+            callback: function($$v) {
+              _vm.newNoteDialog = $$v
+            },
+            expression: "newNoteDialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _c("span", { staticClass: "headline" }, [
+                  _vm._v("Nová poznámka")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "12" } },
+                            [
+                              _c("v-textarea", {
+                                model: {
+                                  value: _vm.noteText,
+                                  callback: function($$v) {
+                                    _vm.noteText = $$v
+                                  },
+                                  expression: "noteText"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.closeDialog()
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Zavřít\n                ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.saveNote()
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Uložit\n                ")]
                   )
                 ],
                 1

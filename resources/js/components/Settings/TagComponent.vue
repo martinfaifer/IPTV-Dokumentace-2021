@@ -5,7 +5,7 @@
                 <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
-                    label="Hledání"
+                    label="Vyhledat štítek"
                     single-line
                     hide-details
                 ></v-text-field>
@@ -175,8 +175,8 @@ export default {
         this.getTags();
     },
     methods: {
-        getTags() {
-            axios.get("tags").then(response => {
+        async getTags() {
+            await axios.get("tags").then(response => {
                 if (response.data.status === "success") {
                     this.tags = response.data.tags;
                 } else {
@@ -188,16 +188,16 @@ export default {
         openEditDialog() {
             this.EditTagDialog = true;
         },
-        deleteTag(tagId) {
-            axios.post("tag/remove", {
+        async deleteTag(tagId) {
+            await axios.post("tag/remove", {
                 tagId: tagId
             }).then(response => {
                 this.$store.state.alerts = response.data.alert;
                 this.getTags();
             });
         },
-        SaveNewTag() {
-            axios
+        async SaveNewTag() {
+            await axios
                 .post("tag/create", {
                     tagName: this.tagName,
                     tagColor: this.tagColor
@@ -208,8 +208,8 @@ export default {
                     this.getTags();
                 });
         },
-        SaveEditTag() {
-            axios.post('tag/update', {
+        async SaveEditTag() {
+            await axios.post('tag/update', {
                 tagId: this.tagId,
                 tagName: this.tagName,
                 tagColor: this.tagColor

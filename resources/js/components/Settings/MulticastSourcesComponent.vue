@@ -5,12 +5,12 @@
                 <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
-                    label="Vyhledat endpoint"
+                    label="Vyhledat zdroj"
                     single-line
                     hide-details
                 ></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="apis" :search="search">
+            <v-data-table :headers="headers" :items="sources" :search="search">
             </v-data-table>
         </v-card>
     </v-main>
@@ -22,28 +22,23 @@ export default {
             search: "",
             headers: [
                 {
-                    text: "URL",
+                    text: "Zdroj",
                     align: "start",
-                    value: "uri"
+                    value: "zdroj"
                 },
-                { text: "Událost", value: "type" },
-                { text: "Token", value: "token" }
+                { text: "Akce", value: "akce" }
             ],
-            apis: []
+            sources: []
         };
     },
     components: {},
     created() {
-        this.getApi();
+        this.getSources();
     },
     methods: {
-        async getApi() {
-            await axios.get("external_endpoints").then(response => {
-                if (response.data.status === "success") {
-                    this.apis = response.data.apis;
-                } else {
-                    this.apis = [];
-                }
+        async getSources() {
+            await axios.get("sources").then(response => {
+                this.sources = response.data;
             });
         }
     },
