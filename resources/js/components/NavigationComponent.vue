@@ -369,9 +369,9 @@ export default {
         this.getAlertsFromDohled();
     },
     methods: {
-        async getAlertsFromDohled() {
+        getAlertsFromDohled() {
             try {
-                await axios.get("/api/iptv/alerts").then(response => {
+                axios.get("/api/iptv/alerts").then(response => {
                     if (response.data.length === 0) {
                         this.alerts = response.data;
                         this.alertCount = "0";
@@ -382,9 +382,9 @@ export default {
                 });
             } catch (error) {}
         },
-        async logOut() {
+        logOut() {
             try {
-                await axios.get("logout").then(response => {
+                axios.get("logout").then(response => {
                     this.$router.push("/login");
                 });
             } catch (error) {}

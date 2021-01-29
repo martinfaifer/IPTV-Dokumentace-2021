@@ -147,8 +147,8 @@ export default {
         this.loadOutputKvality();
     },
     methods: {
-         async openDialog() {
-            await axios
+        openDialog() {
+            axios
                 .post("h265/channel/kvalityForEdit", {
                     channelId: this.$route.params.id,
                     type: "h265"
@@ -163,8 +163,8 @@ export default {
             this.editDataDialog = false;
             this.kvalityForDialog = [];
         },
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("h265/channel/kvality/update", {
                     channelId: this.$route.params.id,
                     p1080: this.kvalityForDialog.p1080,
@@ -189,8 +189,8 @@ export default {
             });
         },
 
-        async loadChunkStoreId() {
-            await axios
+        loadChunkStoreId() {
+            axios
                 .post("unicast/chunkStoreId", {
                     channelId: this.$route.params.id
                 })
@@ -198,8 +198,8 @@ export default {
                     this.chunkStoreId = response.data;
                 });
         },
-        async loadOutputKvality() {
-            await axios
+        loadOutputKvality() {
+            axios
                 .post("h264/channel/kvality", {
                     channelId: this.$route.params.id,
                     type: "h265"

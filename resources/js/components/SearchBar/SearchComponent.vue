@@ -64,13 +64,13 @@ export default {
     },
     created() {},
     methods: {
-        async searchDialog() {
+        searchDialog() {
             this.searchDialogInput = true;
             this.search = null;
             this.model = null;
 
-            await axios.get('search').then(response => {
-                this.entries = response.data.entries
+            axios.get("search").then(response => {
+                this.entries = response.data.entries;
             });
         }
     },

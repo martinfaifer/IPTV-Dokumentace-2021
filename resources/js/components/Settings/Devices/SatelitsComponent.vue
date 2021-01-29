@@ -36,8 +36,8 @@ export default {
         this.getSatelits();
     },
     methods: {
-        async getSatelits() {
-            await axios.get("satelits").then(response => {
+        getSatelits() {
+            axios.get("satelits").then(response => {
                 if (response.data.status === "success") {
                     this.satelits = response.data.data;
                 } else {

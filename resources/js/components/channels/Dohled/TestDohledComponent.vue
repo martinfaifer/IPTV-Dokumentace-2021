@@ -86,8 +86,8 @@ export default {
         this.loadDohledDatat();
     },
     methods: {
-        async loadDohledDatat() {
-            await axios
+        loadDohledDatat() {
+            axios
                 .post("channel/dohled", {
                     channelId: this.$route.params.id
                 })

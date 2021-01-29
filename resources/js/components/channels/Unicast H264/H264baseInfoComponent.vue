@@ -222,8 +222,8 @@ export default {
         this.checkIfIs();
     },
     methods: {
-        async removeH264() {
-            await axios
+        removeH264() {
+            axios
                 .post("h264/delete", {
                     channelId: this.$route.params.id
                 })
@@ -236,14 +236,14 @@ export default {
                     }
                 });
         },
-        async createOutput() {
-            await axios.get("device/transcoders").then(response => {
+        createOutput() {
+            axios.get("device/transcoders").then(response => {
                 this.transcoders = response.data;
                 this.outputDialog = true;
             });
         },
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("h264/create", {
                     channelId: this.$route.params.id,
                     addToTranscoder: this.addToTranscoder,
@@ -278,8 +278,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        async loadChannelNameById() {
-            await axios
+        loadChannelNameById() {
+            axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })
@@ -287,8 +287,8 @@ export default {
                     this.channelName = response.data;
                 });
         },
-        async checkIfIs() {
-            await axios
+        checkIfIs() {
+            axios
                 .post("h264/check", {
                     channelId: this.$route.params.id
                 })

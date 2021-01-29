@@ -287,8 +287,8 @@ export default {
         this.loadDevices();
     },
     methods: {
-        async removeDeviceFromSystem() {
-            await axios
+        removeDeviceFromSystem() {
+            axios
                 .post("device/remove", {
                     deviceId: this.deviceId
                 })
@@ -305,8 +305,8 @@ export default {
                     }
                 });
         },
-        async openEditDeviceDialog() {
-            await axios
+        openEditDeviceDialog() {
+            axios
                 .post("device/getInfoForBaseEdit", {
                     deviceId: this.deviceId
                 })
@@ -326,8 +326,8 @@ export default {
             this.vendors = [];
         },
 
-        async saveEditDialog() {
-            await axios
+        saveEditDialog() {
+            axios
                 .post("device/baseEdit", {
                     deviceId: this.deviceId,
                     name: this.editDeviceData.name,
@@ -356,8 +356,8 @@ export default {
                     }
                 });
         },
-        async loadAllInterfaces() {
-            await axios.get("device/allInterfaces").then(response => {
+        loadAllInterfaces() {
+            axios.get("device/allInterfaces").then(response => {
                 this.allInterfaces = response.data;
             });
         },
@@ -369,8 +369,8 @@ export default {
             this.loadAllInterfaces();
         },
 
-        async loadCategories() {
-            await axios.get("device/categories").then(response => {
+        loadCategories() {
+            axios.get("device/categories").then(response => {
                 if (response.data.status === "success") {
                     this.categories = response.data.data;
                 } else {
@@ -378,8 +378,8 @@ export default {
                 }
             });
         },
-        async loadVendors() {
-            await axios.get("vendors").then(response => {
+        loadVendors() {
+            axios.get("vendors").then(response => {
                 if (response.data.status === "success") {
                     this.vendors = response.data.data;
                 } else {
@@ -388,13 +388,13 @@ export default {
             });
         },
 
-        async loadDevices() {
-            await axios.get("devices").then(response => {
+        loadDevices() {
+            axios.get("devices").then(response => {
                 this.devices = response.data;
             });
         },
-        async saveDialog() {
-            await axios
+        saveDialog() {
+            axios
                 .post("device/create", {
                     deviceName: this.deviceName,
                     deviceUser: this.deviceUser,

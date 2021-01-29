@@ -28,7 +28,15 @@
 
                 <template v-slot:item.akce="{ item }">
                     <!-- mdi-play -->
-                    <v-icon @click="tagId = item.id, tagName = item.tagName, tagColor = item.color, openEditDialog()" small color="info"
+                    <v-icon
+                        @click="
+                            (tagId = item.id),
+                                (tagName = item.tagName),
+                                (tagColor = item.color),
+                                openEditDialog()
+                        "
+                        small
+                        color="info"
                         >mdi-pencil</v-icon
                     >
 
@@ -175,8 +183,8 @@ export default {
         this.getTags();
     },
     methods: {
-        async getTags() {
-            await axios.get("tags").then(response => {
+        getTags() {
+            axios.get("tags").then(response => {
                 if (response.data.status === "success") {
                     this.tags = response.data.tags;
                 } else {
@@ -188,16 +196,18 @@ export default {
         openEditDialog() {
             this.EditTagDialog = true;
         },
-        async deleteTag(tagId) {
-            await axios.post("tag/remove", {
-                tagId: tagId
-            }).then(response => {
-                this.$store.state.alerts = response.data.alert;
-                this.getTags();
-            });
+        deleteTag(tagId) {
+            axios
+                .post("tag/remove", {
+                    tagId: tagId
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.getTags();
+                });
         },
-        async SaveNewTag() {
-            await axios
+        SaveNewTag() {
+            axios
                 .post("tag/create", {
                     tagName: this.tagName,
                     tagColor: this.tagColor
@@ -208,16 +218,18 @@ export default {
                     this.getTags();
                 });
         },
-        async SaveEditTag() {
-            await axios.post('tag/update', {
-                tagId: this.tagId,
-                tagName: this.tagName,
-                tagColor: this.tagColor
-            }).then(response => {
-                this.$store.state.alerts = response.data.alert;
-                this.EditTagDialog = false;
-                this.getTags();
-            })
+        SaveEditTag() {
+            axios
+                .post("tag/update", {
+                    tagId: this.tagId,
+                    tagName: this.tagName,
+                    tagColor: this.tagColor
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.EditTagDialog = false;
+                    this.getTags();
+                });
             this.EditTagDialog = false;
         }
     },

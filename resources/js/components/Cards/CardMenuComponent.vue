@@ -60,8 +60,8 @@ export default {
         this.loadCards();
     },
     methods: {
-        async loadCards() {
-            await axios.get("cards").then(response => {
+        loadCards() {
+            axios.get("cards").then(response => {
                 this.cards = response.data;
             });
         },

@@ -9,14 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -141,26 +133,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadTags: function loadTags() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("tags", {
-                  id: _this2.$route.params.id,
-                  datatype: _this2.checkUri()
-                }).then(function (response) {
-                  _this2.tags = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      // obecná fn , kdy se bude hlídat uri a dle toho se bude hledat tag pro daný source
+      axios.post("tags", {
+        id: this.$route.params.id,
+        datatype: this.checkUri()
+      }).then(function (response) {
+        _this2.tags = response.data;
+      });
     },
     checkUri: function checkUri() {
       if (this.$route.path === "/channel/" + this.$route.params.id) {
@@ -186,77 +165,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     OpenDialogForNewTag: function OpenDialogForNewTag() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("tags").then(function (response) {
-                  _this3.addetableTags = response.data.tags;
-                  _this3.NewTagsDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("tags").then(function (response) {
+        _this3.addetableTags = response.data.tags;
+        _this3.NewTagsDialog = true;
+      });
     },
     addtag: function addtag() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("tag/add", {
-                  id: _this4.$route.params.id,
-                  type: _this4.type,
-                  tagId: _this4.tagToAdd
-                }).then(function (response) {
-                  _this4.$store.state.alerts = response.data.alert;
-                  _this4.NewTagsDialog = false;
+      axios.post("tag/add", {
+        id: this.$route.params.id,
+        type: this.type,
+        tagId: this.tagToAdd
+      }).then(function (response) {
+        _this4.$store.state.alerts = response.data.alert;
+        _this4.NewTagsDialog = false;
 
-                  _this4.loadTags();
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+        _this4.loadTags();
+      });
     },
     removeTag: function removeTag() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("tag/removeFrom", {
-                  tagId: _this5.tagId
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
+      axios.post("tag/removeFrom", {
+        tagId: this.tagId
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
 
-                  _this5.loadTags();
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+        _this5.loadTags();
+      });
     }
   },
   watch: {

@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-container fluid class="ml-3" >
+        <v-container fluid class="ml-3">
             <div>
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ thisCardNumber }}</h2>
@@ -16,33 +16,30 @@
     </v-main>
 </template>
 <script>
-
 import CardDeviceComponent from "./CardDeviceComponent";
 
 export default {
     data() {
         return {
-            thisCardNumber: "",
+            thisCardNumber: ""
         };
     },
     components: {
-        "carddevice-component": CardDeviceComponent,
- 
+        "carddevice-component": CardDeviceComponent
     },
     created() {
         this.loadCardNumber();
     },
     methods: {
-        async loadCardNumber() {
-            await axios
+        loadCardNumber() {
+            axios
                 .post("card/number", {
                     cardId: this.$route.params.id
                 })
                 .then(response => {
                     this.thisCardNumber = response.data;
                 });
-        },
-
+        }
     },
     watch: {
         $route(to, from) {

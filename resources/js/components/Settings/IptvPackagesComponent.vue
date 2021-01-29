@@ -11,14 +11,11 @@
                 ></v-text-field>
             </v-card-title>
             <v-data-table :headers="headers" :items="packages" :search="search">
-
                 <template v-slot:item.sub_package="{ item }">
                     <v-icon v-if="item.sub_package === 'yes'" color="info">
                         mdi-check
                     </v-icon>
                 </template>
-
-
             </v-data-table>
         </v-card>
     </v-main>
@@ -34,7 +31,7 @@ export default {
                     align: "start",
                     value: "main_package"
                 },
-                { text: "Sub balíček", value: "sub_package" },
+                { text: "Sub balíček", value: "sub_package" }
                 // { text: "Akce", value: "akce" }
             ],
             packages: []
@@ -45,8 +42,8 @@ export default {
         this.getPackages();
     },
     methods: {
-        async getPackages() {
-            await axios.get("packages").then(response => {
+        getPackages() {
+            axios.get("packages").then(response => {
                 this.packages = response.data;
             });
         }

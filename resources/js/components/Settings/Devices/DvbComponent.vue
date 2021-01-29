@@ -36,8 +36,8 @@ export default {
         this.getDvbs();
     },
     methods: {
-        async getDvbs() {
-            await axios.get("dvb").then(response => {
+        getDvbs() {
+            axios.get("dvb").then(response => {
                 if (response.data.status === "success") {
                     this.dvbs = response.data.data;
                 } else {
@@ -51,4 +51,3 @@ export default {
     }
 };
 </script>
-

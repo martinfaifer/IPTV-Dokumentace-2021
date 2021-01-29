@@ -14,7 +14,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MulticastComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MulticastComponent.vue */ "./resources/js/components/channels/MulticastComponent.vue");
 /* harmony import */ var _Unicast_H264_H264baseInfoComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Unicast H264/H264baseInfoComponent */ "./resources/js/components/channels/Unicast H264/H264baseInfoComponent.vue");
 /* harmony import */ var _Unicast_H265_H265baseInfoComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Unicast H265/H265baseInfoComponent */ "./resources/js/components/channels/Unicast H265/H265baseInfoComponent.vue");
-/* harmony import */ var _Dohled_DohledChannelComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Dohled/DohledChannelComponent */ "./resources/js/components/channels/Dohled/DohledChannelComponent.vue");
 //
 //
 //
@@ -101,15 +100,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
@@ -128,8 +118,7 @@ __webpack_require__.r(__webpack_exports__);
     "h264baseinfo-component": _Unicast_H264_H264baseInfoComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
     "h265baseinfo-component": _Unicast_H265_H265baseInfoComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
     "default-component": _Default_DefaultComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
-    "tag-component": _Tags_TagComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    "dohled-component": _Dohled_DohledChannelComponent__WEBPACK_IMPORTED_MODULE_5__["default"]
+    "tag-component": _Tags_TagComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   created: function created() {},
   methods: {
@@ -137,84 +126,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     $route: function $route(to, from) {}
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      channelName: ""
-    };
-  },
-  created: function created() {
-    this.loadChannelNameById();
-  },
-  methods: {
-    loadChannelNameById: function loadChannelNameById() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("channel/name", {
-                  channelId: _this.$route.params.id
-                }).then(function (response) {
-                  _this.channelName = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    }
-  },
-  watch: {
-    $route: function $route(to, from) {
-      this.loadChannelNameById();
-    }
   }
 });
 
@@ -229,15 +140,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
 //
 //
 //
@@ -327,29 +229,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDohledDatat: function loadDohledDatat() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("channel/h264/dohled", {
-                  channelId: _this.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this.dohled = response.data.streamData;
-                  } else {
-                    _this.dohled = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("channel/h264/dohled", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this.dohled = response.data.streamData;
+        } else {
+          _this.dohled = null;
+        }
+      });
     }
   },
   watch: {
@@ -370,15 +258,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
 //
 //
 //
@@ -468,29 +347,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDohledDatat: function loadDohledDatat() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("channel/h265/dohled", {
-                  channelId: _this.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this.dohled = response.data.streamData;
-                  } else {
-                    _this.dohled = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("channel/h265/dohled", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this.dohled = response.data.streamData;
+        } else {
+          _this.dohled = null;
+        }
+      });
     }
   },
   watch: {
@@ -511,14 +376,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -608,29 +465,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDohledDatat: function loadDohledDatat() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("channel/dohled", {
-                  channelId: _this.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this.dohled = response.data.streamData;
-                  } else {
-                    _this.dohled = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("channel/dohled", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this.dohled = response.data.streamData;
+        } else {
+          _this.dohled = null;
+        }
+      });
     }
   },
   watch: {
@@ -651,14 +494,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -885,62 +720,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadBackup: function loadBackup() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios.post("backup", {
-                  channelId: _this2.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this2.backup = response.data.data;
-                  } else {
-                    _this2.backup = null;
-                  }
-                });
-
-              case 3:
-                _context.next = 8;
-                break;
-
-              case 5:
-                _context.prev = 5;
-                _context.t0 = _context["catch"](0);
-                _this2.backup = null;
-
-              case 8:
-              case "end":
-                return _context.stop();
-            }
+      try {
+        axios.post("backup", {
+          channelId: this.$route.params.id
+        }).then(function (response) {
+          if (response.data.status === "success") {
+            _this2.backup = response.data.data;
+          } else {
+            _this2.backup = null;
           }
-        }, _callee, null, [[0, 5]]);
-      }))();
+        });
+      } catch (error) {
+        this.backup = null;
+      }
     },
     GetMoreInformationAboutThisDevice: function GetMoreInformationAboutThisDevice(data) {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("device/info", {
-                  deviceName: data
-                }).then(function (response) {
-                  _this3.deviceInformation = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("device/info", {
+        deviceName: data
+      }).then(function (response) {
+        _this3.deviceInformation = response.data;
+      });
     },
     openEditDialog: function openEditDialog() {
       var _this4 = this;
@@ -959,61 +760,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveData: function saveData() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("device/backup/edit", {
-                  channelId: _this5.$route.params.id,
-                  deviceName: _this5.backup.name,
-                  channelToInterface: _this5.backup.interfaces,
-                  checkIfDeviceHasInterface: _this5.deviceInformation.outputInterfaces
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
+      axios.post("device/backup/edit", {
+        channelId: this.$route.params.id,
+        deviceName: this.backup.name,
+        channelToInterface: this.backup.interfaces,
+        checkIfDeviceHasInterface: this.deviceInformation.outputInterfaces
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this5.editDialog = false;
+        if (response.data.status === "success") {
+          _this5.editDialog = false;
 
-                    _this5.loadBackup();
-                  } else {
-                    _this5.editDialog = false;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+          _this5.loadBackup();
+        } else {
+          _this5.editDialog = false;
+        }
+      });
     },
     removeData: function removeData() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("device/backup/remove", {
-                  channelId: _this6.$route.params.id
-                }).then(function (response) {
-                  _this6.$store.state.alerts = response.data.alert;
+      axios.post("device/backup/remove", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this6.$store.state.alerts = response.data.alert;
 
-                  _this6.loadBackup();
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+        _this6.loadBackup();
+      });
     }
   },
   watch: {
@@ -1034,14 +807,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+//
+//
+//
+//
 //
 //
 //
@@ -1250,29 +1019,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getEvents: function getEvents() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("event/channel", {
-                  channelId: _this2.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this2.events = response.data.data;
-                  } else {
-                    _this2.events = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("event/channel", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this2.events = response.data.data;
+        } else {
+          _this2.events = null;
+        }
+      });
     },
     closeDialog: function closeDialog() {
       this.start_day = "";
@@ -1287,60 +1042,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveEvent: function saveEvent() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("event/create", {
-                  channelId: _this3.$route.params.id,
-                  start_day: _this3.start_day,
-                  start_time: _this3.start_time,
-                  end_day: _this3.end_day,
-                  end_time: _this3.end_time,
-                  event_note: _this3.event_note,
-                  vypadek: _this3.vypadek,
-                  checkbox_create_to_dohled: _this3.checkbox_create_to_dohled
-                }).then(function (response) {
-                  _this3.$store.state.alerts = response.data.alert;
-                  _this3.createEventDialog = false;
+      axios.post("event/create", {
+        channelId: this.$route.params.id,
+        start_day: this.start_day,
+        start_time: this.start_time,
+        end_day: this.end_day,
+        end_time: this.end_time,
+        event_note: this.event_note,
+        vypadek: this.vypadek,
+        checkbox_create_to_dohled: this.checkbox_create_to_dohled
+      }).then(function (response) {
+        _this3.$store.state.alerts = response.data.alert;
+        _this3.createEventDialog = false;
 
-                  _this3.getEvents();
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+        _this3.getEvents();
+      });
     },
     deleteEvent: function deleteEvent(eventId) {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post('event/delete', {
-                  eventId: eventId
-                }).then(function (response) {
-                  _this4.$store.state.alerts = response.data.alert;
+      axios.post("event/delete", {
+        eventId: eventId
+      }).then(function (response) {
+        _this4.$store.state.alerts = response.data.alert;
 
-                  _this4.getEvents();
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+        _this4.getEvents();
+      });
     }
   },
   watch: {
@@ -1361,19 +1088,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
-//
-//
-//
-//
 //
 //
 //
@@ -1558,114 +1272,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadMulticast: function loadMulticast() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("multicast", {
-                  channelId: _this2.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this2.multicasts = response.data.data;
-                  } else {
-                    _this2.multicasts = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("multicast", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this2.multicasts = response.data.data;
+        } else {
+          _this2.multicasts = null;
+        }
+      });
     },
     getMulticastSources: function getMulticastSources() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("sources").then(function (response) {
-                  _this3.sources = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("sources").then(function (response) {
+        _this3.sources = response.data;
+      });
     },
     openMulticastEditDialog: function openMulticastEditDialog() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("channel/multicast", {
-                  channelId: _this4.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this4.getMulticastSources();
+      axios.post("channel/multicast", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this4.getMulticastSources();
 
-                    _this4.editData = response.data.data;
-                    _this4.editMulticastSources = true;
-                  } else {
-                    _this4.editData = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+          _this4.editData = response.data.data;
+          _this4.editMulticastSources = true;
+        } else {
+          _this4.editData = null;
+        }
+      });
     },
     savedata: function savedata() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("channel/multicast/edit", {
-                  channelId: _this5.$route.params.id,
-                  multicastZdroj: _this5.editData.multicastZdroj,
-                  multicast_ip: _this5.editData.multicast_ip,
-                  stb_ip: _this5.editData.stb_ip,
-                  backup_multicastZdroj: _this5.editData.backup_multicastZdroj,
-                  backup_multicast_ip: _this5.editData.backup_multicast_ip
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
+      axios.post("channel/multicast/edit", {
+        channelId: this.$route.params.id,
+        multicastZdroj: this.editData.multicastZdroj,
+        multicast_ip: this.editData.multicast_ip,
+        stb_ip: this.editData.stb_ip,
+        backup_multicastZdroj: this.editData.backup_multicastZdroj,
+        backup_multicast_ip: this.editData.backup_multicast_ip
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this5.editMulticastSources = false;
+        if (response.data.status === "success") {
+          _this5.editMulticastSources = false;
 
-                    _this5.loadMulticast();
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+          _this5.loadMulticast();
+        }
+      });
     }
   },
   watch: {
@@ -1686,14 +1344,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -1927,50 +1577,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getMultiplexors: function getMultiplexors() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("device/multiplexors").then(function (response) {
-                  _this2.items = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("device/multiplexors").then(function (response) {
+        _this2.items = response.data;
+      });
     },
     loadMultiplexor: function loadMultiplexor() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("multiplexor", {
-                  channelId: _this3.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.multiplexor = response.data.data;
-                  } else {
-                    _this3.multiplexor = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("multiplexor", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this3.multiplexor = response.data.data;
+        } else {
+          _this3.multiplexor = null;
+        }
+      });
     },
     openEditMultiplexor: function openEditMultiplexor() {
       this.getMultiplexors();
@@ -1983,59 +1605,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     savedata: function savedata() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("channel/multiplexer/edit", {
-                  channelId: _this4.$route.params.id,
-                  deviceName: _this4.multiplexor.name
-                }).then(function (response) {
-                  _this4.$store.state.alerts = response.data.alert;
+      axios.post("channel/multiplexer/edit", {
+        channelId: this.$route.params.id,
+        deviceName: this.multiplexor.name
+      }).then(function (response) {
+        _this4.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this4.editMultiplexor = false;
+        if (response.data.status === "success") {
+          _this4.editMultiplexor = false;
 
-                    _this4.loadMultiplexor();
-                  } else {
-                    _this4.editMultiplexor = false;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+          _this4.loadMultiplexor();
+        } else {
+          _this4.editMultiplexor = false;
+        }
+      });
     },
     removeMultiplexor: function removeMultiplexor() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("channel/multiplexer/remove", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
+      axios.post("channel/multiplexer/remove", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
 
-                  _this5.loadMultiplexor();
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+        _this5.loadMultiplexor();
+      });
     }
   },
   watch: {
@@ -2056,14 +1650,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2227,30 +1813,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveNote: function saveNote() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("note/create", {
-                  note: _this3.noteText,
-                  id: _this3.$route.params.id
-                }).then(function (response) {
-                  _this3.$store.state.alerts = response.data.alert;
-                  _this3.newNoteDialog = false;
-                  _this3.noteText = null;
+      axios.post("note/create", {
+        note: this.noteText,
+        id: this.$route.params.id
+      }).then(function (response) {
+        _this3.$store.state.alerts = response.data.alert;
+        _this3.newNoteDialog = false;
+        _this3.noteText = null;
 
-                  _this3.loadNotes();
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+        _this3.loadNotes();
+      });
     },
     closeDialog: function closeDialog() {
       this.newNoteDialog = false;
@@ -2259,55 +1831,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     deleteNote: function deleteNote() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("note/delete", {
-                  noteId: _this4.noteId
-                }).then(function (response) {
-                  _this4.$store.state.alerts = response.data.alert;
+      axios.post("note/delete", {
+        noteId: this.noteId
+      }).then(function (response) {
+        _this4.$store.state.alerts = response.data.alert;
 
-                  _this4.loadNotes();
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+        _this4.loadNotes();
+      });
     },
     loadNotes: function loadNotes() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("notes", {
-                  id: _this5.$route.params.id,
-                  datatype: _this5.checkUri()
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.notes = response.data.notes;
-                  } else {
-                    _this5.notes = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      // obecná fn , kdy se bude hlídat uri a dle toho se bude hledat tag pro daný source
+      axios.post("notes", {
+        id: this.$route.params.id,
+        datatype: this.checkUri()
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this5.notes = response.data.notes;
+        } else {
+          _this5.notes = null;
+        }
+      });
     },
     checkUri: function checkUri() {
       if (this.$route.path === "/channel/" + this.$route.params.id) {
@@ -2345,14 +1890,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+//
+//
+//
+//
 //
 //
 //
@@ -2684,115 +2225,73 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     openEditDialog: function openEditDialog() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("device/prijem").then(function (response) {
-                  _this2.GetMoreInformationAboutThisDevice(_this2.prijem.name);
+      axios.get("device/prijem").then(function (response) {
+        _this2.GetMoreInformationAboutThisDevice(_this2.prijem.name);
 
-                  _this2.items = response.data;
-                  _this2.editDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+        _this2.items = response.data;
+        _this2.editDialog = true;
+      });
     },
     saveData: function saveData() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (_this3.deviceInformation === null) {
-                  _this3.deviceInformation = null;
-                } else {
-                  _this3.deviceInformation = _this3.deviceInformation.outputInterfaces;
-                }
+      if (this.deviceInformation === null) {
+        this.deviceInformation = null;
+      } else {
+        this.deviceInformation = this.deviceInformation.outputInterfaces;
+      }
 
-                _context2.next = 3;
-                return axios.post("device/prijem/edit", {
-                  channelId: _this3.$route.params.id,
-                  deviceName: _this3.prijem.name,
-                  children: _this3.children,
-                  channelToInterface: _this3.prijem.interfaces,
-                  linuxPath: _this3.prijem.path,
-                  checkIfDeviceHasInterface: _this3.deviceInformation
-                }).then(function (response) {
-                  _this3.$store.state.alerts = response.data.alert;
+      axios.post("device/prijem/edit", {
+        channelId: this.$route.params.id,
+        deviceName: this.prijem.name,
+        children: this.children,
+        channelToInterface: this.prijem.interfaces,
+        linuxPath: this.prijem.path,
+        checkIfDeviceHasInterface: this.deviceInformation
+      }).then(function (response) {
+        _this3.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this3.editDialog = false;
-                    _this3.deviceInformation = [];
-                    _this3.hasChildren = null;
+        if (response.data.status === "success") {
+          _this3.editDialog = false;
+          _this3.deviceInformation = [];
+          _this3.hasChildren = null;
 
-                    _this3.loadPrijem();
-                  } else {
-                    _this3.editDialog = false;
-                  }
-                });
-
-              case 3:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+          _this3.loadPrijem();
+        } else {
+          _this3.editDialog = false;
+        }
+      });
     },
     GetMoreInformationAboutThisDevice: function GetMoreInformationAboutThisDevice(data) {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("device/info", {
-                  deviceName: data
-                }).then(function (response) {
-                  if (response.data.status === "sat") {
-                    _this4.deviceInformation = response.data.data;
-                    _this4.hasChildren = null;
-                    _this4.childrens = [];
-                    _this4.hasLinuxPath = null;
-                  } else if (response.data.status === "poIP") {
-                    _this4.hasLinuxPath = null;
-                    _this4.hasChildren = "children";
-                    _this4.deviceInformation = null;
-                    axios.get("device/transcodersAndlinux").then(function (response) {
-                      _this4.childrens = response.data;
-                    });
-                  } else if (response.data.status === "linux") {
-                    _this4.hasLinuxPath = true;
-                    _this4.deviceInformation = null;
-                    _this4.hasChildren = null;
-                    _this4.childrens = [];
-                  } else {
-                    _this4.hasLinuxPath = null;
-                    _this4.deviceInformation = null;
-                    _this4.hasChildren = null;
-                    _this4.childrens = [];
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.post("device/info", {
+        deviceName: data
+      }).then(function (response) {
+        if (response.data.status === "sat") {
+          _this4.deviceInformation = response.data.data;
+          _this4.hasChildren = null;
+          _this4.childrens = [];
+          _this4.hasLinuxPath = null;
+        } else if (response.data.status === "poIP") {
+          _this4.hasLinuxPath = null;
+          _this4.hasChildren = "children";
+          _this4.deviceInformation = null;
+          axios.get("device/transcodersAndlinux").then(function (response) {
+            _this4.childrens = response.data;
+          });
+        } else if (response.data.status === "linux") {
+          _this4.hasLinuxPath = true;
+          _this4.deviceInformation = null;
+          _this4.hasChildren = null;
+          _this4.childrens = [];
+        } else {
+          _this4.hasLinuxPath = null;
+          _this4.deviceInformation = null;
+          _this4.hasChildren = null;
+          _this4.childrens = [];
+        }
+      });
     },
     closeDialog: function closeDialog() {
       this.editDialog = false;
@@ -2801,60 +2300,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     removeData: function removeData() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("device/prijem/remove", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
+      axios.post("device/prijem/remove", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
 
-                  _this5.loadPrijem();
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+        _this5.loadPrijem();
+      });
     },
     loadPrijem: function loadPrijem() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.post("prijem", {
-                  channelId: _this6.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this6.prijem = response.data.data;
+      axios.post("prijem", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this6.prijem = response.data.data;
 
-                    if (response.data.data.children != null) {
-                      _this6.childrenData = response.data.data.children;
-                    } else {
-                      _this6.childrenData = null;
-                    }
-                  } else {
-                    _this6.prijem = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
+          if (response.data.data.children != null) {
+            _this6.childrenData = response.data.data.children;
+          } else {
+            _this6.childrenData = null;
           }
-        }, _callee5);
-      }))();
+        } else {
+          _this6.prijem = null;
+        }
+      });
     }
   },
   watch: {
@@ -2875,21 +2346,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Multicast_multicastComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Multicast/_multicastComponent */ "./resources/js/components/channels/Multicast/_multicastComponent.vue");
-/* harmony import */ var _Multicast_multiplexorComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Multicast/_multiplexorComponent */ "./resources/js/components/channels/Multicast/_multiplexorComponent.vue");
-/* harmony import */ var _Multicast_sourceComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Multicast/_sourceComponent */ "./resources/js/components/channels/Multicast/_sourceComponent.vue");
-/* harmony import */ var _Multicast_backupComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Multicast/_backupComponent */ "./resources/js/components/channels/Multicast/_backupComponent.vue");
-/* harmony import */ var _Multicast_calendarComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Multicast/_calendarComponent */ "./resources/js/components/channels/Multicast/_calendarComponent.vue");
-/* harmony import */ var _Multicast_noteComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Multicast/_noteComponent */ "./resources/js/components/channels/Multicast/_noteComponent.vue");
-/* harmony import */ var _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Dohled/TestDohledComponent */ "./resources/js/components/channels/Dohled/TestDohledComponent.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _Multicast_multicastComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Multicast/_multicastComponent */ "./resources/js/components/channels/Multicast/_multicastComponent.vue");
+/* harmony import */ var _Multicast_multiplexorComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Multicast/_multiplexorComponent */ "./resources/js/components/channels/Multicast/_multiplexorComponent.vue");
+/* harmony import */ var _Multicast_sourceComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Multicast/_sourceComponent */ "./resources/js/components/channels/Multicast/_sourceComponent.vue");
+/* harmony import */ var _Multicast_backupComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Multicast/_backupComponent */ "./resources/js/components/channels/Multicast/_backupComponent.vue");
+/* harmony import */ var _Multicast_calendarComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Multicast/_calendarComponent */ "./resources/js/components/channels/Multicast/_calendarComponent.vue");
+/* harmony import */ var _Multicast_noteComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Multicast/_noteComponent */ "./resources/js/components/channels/Multicast/_noteComponent.vue");
+/* harmony import */ var _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Dohled/TestDohledComponent */ "./resources/js/components/channels/Dohled/TestDohledComponent.vue");
 //
 //
 //
@@ -2951,13 +2414,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   components: {
-    "multicast-component": _Multicast_multicastComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    "multiplexor-component": _Multicast_multiplexorComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    "source-component": _Multicast_sourceComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
-    "backup-component": _Multicast_backupComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
-    "calendar-component": _Multicast_calendarComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
-    "note-component": _Multicast_noteComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
-    "dohled-component": _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
+    "multicast-component": _Multicast_multicastComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    "multiplexor-component": _Multicast_multiplexorComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    "source-component": _Multicast_sourceComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    "backup-component": _Multicast_backupComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
+    "calendar-component": _Multicast_calendarComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
+    "note-component": _Multicast_noteComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+    "dohled-component": _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   created: function created() {
     this.loadChannelNameById();
@@ -2966,25 +2429,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadChannelNameById: function loadChannelNameById() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("channel/name", {
-                  channelId: _this.$route.params.id
-                }).then(function (response) {
-                  _this.channelName = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("channel/name", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this.channelName = response.data;
+      });
     }
   },
   watch: {
@@ -3005,14 +2454,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -3254,100 +2695,56 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadM3u8Kvality: function loadM3u8Kvality() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("h264/channel/m3u8", {
-                  channelId: _this.$route.params.id,
-                  type: "h264"
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this.m3u8s = response.data.data;
-                  } else {
-                    _this.m3u8s = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("h264/channel/m3u8", {
+        channelId: this.$route.params.id,
+        type: "h264"
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this.m3u8s = response.data.data;
+        } else {
+          _this.m3u8s = null;
+        }
+      });
     },
     savedata: function savedata() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("h264/channel/edit", {
-                  channelId: _this2.$route.params.id,
-                  kdekoliv: _this2.m3u8s.kdekoliv,
-                  local: _this2.m3u8s.local,
-                  mobile: _this2.m3u8s.mobile,
-                  p1080: _this2.kvalityForDialog.p1080,
-                  p720: _this2.kvalityForDialog.p720,
-                  p576: _this2.kvalityForDialog.p576,
-                  type: "h264",
-                  chunkStoreId: _this2.chunkStoreId
-                }).then(function (response) {
-                  _this2.$store.state.alerts = response.data.alert;
+      axios.post("h264/channel/edit", {
+        channelId: this.$route.params.id,
+        kdekoliv: this.m3u8s.kdekoliv,
+        local: this.m3u8s.local,
+        mobile: this.m3u8s.mobile,
+        p1080: this.kvalityForDialog.p1080,
+        p720: this.kvalityForDialog.p720,
+        p576: this.kvalityForDialog.p576,
+        type: "h264",
+        chunkStoreId: this.chunkStoreId
+      }).then(function (response) {
+        _this2.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this2.editDataDialog = false;
+        if (response.data.status === "success") {
+          _this2.editDataDialog = false;
 
-                    _this2.loadChunkStoreId();
+          _this2.loadChunkStoreId();
 
-                    _this2.loadOutputKvality();
+          _this2.loadOutputKvality();
 
-                    _this2.loadM3u8Kvality();
-                  } else {
-                    _this2.m3u8s = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+          _this2.loadM3u8Kvality();
+        } else {
+          _this2.m3u8s = null;
+        }
+      });
     },
     openDialog: function openDialog() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("h264/channel/kvalityForEdit", {
-                  channelId: _this3.$route.params.id,
-                  type: "h264"
-                }).then(function (response) {
-                  _this3.kvalityForDialog = response.data;
-                });
-
-              case 2:
-                _this3.editDataDialog = true;
-
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.post("h264/channel/kvalityForEdit", {
+        channelId: this.$route.params.id,
+        type: "h264"
+      }).then(function (response) {
+        _this3.kvalityForDialog = response.data;
+      });
+      this.editDataDialog = true;
     },
     closeDialog: function closeDialog() {
       this.editDataDialog = false;
@@ -3367,53 +2764,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadChunkStoreId: function loadChunkStoreId() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("unicast/chunkStoreId", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  _this5.chunkStoreId = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.post("unicast/chunkStoreId", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this5.chunkStoreId = response.data;
+      });
     },
     loadOutputKvality: function loadOutputKvality() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.post("h264/channel/kvality", {
-                  channelId: _this6.$route.params.id,
-                  type: "h264"
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this6.kvalityOutput = response.data.data;
-                  } else {
-                    _this6.kvalityOutput = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+      axios.post("h264/channel/kvality", {
+        channelId: this.$route.params.id,
+        type: "h264"
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this6.kvalityOutput = response.data.data;
+        } else {
+          _this6.kvalityOutput = null;
+        }
+      });
     }
   },
   watch: {
@@ -3436,17 +2805,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _H264InfoCoomponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./H264InfoCoomponent */ "./resources/js/components/channels/Unicast H264/H264InfoCoomponent.vue");
-/* harmony import */ var _unicastDeviceComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_unicastDeviceComponent */ "./resources/js/components/channels/Unicast H264/_unicastDeviceComponent.vue");
-/* harmony import */ var _Dohled_DohledH264Component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Dohled/DohledH264Component */ "./resources/js/components/channels/Dohled/DohledH264Component.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _H264InfoCoomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./H264InfoCoomponent */ "./resources/js/components/channels/Unicast H264/H264InfoCoomponent.vue");
+/* harmony import */ var _unicastDeviceComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_unicastDeviceComponent */ "./resources/js/components/channels/Unicast H264/_unicastDeviceComponent.vue");
+/* harmony import */ var _Dohled_DohledH264Component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Dohled/DohledH264Component */ "./resources/js/components/channels/Dohled/DohledH264Component.vue");
 //
 //
 //
@@ -3660,9 +3021,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   components: {
-    "h264info-component": _H264InfoCoomponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    "transcoder-component": _unicastDeviceComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    "dohled-component": _Dohled_DohledH264Component__WEBPACK_IMPORTED_MODULE_3__["default"]
+    "h264info-component": _H264InfoCoomponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    "transcoder-component": _unicastDeviceComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    "dohled-component": _Dohled_DohledH264Component__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   created: function created() {
     this.loadChannelNameById();
@@ -3672,90 +3033,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     removeH264: function removeH264() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("h264/delete", {
-                  channelId: _this.$route.params.id
-                }).then(function (response) {
-                  _this.$store.state.alerts = response.data.alert;
+      axios.post("h264/delete", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+        if (response.data.status === "success") {
+          _this.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+        }
+      });
     },
     createOutput: function createOutput() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("device/transcoders").then(function (response) {
-                  _this2.transcoders = response.data;
-                  _this2.outputDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("device/transcoders").then(function (response) {
+        _this2.transcoders = response.data;
+        _this2.outputDialog = true;
+      });
     },
     savedata: function savedata() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("h264/create", {
-                  channelId: _this3.$route.params.id,
-                  addToTranscoder: _this3.addToTranscoder,
-                  chunkStoreId: _this3.chunkStoreId,
-                  transcoder: _this3.transcoder,
-                  output1080: _this3.output1080,
-                  output720: _this3.output720,
-                  output576: _this3.output576,
-                  hlsKdekoliv: _this3.hlsKdekoliv,
-                  hlsLocal: _this3.hlsLocal,
-                  hlsMobile: _this3.hlsMobile
-                }).then(function (response) {
-                  _this3.$store.state.alerts = response.data.alert; // this.$route.push("/");
-                  // this.$route.push("/channel/" + response.data.channelId + "/h264");
+      axios.post("h264/create", {
+        channelId: this.$route.params.id,
+        addToTranscoder: this.addToTranscoder,
+        chunkStoreId: this.chunkStoreId,
+        transcoder: this.transcoder,
+        output1080: this.output1080,
+        output720: this.output720,
+        output576: this.output576,
+        hlsKdekoliv: this.hlsKdekoliv,
+        hlsLocal: this.hlsLocal,
+        hlsMobile: this.hlsMobile
+      }).then(function (response) {
+        _this3.$store.state.alerts = response.data.alert; // this.$route.push("/");
+        // this.$route.push("/channel/" + response.data.channelId + "/h264");
 
-                  _this3.loadChannelNameById();
+        _this3.loadChannelNameById();
 
-                  _this3.checkIfIs();
+        _this3.checkIfIs();
 
-                  _this3.outputDialog = false;
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+        _this3.outputDialog = false;
+      });
     },
     closeDialog: function closeDialog() {
       this.outputDialog = false;
@@ -3774,48 +3093,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadChannelNameById: function loadChannelNameById() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("channel/name", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  _this5.channelName = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.post("channel/name", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this5.channelName = response.data;
+      });
     },
     checkIfIs: function checkIfIs() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.post("h264/check", {
-                  channelId: _this6.$route.params.id
-                }).then(function (response) {
-                  _this6.exist = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+      axios.post("h264/check", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this6.exist = response.data;
+      });
     }
   },
   watch: {
@@ -3836,14 +3127,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -4038,51 +3321,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     savedata: function savedata() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("h264/transcoder/update", {
-                  channelId: _this.$route.params.id,
-                  transcoder: _this.transcoder.name
-                }).then(function (response) {
-                  _this.$store.state.alerts = response.data.alert;
-                  _this.editDataDialog = false;
+      axios.post("h264/transcoder/update", {
+        channelId: this.$route.params.id,
+        transcoder: this.transcoder.name
+      }).then(function (response) {
+        _this.$store.state.alerts = response.data.alert;
+        _this.editDataDialog = false;
 
-                  _this.loadTranscoder();
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+        _this.loadTranscoder();
+      });
     },
     openEditDialog: function openEditDialog() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("device/transcoders").then(function (response) {
-                  _this2.transcoders = response.data;
-                  _this2.editDataDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("device/transcoders").then(function (response) {
+        _this2.transcoders = response.data;
+        _this2.editDataDialog = true;
+      });
     },
     show: function show(e) {
       var _this3 = this;
@@ -4098,56 +3353,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadStatusFromTramscoder: function loadStatusFromTramscoder() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("h264/transcoder/status", {
-                  channelId: _this4.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === 'success') {
-                    _this4.transcoderStatus = response.data;
-                  } else {
-                    _this4.transcoderStatus = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.post("h264/transcoder/status", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this4.transcoderStatus = response.data;
+        } else {
+          _this4.transcoderStatus = null;
+        }
+      });
     },
     loadTranscoder: function loadTranscoder() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("h264/transcoder", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.transcoder = response.data.data;
-                  } else {
-                    _this5.transcoder = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.post("h264/transcoder", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this5.transcoder = response.data.data;
+        } else {
+          _this5.transcoder = null;
+        }
+      });
     }
   },
   watch: {
@@ -4169,14 +3396,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -4328,29 +3547,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     openDialog: function openDialog() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("h265/channel/kvalityForEdit", {
-                  channelId: _this.$route.params.id,
-                  type: "h265"
-                }).then(function (response) {
-                  _this.kvalityForDialog = response.data;
-                });
-
-              case 2:
-                _this.editDataDialog = true;
-
-              case 3:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("h265/channel/kvalityForEdit", {
+        channelId: this.$route.params.id,
+        type: "h265"
+      }).then(function (response) {
+        _this.kvalityForDialog = response.data;
+      });
+      this.editDataDialog = true;
     },
     closeDialog: function closeDialog() {
       this.editDataDialog = false;
@@ -4359,33 +3562,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     savedata: function savedata() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("h265/channel/kvality/update", {
-                  channelId: _this2.$route.params.id,
-                  p1080: _this2.kvalityForDialog.p1080,
-                  p720: _this2.kvalityForDialog.p720
-                }).then(function (response) {
-                  _this2.$store.state.alerts = response.data.alert;
+      axios.post("h265/channel/kvality/update", {
+        channelId: this.$route.params.id,
+        p1080: this.kvalityForDialog.p1080,
+        p720: this.kvalityForDialog.p720
+      }).then(function (response) {
+        _this2.$store.state.alerts = response.data.alert;
 
-                  _this2.loadChunkStoreId();
+        _this2.loadChunkStoreId();
 
-                  _this2.loadOutputKvality();
+        _this2.loadOutputKvality();
 
-                  _this2.editDataDialog = false;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+        _this2.editDataDialog = false;
+      });
     },
     show: function show(e) {
       var _this3 = this;
@@ -4401,53 +3590,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadChunkStoreId: function loadChunkStoreId() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("unicast/chunkStoreId", {
-                  channelId: _this4.$route.params.id
-                }).then(function (response) {
-                  _this4.chunkStoreId = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.post("unicast/chunkStoreId", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this4.chunkStoreId = response.data;
+      });
     },
     loadOutputKvality: function loadOutputKvality() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("h264/channel/kvality", {
-                  channelId: _this5.$route.params.id,
-                  type: "h265"
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.kvalityOutput = response.data.data;
-                  } else {
-                    _this5.kvalityOutput = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.post("h264/channel/kvality", {
+        channelId: this.$route.params.id,
+        type: "h265"
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this5.kvalityOutput = response.data.data;
+        } else {
+          _this5.kvalityOutput = null;
+        }
+      });
     }
   },
   watch: {
@@ -4469,18 +3630,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _H265InfoCoomponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./H265InfoCoomponent */ "./resources/js/components/channels/Unicast H265/H265InfoCoomponent.vue");
-/* harmony import */ var _unicastDeviceController__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_unicastDeviceController */ "./resources/js/components/channels/Unicast H265/_unicastDeviceController.vue");
-/* harmony import */ var _Dohled_DohledH265Component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Dohled/DohledH265Component */ "./resources/js/components/channels/Dohled/DohledH265Component.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
+/* harmony import */ var _H265InfoCoomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./H265InfoCoomponent */ "./resources/js/components/channels/Unicast H265/H265InfoCoomponent.vue");
+/* harmony import */ var _unicastDeviceController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_unicastDeviceController */ "./resources/js/components/channels/Unicast H265/_unicastDeviceController.vue");
+/* harmony import */ var _Dohled_DohledH265Component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Dohled/DohledH265Component */ "./resources/js/components/channels/Dohled/DohledH265Component.vue");
 //
 //
 //
@@ -4631,9 +3783,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   components: {
-    "h265info-component": _H265InfoCoomponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    "transcoder-component": _unicastDeviceController__WEBPACK_IMPORTED_MODULE_2__["default"],
-    "dohled-component": _Dohled_DohledH265Component__WEBPACK_IMPORTED_MODULE_3__["default"]
+    "h265info-component": _H265InfoCoomponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    "transcoder-component": _unicastDeviceController__WEBPACK_IMPORTED_MODULE_1__["default"],
+    "dohled-component": _Dohled_DohledH265Component__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   created: function created() {
     this.loadChannelNameById();
@@ -4646,58 +3798,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     savedata: function savedata() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("h265/create", {
-                  channelId: _this.$route.params.id,
-                  addToTranscoder: _this.addToTranscoder,
-                  transcoder: _this.transcoder,
-                  output1080: _this.output1080,
-                  output720: _this.output720
-                }).then(function (response) {
-                  _this.$store.state.alerts = response.data.alert; // this.$route.push("/");
-                  // this.$route.push("/channel/" + response.data.channelId + "/h264");
+      axios.post("h265/create", {
+        channelId: this.$route.params.id,
+        addToTranscoder: this.addToTranscoder,
+        transcoder: this.transcoder,
+        output1080: this.output1080,
+        output720: this.output720
+      }).then(function (response) {
+        _this.$store.state.alerts = response.data.alert;
 
-                  _this.loadChannelNameById();
+        _this.loadChannelNameById();
 
-                  _this.checkIfIs();
+        _this.checkIfIs();
 
-                  _this.outputDialog = false;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+        _this.outputDialog = false;
+      });
     },
     createOutput: function createOutput() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("device/transcodersAndSatelits").then(function (response) {
-                  _this2.transcoders = response.data;
-                  _this2.outputDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("device/transcodersAndSatelits").then(function (response) {
+        _this2.transcoders = response.data;
+        _this2.outputDialog = true;
+      });
     },
     show: function show(e) {
       var _this3 = this;
@@ -4713,48 +3836,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadChannelNameById: function loadChannelNameById() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("channel/name", {
-                  channelId: _this4.$route.params.id
-                }).then(function (response) {
-                  _this4.channelName = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.post("channel/name", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this4.channelName = response.data;
+      });
     },
     checkIfIs: function checkIfIs() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("h265/check", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  _this5.exist = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.post("h265/check", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        _this5.exist = response.data;
+      });
     }
   },
   watch: {
@@ -4775,14 +3870,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -4980,52 +4067,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     createOutput: function createOutput() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("device/transcodersAndSatelits").then(function (response) {
-                  _this.transcoders = response.data;
-                  _this.outputDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("device/transcodersAndSatelits").then(function (response) {
+        _this.transcoders = response.data;
+        _this.outputDialog = true;
+      });
     },
     savedata: function savedata() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("h265/transcoder/update", {
-                  channelId: _this2.$route.params.id,
-                  transcoder: _this2.transcoder.name
-                }).then(function (response) {
-                  _this2.$store.state.alerts = response.data.alert;
+      axios.post("h265/transcoder/update", {
+        channelId: this.$route.params.id,
+        transcoder: this.transcoder.name
+      }).then(function (response) {
+        _this2.$store.state.alerts = response.data.alert;
 
-                  _this2.loadTranscoder();
+        _this2.loadTranscoder();
 
-                  _this2.outputDialog = false;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+        _this2.outputDialog = false;
+      });
     },
     closeDialog: function closeDialog() {
       this.outputDialog = false;
@@ -5044,56 +4103,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadTranscoder: function loadTranscoder() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("h265/transcoder", {
-                  channelId: _this4.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this4.transcoder = response.data.data;
-                  } else {
-                    _this4.transcoder = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.post("h265/transcoder", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this4.transcoder = response.data.data;
+        } else {
+          _this4.transcoder = null;
+        }
+      });
     },
     loadStatusFromTramscoder: function loadStatusFromTramscoder() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("h265/transcoder/status", {
-                  channelId: _this5.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.transcoderStatus = response.data;
-                  } else {
-                    _this5.transcoderStatus = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.post("h265/transcoder/status", {
+        channelId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this5.transcoderStatus = response.data;
+        } else {
+          _this5.transcoderStatus = null;
+        }
+      });
     }
   },
   watch: {
@@ -5236,55 +4267,6 @@ var render = function() {
           1
         )
   ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=template&id=f15d3cd6&":
-/*!*****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=template&id=f15d3cd6& ***!
-  \*****************************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-main",
-    [
-      _c(
-        "v-container",
-        { staticClass: "ml-3", attrs: { fluid: "" } },
-        [
-          _c(
-            "div",
-            [
-              _c("h2", [
-                _vm._v(_vm._s(_vm.channelName) + " - informace z dohledu")
-              ]),
-              _vm._v(" "),
-              _c("v-divider", { attrs: { inline: "" } })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("v-row", { staticClass: " mt-6" }, [_c("v-col")], 1)
-        ],
-        1
-      )
-    ],
-    1
-  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -8632,7 +7614,7 @@ var render = function() {
                                           _c("span", { staticClass: "ml-6" }, [
                                             _c("strong", [
                                               _vm._v(
-                                                "\n                                    Absolutní cesta ke scriptu: \n                                "
+                                                "\n                                    Absolutní cesta ke scriptu:\n                                "
                                               )
                                             ]),
                                             _vm._v(
@@ -10644,7 +9626,7 @@ var render = function() {
                                   _vm.transcoderStatus.streamStatus === "active"
                                     ? _c("span", [
                                         _vm._v(
-                                          "\n                        Stav streamu z transcoderu: \n                            "
+                                          "\n                            Stav streamu z transcoderu:\n                            "
                                         ),
                                         _c(
                                           "span",
@@ -12164,75 +11146,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChannelComponent_vue_vue_type_template_id_4a5ea904___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChannelComponent_vue_vue_type_template_id_4a5ea904___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/channels/Dohled/DohledChannelComponent.vue":
-/*!****************************************************************************!*\
-  !*** ./resources/js/components/channels/Dohled/DohledChannelComponent.vue ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _DohledChannelComponent_vue_vue_type_template_id_f15d3cd6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DohledChannelComponent.vue?vue&type=template&id=f15d3cd6& */ "./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=template&id=f15d3cd6&");
-/* harmony import */ var _DohledChannelComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DohledChannelComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _DohledChannelComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _DohledChannelComponent_vue_vue_type_template_id_f15d3cd6___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _DohledChannelComponent_vue_vue_type_template_id_f15d3cd6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/channels/Dohled/DohledChannelComponent.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************!*\
-  !*** ./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DohledChannelComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./DohledChannelComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DohledChannelComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=template&id=f15d3cd6&":
-/*!***********************************************************************************************************!*\
-  !*** ./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=template&id=f15d3cd6& ***!
-  \***********************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DohledChannelComponent_vue_vue_type_template_id_f15d3cd6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./DohledChannelComponent.vue?vue&type=template&id=f15d3cd6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/channels/Dohled/DohledChannelComponent.vue?vue&type=template&id=f15d3cd6&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DohledChannelComponent_vue_vue_type_template_id_f15d3cd6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DohledChannelComponent_vue_vue_type_template_id_f15d3cd6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

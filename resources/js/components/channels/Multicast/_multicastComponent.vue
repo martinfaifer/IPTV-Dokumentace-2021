@@ -23,12 +23,7 @@
                             <strong>Multicastová IP: </strong>
                             {{ multicast.multicast_ip }}
                         </v-col>
-                        <v-col
-                            cols="12"
-                            sm="12"
-                            md="3"
-
-                        >
+                        <v-col cols="12" sm="12" md="3">
                             <strong>IP k STB:</strong>
                             {{ multicast.stb_ip }}
                         </v-col>
@@ -185,8 +180,8 @@ export default {
             });
         },
 
-        async loadMulticast() {
-            await axios
+        loadMulticast() {
+            axios
                 .post("multicast", {
                     channelId: this.$route.params.id
                 })
@@ -198,13 +193,13 @@ export default {
                     }
                 });
         },
-        async getMulticastSources() {
-            await axios.get("sources").then(response => {
+        getMulticastSources() {
+            axios.get("sources").then(response => {
                 this.sources = response.data;
             });
         },
-        async openMulticastEditDialog() {
-            await axios
+        openMulticastEditDialog() {
+            axios
                 .post("channel/multicast", {
                     channelId: this.$route.params.id
                 })
@@ -218,8 +213,8 @@ export default {
                     }
                 });
         },
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("channel/multicast/edit", {
                     channelId: this.$route.params.id,
                     multicastZdroj: this.editData.multicastZdroj,

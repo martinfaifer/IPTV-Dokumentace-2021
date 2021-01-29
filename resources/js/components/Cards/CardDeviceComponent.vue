@@ -77,8 +77,8 @@ export default {
         this.loadDevice();
     },
     methods: {
-        async loadDevice() {
-            await axios
+        loadDevice() {
+            axios
                 .post("card/device", {
                     cardId: this.$route.params.id
                 })

@@ -27,8 +27,8 @@ export default {
         this.loadChannelNameById();
     },
     methods: {
-        async loadChannelNameById() {
-            await axios
+        loadChannelNameById() {
+            axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })

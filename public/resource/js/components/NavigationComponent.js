@@ -72,14 +72,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -142,28 +134,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getEvents: function getEvents() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("events/today").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this.events = response.data.events;
-                    _this.dialog = true;
-                  } else {
-                    _this.events = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("events/today").then(function (response) {
+        if (response.data.status === "success") {
+          _this.events = response.data.events;
+          _this.dialog = true;
+        } else {
+          _this.events = null;
+        }
+      });
     }
   }
 });
@@ -179,14 +157,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -250,23 +220,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadCards: function loadCards() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("cards").then(function (response) {
-                  _this.cards = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("cards").then(function (response) {
+        _this.cards = response.data;
+      });
     },
     show: function show(e, cardId) {
       var _this2 = this;
@@ -294,21 +250,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Alerts_AlertComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Alerts/AlertComponent */ "./resources/js/components/Alerts/AlertComponent.vue");
-/* harmony import */ var _channels_ChannelsMenuComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./channels/ChannelsMenuComponent */ "./resources/js/components/channels/ChannelsMenuComponent.vue");
-/* harmony import */ var _devices_DevicesMenuComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./devices/DevicesMenuComponent */ "./resources/js/components/devices/DevicesMenuComponent.vue");
-/* harmony import */ var _components_SearchBar_SearchComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/SearchBar/SearchComponent */ "./resources/js/components/SearchBar/SearchComponent.vue");
-/* harmony import */ var _Cards_CardMenuComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Cards/CardMenuComponent */ "./resources/js/components/Cards/CardMenuComponent.vue");
-/* harmony import */ var _Alerts_EventComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Alerts/EventComponent */ "./resources/js/components/Alerts/EventComponent.vue");
-/* harmony import */ var _Settings_SettingsMenuComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Settings/SettingsMenuComponent */ "./resources/js/components/Settings/SettingsMenuComponent.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _Alerts_AlertComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Alerts/AlertComponent */ "./resources/js/components/Alerts/AlertComponent.vue");
+/* harmony import */ var _channels_ChannelsMenuComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./channels/ChannelsMenuComponent */ "./resources/js/components/channels/ChannelsMenuComponent.vue");
+/* harmony import */ var _devices_DevicesMenuComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./devices/DevicesMenuComponent */ "./resources/js/components/devices/DevicesMenuComponent.vue");
+/* harmony import */ var _components_SearchBar_SearchComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/SearchBar/SearchComponent */ "./resources/js/components/SearchBar/SearchComponent.vue");
+/* harmony import */ var _Cards_CardMenuComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Cards/CardMenuComponent */ "./resources/js/components/Cards/CardMenuComponent.vue");
+/* harmony import */ var _Alerts_EventComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Alerts/EventComponent */ "./resources/js/components/Alerts/EventComponent.vue");
+/* harmony import */ var _Settings_SettingsMenuComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Settings/SettingsMenuComponent */ "./resources/js/components/Settings/SettingsMenuComponent.vue");
 //
 //
 //
@@ -661,13 +609,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   components: {
-    "alert-component": _Alerts_AlertComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    "channelssidemenu-component": _channels_ChannelsMenuComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    "devicessidemenu-component": _devices_DevicesMenuComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
-    "search-compoennt": _components_SearchBar_SearchComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
-    "cardsmenu-component": _Cards_CardMenuComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
-    "event-component": _Alerts_EventComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
-    "settingsmenu-component": _Settings_SettingsMenuComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
+    "alert-component": _Alerts_AlertComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    "channelssidemenu-component": _channels_ChannelsMenuComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    "devicessidemenu-component": _devices_DevicesMenuComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    "search-compoennt": _components_SearchBar_SearchComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
+    "cardsmenu-component": _Cards_CardMenuComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
+    "event-component": _Alerts_EventComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+    "settingsmenu-component": _Settings_SettingsMenuComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   created: function created() {
     this.getUser();
@@ -678,68 +626,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getAlertsFromDohled: function getAlertsFromDohled() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios.get("/api/iptv/alerts").then(function (response) {
-                  if (response.data.length === 0) {
-                    _this3.alerts = response.data;
-                    _this3.alertCount = "0";
-                  } else {
-                    _this3.alerts = response.data;
-                    _this3.alertCount = response.data.length;
-                  }
-                });
-
-              case 3:
-                _context.next = 7;
-                break;
-
-              case 5:
-                _context.prev = 5;
-                _context.t0 = _context["catch"](0);
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
+      try {
+        axios.get("/api/iptv/alerts").then(function (response) {
+          if (response.data.length === 0) {
+            _this3.alerts = response.data;
+            _this3.alertCount = "0";
+          } else {
+            _this3.alerts = response.data;
+            _this3.alertCount = response.data.length;
           }
-        }, _callee, null, [[0, 5]]);
-      }))();
+        });
+      } catch (error) {}
     },
     logOut: function logOut() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return axios.get("logout").then(function (response) {
-                  _this4.$router.push("/login");
-                });
-
-              case 3:
-                _context2.next = 7;
-                break;
-
-              case 5:
-                _context2.prev = 5;
-                _context2.t0 = _context2["catch"](0);
-
-              case 7:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[0, 5]]);
-      }))();
+      try {
+        axios.get("logout").then(function (response) {
+          _this4.$router.push("/login");
+        });
+      } catch (error) {}
     },
     getUser: function getUser() {
       var _this5 = this;
@@ -813,14 +719,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -889,26 +787,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     searchDialog: function searchDialog() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.searchDialogInput = true;
-                _this.search = null;
-                _this.model = null;
-                _context.next = 5;
-                return axios.get('search').then(function (response) {
-                  _this.entries = response.data.entries;
-                });
-
-              case 5:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      this.searchDialogInput = true;
+      this.search = null;
+      this.model = null;
+      axios.get("search").then(function (response) {
+        _this.entries = response.data.entries;
+      });
     }
   },
   mounted: function mounted() {
@@ -1024,14 +908,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -1661,130 +1537,74 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     saveChannelName: function saveChannelName() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("channel/name/edit", {
-                  channelId: _this.channelId,
-                  channelName: _this.channelName
-                }).then(function (response) {
-                  _this.$store.state.alerts = response.data.alert;
+      axios.post("channel/name/edit", {
+        channelId: this.channelId,
+        channelName: this.channelName
+      }).then(function (response) {
+        _this.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this.editChannelName = false;
+        if (response.data.status === "success") {
+          _this.editChannelName = false;
 
-                    _this.loadchannels();
+          _this.loadchannels();
 
-                    _this.$router.push("/")["catch"](function (err) {});
+          _this.$router.push("/")["catch"](function (err) {});
 
-                    _this.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+          _this.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+        }
+      });
     },
     editChannelNameDialog: function editChannelNameDialog() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("channel/name", {
-                  channelId: _this2.channelId
-                }).then(function (response) {
-                  _this2.channelName = response.data;
-                  _this2.editChannelName = true;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("channel/name", {
+        channelId: this.channelId
+      }).then(function (response) {
+        _this2.channelName = response.data;
+        _this2.editChannelName = true;
+      });
     },
     createNewChannelDialog: function createNewChannelDialog() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.get("sources").then(function (response) {
-                  _this3.sources = response.data;
-                  _this3.createNewChannel = true;
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.get("sources").then(function (response) {
+        _this3.sources = response.data;
+        _this3.createNewChannel = true;
+      });
     },
     saveNewChannel: function saveNewChannel() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("channel/create", {
-                  channelName: _this4.channelName,
-                  multicastZdroj: _this4.multicastZdroj,
-                  multicast_ip: _this4.multicast_ip,
-                  stb_ip: _this4.stb_ip,
-                  backup_multicastZdroj: _this4.backup_multicastZdroj,
-                  backup_multicast_ip: _this4.backup_multicast_ip,
-                  dohledovat: _this4.dohledovat,
-                  vytvaretNahled: _this4.vytvaretNahled,
-                  zalozitDoDohledu: _this4.zalozitDoDohledu
-                }).then(function (response) {
-                  _this4.$store.state.alerts = response.data.alert;
+      axios.post("channel/create", {
+        channelName: this.channelName,
+        multicastZdroj: this.multicastZdroj,
+        multicast_ip: this.multicast_ip,
+        stb_ip: this.stb_ip,
+        backup_multicastZdroj: this.backup_multicastZdroj,
+        backup_multicast_ip: this.backup_multicast_ip,
+        dohledovat: this.dohledovat,
+        vytvaretNahled: this.vytvaretNahled,
+        zalozitDoDohledu: this.zalozitDoDohledu
+      }).then(function (response) {
+        _this4.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this4.loadchannels();
+        if (response.data.status === "success") {
+          _this4.loadchannels();
 
-                    _this4.createNewChannel = false;
-                    _this4.channelName = null;
-                    _this4.multicastZdroj = null;
-                    _this4.multicast_ip = null;
-                    _this4.stb_ip = null;
-                    _this4.backup_multicastZdroj = null;
-                    _this4.backup_multicast_ip = null;
-                    _this4.dohledovat = false;
-                    _this4.vytvaretNahled = false;
-                    _this4.zalozitDoDohledu = false;
+          _this4.createNewChannel = false;
+          _this4.channelName = null;
+          _this4.multicastZdroj = null;
+          _this4.multicast_ip = null;
+          _this4.stb_ip = null;
+          _this4.backup_multicastZdroj = null;
+          _this4.backup_multicast_ip = null;
+          _this4.dohledovat = false;
+          _this4.vytvaretNahled = false;
+          _this4.zalozitDoDohledu = false;
 
-                    _this4.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+          _this4.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+        }
+      });
     },
     addEvent: function addEvent() {
       this.createEventDialog = true;
@@ -1792,254 +1612,142 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     saveEvent: function saveEvent() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.post("event/create", {
-                  channelId: _this5.channelId,
-                  start_day: _this5.start_day,
-                  start_time: _this5.start_time,
-                  end_day: _this5.end_day,
-                  end_time: _this5.end_time,
-                  event_note: _this5.event_note,
-                  vypadek: _this5.vypadek,
-                  checkbox_create_to_dohled: _this5.checkbox_create_to_dohled
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
-                  _this5.createEventDialog = false;
+      axios.post("event/create", {
+        channelId: this.channelId,
+        start_day: this.start_day,
+        start_time: this.start_time,
+        end_day: this.end_day,
+        end_time: this.end_time,
+        event_note: this.event_note,
+        vypadek: this.vypadek,
+        checkbox_create_to_dohled: this.checkbox_create_to_dohled
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
+        _this5.createEventDialog = false;
 
-                  _this5.$router.push("/channel");
+        _this5.$router.push("/channel");
 
-                  _this5.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+        _this5.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+      });
     },
     addMultiplexer: function addMultiplexer() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.next = 2;
-                return axios.post("channel/check", {
-                  channelId: _this6.channelId,
-                  param: "multiplexor"
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    // je mozné pridat multiplerox
-                    _this6.createMultiplexerDialog = true;
+      axios.post("channel/check", {
+        channelId: this.channelId,
+        param: "multiplexor"
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          // je mozné pridat multiplerox
+          _this6.createMultiplexerDialog = true;
 
-                    _this6.getMultiplexors();
-                  } else {
-                    _this6.$store.state.alerts = response.data.alert;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }))();
+          _this6.getMultiplexors();
+        } else {
+          _this6.$store.state.alerts = response.data.alert;
+        }
+      });
     },
     GetMoreInformationAboutThisDevice: function GetMoreInformationAboutThisDevice(data) {
       var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                _context7.next = 2;
-                return axios.post("device/info", {
-                  deviceName: data
-                }).then(function (response) {
-                  _this7.deviceInformation = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7);
-      }))();
+      axios.post("device/info", {
+        deviceName: data
+      }).then(function (response) {
+        _this7.deviceInformation = response.data;
+      });
     },
     addBackupPrijem: function addBackupPrijem() {
       var _this8 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                _context8.next = 2;
-                return axios.post("channel/check", {
-                  channelId: _this8.channelId,
-                  param: "backup"
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this8.createBackupPrijemDialog = true;
+      axios.post("channel/check", {
+        channelId: this.channelId,
+        param: "backup"
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this8.createBackupPrijemDialog = true;
 
-                    _this8.getPrijemDevices();
-                  } else {
-                    _this8.$store.state.alerts = response.data.alert;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
-      }))();
+          _this8.getPrijemDevices();
+        } else {
+          _this8.$store.state.alerts = response.data.alert;
+        }
+      });
     },
     addPrijem: function addPrijem() {
       var _this9 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
-          while (1) {
-            switch (_context9.prev = _context9.next) {
-              case 0:
-                _context9.next = 2;
-                return axios.post("channel/check", {
-                  channelId: _this9.channelId,
-                  param: "prijem"
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    // je mozné pridat multiplerox
-                    _this9.createPrijemDialog = true;
+      axios.post("channel/check", {
+        channelId: this.channelId,
+        param: "prijem"
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          // je mozné pridat multiplerox
+          _this9.createPrijemDialog = true;
 
-                    _this9.getPrijemDevices();
-                  } else {
-                    _this9.$store.state.alerts = response.data.alert;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context9.stop();
-            }
-          }
-        }, _callee9);
-      }))();
+          _this9.getPrijemDevices();
+        } else {
+          _this9.$store.state.alerts = response.data.alert;
+        }
+      });
     },
     saveBackupPrijemData: function saveBackupPrijemData() {
       var _this10 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
-          while (1) {
-            switch (_context10.prev = _context10.next) {
-              case 0:
-                _context10.next = 2;
-                return axios.post("device/backup/edit", {
-                  channelId: _this10.channelId,
-                  deviceName: _this10.backup,
-                  channelToInterface: _this10.prijemInterfaces,
-                  checkIfDeviceHasInterface: _this10.deviceInformation.outputInterfaces
-                }).then(function (response) {
-                  _this10.backup = null;
-                  _this10.channelToInterface = null;
-                  _this10.$store.state.alerts = response.data.alert;
-                  _this10.createBackupPrijemDialog = false;
+      axios.post("device/backup/edit", {
+        channelId: this.channelId,
+        deviceName: this.backup,
+        channelToInterface: this.prijemInterfaces,
+        checkIfDeviceHasInterface: this.deviceInformation.outputInterfaces
+      }).then(function (response) {
+        _this10.backup = null;
+        _this10.channelToInterface = null;
+        _this10.$store.state.alerts = response.data.alert;
+        _this10.createBackupPrijemDialog = false;
 
-                  if (response.data.status === "success") {
-                    _this10.$router.push("/")["catch"](function (err) {});
+        if (response.data.status === "success") {
+          _this10.$router.push("/")["catch"](function (err) {});
 
-                    _this10.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context10.stop();
-            }
-          }
-        }, _callee10);
-      }))();
+          _this10.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+        }
+      });
     },
     savePrijemData: function savePrijemData() {
       var _this11 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
-          while (1) {
-            switch (_context11.prev = _context11.next) {
-              case 0:
-                _context11.next = 2;
-                return axios.post("device/prijem/edit", {
-                  channelId: _this11.channelId,
-                  deviceName: _this11.prijem,
-                  channelToInterface: _this11.prijemInterfaces,
-                  checkIfDeviceHasInterface: _this11.deviceInformation.outputInterfaces
-                }).then(function (response) {
-                  _this11.prijem = null;
-                  _this11.channelToInterface = null;
-                  _this11.$store.state.alerts = response.data.alert;
-                  _this11.createPrijemDialog = false;
+      axios.post("device/prijem/edit", {
+        channelId: this.channelId,
+        deviceName: this.prijem,
+        channelToInterface: this.prijemInterfaces,
+        checkIfDeviceHasInterface: this.deviceInformation.outputInterfaces
+      }).then(function (response) {
+        _this11.prijem = null;
+        _this11.channelToInterface = null;
+        _this11.$store.state.alerts = response.data.alert;
+        _this11.createPrijemDialog = false;
 
-                  if (response.data.status === "success") {
-                    _this11.$router.push("/")["catch"](function (err) {});
+        if (response.data.status === "success") {
+          _this11.$router.push("/")["catch"](function (err) {});
 
-                    _this11.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context11.stop();
-            }
-          }
-        }, _callee11);
-      }))();
+          _this11.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+        }
+      });
     },
     saveMultiplexerdata: function saveMultiplexerdata() {
       var _this12 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
-          while (1) {
-            switch (_context12.prev = _context12.next) {
-              case 0:
-                _context12.next = 2;
-                return axios.post("channel/multiplexer/edit", {
-                  channelId: _this12.channelId,
-                  deviceName: _this12.multiplexer.name
-                }).then(function (response) {
-                  _this12.multiplexer = null;
-                  _this12.$store.state.alerts = response.data.alert;
-                  _this12.createMultiplexerDialog = false;
+      axios.post("channel/multiplexer/edit", {
+        channelId: this.channelId,
+        deviceName: this.multiplexer.name
+      }).then(function (response) {
+        _this12.multiplexer = null;
+        _this12.$store.state.alerts = response.data.alert;
+        _this12.createMultiplexerDialog = false;
 
-                  if (response.data.status === "success") {
-                    _this12.$router.push("/")["catch"](function (err) {});
+        if (response.data.status === "success") {
+          _this12.$router.push("/")["catch"](function (err) {});
 
-                    _this12.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context12.stop();
-            }
-          }
-        }, _callee12);
-      }))();
+          _this12.$router.push("/channel/" + response.data.channelId)["catch"](function (err) {});
+        }
+      });
     },
     closeDialog: function closeDialog() {
       this.editChannelName = false;
@@ -2058,23 +1766,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadchannels: function loadchannels() {
       var _this13 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
-          while (1) {
-            switch (_context13.prev = _context13.next) {
-              case 0:
-                _context13.next = 2;
-                return axios.get("channels").then(function (response) {
-                  _this13.channels = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context13.stop();
-            }
-          }
-        }, _callee13);
-      }))();
+      axios.get("channels").then(function (response) {
+        _this13.channels = response.data;
+      });
     },
     show: function show(e, channelId) {
       var _this14 = this;
@@ -2091,122 +1785,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     openDialogEditCurrentChannel: function openDialogEditCurrentChannel() {
       var _this15 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
-          while (1) {
-            switch (_context14.prev = _context14.next) {
-              case 0:
-                _context14.next = 2;
-                return axios.post("channel", {
-                  channelId: _this15.channelId
-                }).then(function (response) {
-                  _this15.editChannel = response.data;
+      axios.post("channel", {
+        channelId: this.channelId
+      }).then(function (response) {
+        _this15.editChannel = response.data;
 
-                  _this15.getIptvPackages();
+        _this15.getIptvPackages();
 
-                  _this15.getPrijemDevices();
+        _this15.getPrijemDevices();
 
-                  _this15.getMultiplexors();
+        _this15.getMultiplexors();
 
-                  _this15.getMulticastSources();
+        _this15.getMulticastSources();
 
-                  _this15.GetMoreInformationAboutThisDevice(response.data.prijemId);
+        _this15.GetMoreInformationAboutThisDevice(response.data.prijemId);
 
-                  _this15.editDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context14.stop();
-            }
-          }
-        }, _callee14);
-      }))();
+        _this15.editDialog = true;
+      });
     },
     // MOZNA ZRUSIT  A PRESUNOUT DO TAGŮ
     getIptvPackages: function getIptvPackages() {
       var _this16 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
-          while (1) {
-            switch (_context15.prev = _context15.next) {
-              case 0:
-                _context15.next = 2;
-                return axios.get("packages").then(function (response) {
-                  _this16.packages = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context15.stop();
-            }
-          }
-        }, _callee15);
-      }))();
+      axios.get("packages").then(function (response) {
+        _this16.packages = response.data;
+      });
     },
     getPrijemDevices: function getPrijemDevices() {
       var _this17 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
-          while (1) {
-            switch (_context16.prev = _context16.next) {
-              case 0:
-                _context16.next = 2;
-                return axios.get("device/prijem").then(function (response) {
-                  _this17.prijems = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context16.stop();
-            }
-          }
-        }, _callee16);
-      }))();
+      axios.get("device/prijem").then(function (response) {
+        _this17.prijems = response.data;
+      });
     },
     getMultiplexors: function getMultiplexors() {
       var _this18 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee17$(_context17) {
-          while (1) {
-            switch (_context17.prev = _context17.next) {
-              case 0:
-                _context17.next = 2;
-                return axios.get("devices/multiplexors").then(function (response) {
-                  _this18.editMultiplexors = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context17.stop();
-            }
-          }
-        }, _callee17);
-      }))();
+      axios.get("devices/multiplexors").then(function (response) {
+        _this18.editMultiplexors = response.data;
+      });
     },
     getMulticastSources: function getMulticastSources() {
       var _this19 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee18$(_context18) {
-          while (1) {
-            switch (_context18.prev = _context18.next) {
-              case 0:
-                _context18.next = 2;
-                return axios.get("sources").then(function (response) {
-                  _this19.deviceInformation = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context18.stop();
-            }
-          }
-        }, _callee18);
-      }))();
+      axios.get("sources").then(function (response) {
+        _this19.deviceInformation = response.data;
+      });
     },
     removeChannelDialog: function removeChannelDialog() {
       this.deleteDialog = true;
@@ -2214,32 +1838,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     removeChannel: function removeChannel() {
       var _this20 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee19$(_context19) {
-          while (1) {
-            switch (_context19.prev = _context19.next) {
-              case 0:
-                _context19.next = 2;
-                return axios.post("channel/delete", {
-                  channelId: _this20.channelId
-                }).then(function (response) {
-                  _this20.$store.state.alerts = response.data.alert;
-                  _this20.deleteDialog = false;
+      axios.post("channel/delete", {
+        channelId: this.channelId
+      }).then(function (response) {
+        _this20.$store.state.alerts = response.data.alert;
+        _this20.deleteDialog = false;
 
-                  if (response.data.status === "success") {
-                    _this20.loadchannels();
+        if (response.data.status === "success") {
+          _this20.loadchannels();
 
-                    _this20.$router.push("/")["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context19.stop();
-            }
-          }
-        }, _callee19);
-      }))();
+          _this20.$router.push("/")["catch"](function (err) {});
+        }
+      });
     }
   }
 });
@@ -2255,14 +1865,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2553,67 +2155,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     removeDeviceFromSystem: function removeDeviceFromSystem() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("device/remove", {
-                  deviceId: _this.deviceId
-                }).then(function (response) {
-                  // zobrazení alertu
-                  _this.$store.state.alerts = response.data.alert;
+      axios.post("device/remove", {
+        deviceId: this.deviceId
+      }).then(function (response) {
+        // zobrazení alertu
+        _this.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    if (_this.$router.match("/device/" + _this.deviceId)) {
-                      _this.loadDevices();
+        if (response.data.status === "success") {
+          if (_this.$router.match("/device/" + _this.deviceId)) {
+            _this.loadDevices();
 
-                      _this.$router.push("/device/")["catch"](function (err) {});
-                    } else {
-                      _this.loadDevices();
-                    }
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
+            _this.$router.push("/device/")["catch"](function (err) {});
+          } else {
+            _this.loadDevices();
           }
-        }, _callee);
-      }))();
+        }
+      });
     },
     openEditDeviceDialog: function openEditDeviceDialog() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("device/getInfoForBaseEdit", {
-                  deviceId: _this2.deviceId
-                }).then(function (response) {
-                  _this2.editDeviceData = response.data;
+      axios.post("device/getInfoForBaseEdit", {
+        deviceId: this.deviceId
+      }).then(function (response) {
+        _this2.editDeviceData = response.data;
 
-                  _this2.loadCategories();
+        _this2.loadCategories();
 
-                  _this2.loadVendors();
+        _this2.loadVendors();
 
-                  _this2.loadAllInterfaces();
+        _this2.loadAllInterfaces();
 
-                  _this2.editDeviceDialog = true;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+        _this2.editDeviceDialog = true;
+      });
     },
     closeEditDialog: function closeEditDialog() {
       this.deviceDialog = false;
@@ -2625,67 +2199,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveEditDialog: function saveEditDialog() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("device/baseEdit", {
-                  deviceId: _this3.deviceId,
-                  name: _this3.editDeviceData.name,
-                  ip: _this3.editDeviceData.ip,
-                  login_password: _this3.editDeviceData.login_password,
-                  login_user: _this3.editDeviceData.login_user,
-                  category: _this3.editDeviceData.category,
-                  vendor: _this3.editDeviceData.vendor,
-                  haveInterface: _this3.editDeviceData.haveInterface
-                }).then(function (response) {
-                  _this3.$store.state.alerts = response.data.alert;
+      axios.post("device/baseEdit", {
+        deviceId: this.deviceId,
+        name: this.editDeviceData.name,
+        ip: this.editDeviceData.ip,
+        login_password: this.editDeviceData.login_password,
+        login_user: this.editDeviceData.login_user,
+        category: this.editDeviceData.category,
+        vendor: this.editDeviceData.vendor,
+        haveInterface: this.editDeviceData.haveInterface
+      }).then(function (response) {
+        _this3.$store.state.alerts = response.data.alert;
 
-                  if (response.data.status === "success") {
-                    _this3.deviceDialog = false;
-                    _this3.editDeviceData = null;
-                    _this3.allInterfaces = [];
-                    _this3.categories = [];
-                    _this3.vendors = [];
+        if (response.data.status === "success") {
+          _this3.deviceDialog = false;
+          _this3.editDeviceData = null;
+          _this3.allInterfaces = [];
+          _this3.categories = [];
+          _this3.vendors = [];
 
-                    _this3.loadDevices();
+          _this3.loadDevices();
 
-                    _this3.$router.push("/device/")["catch"](function (err) {});
+          _this3.$router.push("/device/")["catch"](function (err) {});
 
-                    _this3.$router.push("/device/" + response.data.deviceId)["catch"](function (err) {});
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+          _this3.$router.push("/device/" + response.data.deviceId)["catch"](function (err) {});
+        }
+      });
     },
     loadAllInterfaces: function loadAllInterfaces() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.get("device/allInterfaces").then(function (response) {
-                  _this4.allInterfaces = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.get("device/allInterfaces").then(function (response) {
+        _this4.allInterfaces = response.data;
+      });
     },
     createDeviceDialog: function createDeviceDialog() {
       this.deviceDialog = true;
@@ -2696,109 +2242,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadCategories: function loadCategories() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.get("device/categories").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.categories = response.data.data;
-                  } else {
-                    _this5.categories = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+      axios.get("device/categories").then(function (response) {
+        if (response.data.status === "success") {
+          _this5.categories = response.data.data;
+        } else {
+          _this5.categories = null;
+        }
+      });
     },
     loadVendors: function loadVendors() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.next = 2;
-                return axios.get("vendors").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this6.vendors = response.data.data;
-                  } else {
-                    _this6.vendors = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }))();
+      axios.get("vendors").then(function (response) {
+        if (response.data.status === "success") {
+          _this6.vendors = response.data.data;
+        } else {
+          _this6.vendors = null;
+        }
+      });
     },
     loadDevices: function loadDevices() {
       var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                _context7.next = 2;
-                return axios.get("devices").then(function (response) {
-                  _this7.devices = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7);
-      }))();
+      axios.get("devices").then(function (response) {
+        _this7.devices = response.data;
+      });
     },
     saveDialog: function saveDialog() {
       var _this8 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                _context8.next = 2;
-                return axios.post("device/create", {
-                  deviceName: _this8.deviceName,
-                  deviceUser: _this8.deviceUser,
-                  devicePassword: _this8.devicePassword,
-                  vendor: _this8.vendor,
-                  category: _this8.category,
-                  deviceIp: _this8.deviceIp,
-                  interfaces: _this8.interfaces
-                }).then(function (response) {
-                  _this8.$store.state.alerts = response.data.alert;
-                  _this8.deviceDialog = false;
+      axios.post("device/create", {
+        deviceName: this.deviceName,
+        deviceUser: this.deviceUser,
+        devicePassword: this.devicePassword,
+        vendor: this.vendor,
+        category: this.category,
+        deviceIp: this.deviceIp,
+        interfaces: this.interfaces
+      }).then(function (response) {
+        _this8.$store.state.alerts = response.data.alert;
+        _this8.deviceDialog = false;
 
-                  if (response.data.status === "success") {
-                    _this8.loadDevices();
+        if (response.data.status === "success") {
+          _this8.loadDevices();
 
-                    _this8.$router.push("/device/" + response.data.deviceId);
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
-      }))();
+          _this8.$router.push("/device/" + response.data.deviceId);
+        }
+      });
     },
     show: function show(e, deviceId) {
       var _this9 = this;

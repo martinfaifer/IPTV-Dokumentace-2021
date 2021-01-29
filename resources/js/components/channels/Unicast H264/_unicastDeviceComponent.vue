@@ -71,7 +71,7 @@
                                     transcoderStatus.streamStatus === 'active'
                                 "
                             >
-                            Stav streamu z transcoderu: 
+                                Stav streamu z transcoderu:
                                 <span class="green--text">
                                     <strong>
                                         Transcoduje
@@ -190,8 +190,8 @@ export default {
         closeDialog() {
             this.editDataDialog = false;
         },
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("h264/transcoder/update", {
                     channelId: this.$route.params.id,
                     transcoder: this.transcoder.name
@@ -202,8 +202,8 @@ export default {
                     this.loadTranscoder();
                 });
         },
-        async openEditDialog() {
-            await axios.get("device/transcoders").then(response => {
+        openEditDialog() {
+            axios.get("device/transcoders").then(response => {
                 this.transcoders = response.data;
                 this.editDataDialog = true;
             });
@@ -217,21 +217,21 @@ export default {
                 this.showMenu = true;
             });
         },
-        async loadStatusFromTramscoder() {
-            await axios
+        loadStatusFromTramscoder() {
+            axios
                 .post("h264/transcoder/status", {
                     channelId: this.$route.params.id
                 })
                 .then(response => {
-                    if(response.data.status === 'success') {
+                    if (response.data.status === "success") {
                         this.transcoderStatus = response.data;
                     } else {
                         this.transcoderStatus = null;
                     }
                 });
         },
-        async loadTranscoder() {
-            await axios
+        loadTranscoder() {
+            axios
                 .post("h264/transcoder", {
                     channelId: this.$route.params.id
                 })

@@ -57,7 +57,11 @@
                             {{ event.note }}
                         </v-col>
                         <v-col cols="12" sm="12" md="2">
-                            <v-icon small color="red" @click="deleteEvent(event.id)">
+                            <v-icon
+                                small
+                                color="red"
+                                @click="deleteEvent(event.id)"
+                            >
                                 mdi-delete
                             </v-icon>
                         </v-col>
@@ -203,8 +207,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        async getEvents() {
-            await axios
+        getEvents() {
+            axios
                 .post("event/channel", {
                     channelId: this.$route.params.id
                 })
@@ -226,8 +230,8 @@ export default {
             this.checkbox_create_to_dohled = false;
             this.createEventDialog = false;
         },
-        async saveEvent() {
-            await axios
+        saveEvent() {
+            axios
                 .post("event/create", {
                     channelId: this.$route.params.id,
                     start_day: this.start_day,
@@ -245,13 +249,15 @@ export default {
                     this.getEvents();
                 });
         },
-        async deleteEvent(eventId) {
-            await axios.post('event/delete', {
-                eventId: eventId
-            }).then(response => {
-                this.$store.state.alerts = response.data.alert;
-                this.getEvents();
-            })
+        deleteEvent(eventId) {
+            axios
+                .post("event/delete", {
+                    eventId: eventId
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.getEvents();
+                });
         }
     },
 

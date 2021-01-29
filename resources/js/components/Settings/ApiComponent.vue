@@ -37,8 +37,8 @@ export default {
         this.getApi();
     },
     methods: {
-        async getApi() {
-            await axios.get("external_endpoints").then(response => {
+        getApi() {
+            axios.get("external_endpoints").then(response => {
                 if (response.data.status === "success") {
                     this.apis = response.data.apis;
                 } else {

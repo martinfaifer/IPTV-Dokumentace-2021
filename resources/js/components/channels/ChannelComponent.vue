@@ -37,14 +37,6 @@
                             href="#tab-3"
                             >H265</v-tab
                         >
-                        <!-- <v-tab
-                            link
-                            v-bind:to="
-                                '/channel/' + this.$route.params.id + '/dohled'
-                            "
-                            href="#tab-4"
-                            >Informace z dohledu</v-tab
-                        > -->
 
                         <v-tab-item v-model="channelTab" class="ml-16 mt-6">
                             <!-- INCLUDE KOMPONENTŮ -->
@@ -98,7 +90,6 @@ import TagComponent from "../Tags/TagComponent";
 import MulticastComponent from "./MulticastComponent.vue";
 import H264baseInfoComponent from "./Unicast H264/H264baseInfoComponent";
 import H265baseInfoComponent from "./Unicast H265/H265baseInfoComponent";
-import DohledComponent from "./Dohled/DohledChannelComponent";
 export default {
     data() {
         return {
@@ -113,8 +104,7 @@ export default {
         "h264baseinfo-component": H264baseInfoComponent,
         "h265baseinfo-component": H265baseInfoComponent,
         "default-component": DefaultComponent,
-        "tag-component": TagComponent,
-        "dohled-component": DohledComponent
+        "tag-component": TagComponent
     },
     created() {},
     methods: {

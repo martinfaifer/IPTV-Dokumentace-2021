@@ -10,7 +10,11 @@
                     hide-details
                 ></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="categories" :search="search">
+            <v-data-table
+                :headers="headers"
+                :items="categories"
+                :search="search"
+            >
             </v-data-table>
         </v-card>
     </v-main>
@@ -36,8 +40,8 @@ export default {
         this.getCategories();
     },
     methods: {
-        async getCategories() {
-            await axios.get("device/categories").then(response => {
+        getCategories() {
+            axios.get("device/categories").then(response => {
                 if (response.data.status === "success") {
                     this.categories = response.data.data;
                 } else {

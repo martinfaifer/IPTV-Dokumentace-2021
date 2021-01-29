@@ -72,14 +72,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -841,121 +833,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadCards: function loadCards() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("cards").then(function (response) {
-                  _this2.cards = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("cards").then(function (response) {
+        _this2.cards = response.data;
+      });
     },
     loadDeviceTemplate: function loadDeviceTemplate() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("device/template", {
-                  deviceId: _this3.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.interfaces = response.data.inputs[0];
-                  } else {
-                    _this3.interfaces = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("device/template", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this3.interfaces = response.data.inputs[0];
+        } else {
+          _this3.interfaces = null;
+        }
+      });
     },
     getSatelits: function getSatelits() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.get("satelits").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this4.satelits = response.data.data;
-                  } else {
-                    _this4.satelits = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.get("satelits").then(function (response) {
+        if (response.data.status === "success") {
+          _this4.satelits = response.data.data;
+        } else {
+          _this4.satelits = null;
+        }
+      });
     },
     getDVBS: function getDVBS() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.get("dvb").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.dvbs = response.data.data;
-                  } else {
-                    _this5.dvbs = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.get("dvb").then(function (response) {
+        if (response.data.status === "success") {
+          _this5.dvbs = response.data.data;
+        } else {
+          _this5.dvbs = null;
+        }
+      });
     },
     getPolarizace: function getPolarizace() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.get("polarizace").then(function (response) {
-                  _this6.polarizaces = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+      axios.get("polarizace").then(function (response) {
+        _this6.polarizaces = response.data;
+      });
     },
     openEditWindowForInterface: function openEditWindowForInterface() {
       this.getSatelits();
@@ -967,38 +889,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveInterface: function saveInterface() {
       var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.next = 2;
-                return axios.post("device/blankom/interface", {
-                  deviceId: _this7.$route.params.id,
-                  interfaceId: _this7.interfaceId,
-                  sat: _this7.sat,
-                  dvb: _this7.dvb,
-                  freq: _this7.freq,
-                  polarizace: _this7.polarizace,
-                  symbolrate: _this7.symbolrate,
-                  fec: _this7.fec,
-                  lnb: _this7.lnb,
-                  lnb22k: _this7.lnb22k,
-                  ci: _this7.ci
-                }).then(function (response) {
-                  _this7.$store.state.alerts = response.data;
-                  _this7.editInterfaceSablonaData = false;
+      axios.post("device/blankom/interface", {
+        deviceId: this.$route.params.id,
+        interfaceId: this.interfaceId,
+        sat: this.sat,
+        dvb: this.dvb,
+        freq: this.freq,
+        polarizace: this.polarizace,
+        symbolrate: this.symbolrate,
+        fec: this.fec,
+        lnb: this.lnb,
+        lnb22k: this.lnb22k,
+        ci: this.ci
+      }).then(function (response) {
+        _this7.$store.state.alerts = response.data;
+        _this7.editInterfaceSablonaData = false;
 
-                  _this7.loadDeviceTemplate();
-                });
-
-              case 2:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }))();
+        _this7.loadDeviceTemplate();
+      });
     }
   },
   watch: {
@@ -1019,14 +927,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -1314,121 +1214,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadCards: function loadCards() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("cards").then(function (response) {
-                  _this2.cards = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("cards").then(function (response) {
+        _this2.cards = response.data;
+      });
     },
     loadDeviceTemplate: function loadDeviceTemplate() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("device/template", {
-                  deviceId: _this3.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.interfaces = response.data.inputs[0];
-                  } else {
-                    _this3.interfaces = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("device/template", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this3.interfaces = response.data.inputs[0];
+        } else {
+          _this3.interfaces = null;
+        }
+      });
     },
     getSatelits: function getSatelits() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.get("satelits").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this4.satelits = response.data.data;
-                  } else {
-                    _this4.satelits = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.get("satelits").then(function (response) {
+        if (response.data.status === "success") {
+          _this4.satelits = response.data.data;
+        } else {
+          _this4.satelits = null;
+        }
+      });
     },
     getDVBS: function getDVBS() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.get("dvb").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this5.dvbs = response.data.data;
-                  } else {
-                    _this5.dvbs = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.get("dvb").then(function (response) {
+        if (response.data.status === "success") {
+          _this5.dvbs = response.data.data;
+        } else {
+          _this5.dvbs = null;
+        }
+      });
     },
     getPolarizace: function getPolarizace() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.get("polarizace").then(function (response) {
-                  _this6.polarizaces = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+      axios.get("polarizace").then(function (response) {
+        _this6.polarizaces = response.data;
+      });
     },
     openEditWindowForInterface: function openEditWindowForInterface() {
       this.getSatelits();
@@ -1440,37 +1270,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveInterface: function saveInterface() {
       var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.next = 2;
-                return axios.post("device/fte/interface", {
-                  deviceId: _this7.$route.params.id,
-                  sat: _this7.sat,
-                  dvb: _this7.dvb,
-                  freq: _this7.freq,
-                  polarizace: _this7.polarizace,
-                  interfaces: _this7.interfaces,
-                  symbolrate: _this7.symbolrate,
-                  fec: _this7.fec,
-                  cia: _this7.cia,
-                  cib: _this7.cib
-                }).then(function (response) {
-                  _this7.$store.state.alerts = response.data;
-                  _this7.editInterfaceSablonaData = false;
+      axios.post("device/fte/interface", {
+        deviceId: this.$route.params.id,
+        sat: this.sat,
+        dvb: this.dvb,
+        freq: this.freq,
+        polarizace: this.polarizace,
+        interfaces: this.interfaces,
+        symbolrate: this.symbolrate,
+        fec: this.fec,
+        cia: this.cia,
+        cib: this.cib
+      }).then(function (response) {
+        _this7.$store.state.alerts = response.data;
+        _this7.editInterfaceSablonaData = false;
 
-                  _this7.loadDeviceTemplate();
-                });
-
-              case 2:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }))();
+        _this7.loadDeviceTemplate();
+      });
     }
   },
   watch: {
@@ -1491,14 +1307,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -1663,23 +1471,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadAllInterfaces: function loadAllInterfaces() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.get("device/allInterfaces").then(function (response) {
-                  _this.allInterfaces = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.get("device/allInterfaces").then(function (response) {
+        _this.allInterfaces = response.data;
+      });
     },
     show: function show(e) {
       var _this2 = this;
@@ -1695,29 +1489,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadInterfaces: function loadInterfaces() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("device/currentInterfaces", {
-                  deviceId: _this3.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.deviceInterfaces = response.data.data;
-                  } else {
-                    _this3.deviceInterfaces = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("device/currentInterfaces", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this3.deviceInterfaces = response.data.data;
+        } else {
+          _this3.deviceInterfaces = null;
+        }
+      });
     },
     openEditWindowForDevice: function openEditWindowForDevice() {
       this.editDeviceData = true;
@@ -1726,29 +1506,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveDeviceInfo: function saveDeviceInfo() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post("device/interfaces/edit", {
-                  deviceId: _this4.$route.params.id,
-                  interfaces: _this4.deviceInterfaces
-                }).then(function (response) {
-                  _this4.$store.state.alerts = response.data.alert;
-                  _this4.editDeviceData = false;
+      axios.post("device/interfaces/edit", {
+        deviceId: this.$route.params.id,
+        interfaces: this.deviceInterfaces
+      }).then(function (response) {
+        _this4.$store.state.alerts = response.data.alert;
+        _this4.editDeviceData = false;
 
-                  _this4.loadInterfaces();
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+        _this4.loadInterfaces();
+      });
     },
     closeDialog: function closeDialog() {
       this.loadInterfaces();
@@ -1761,29 +1527,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveDeleteDeviceInfo: function saveDeleteDeviceInfo() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("device/interfaces/delete", {
-                  deviceId: _this5.$route.params.id
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data.alert;
+      axios.post("device/interfaces/delete", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data.alert;
 
-                  _this5.loadInterfaces();
+        _this5.loadInterfaces();
 
-                  _this5.deleteDeviceData = false;
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+        _this5.deleteDeviceData = false;
+      });
     }
   },
   watch: {
@@ -1804,14 +1556,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2069,100 +1813,44 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDeviceTemplate: function loadDeviceTemplate() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("device/template", {
-                  deviceId: _this2.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this2.interfaces = response.data.inputs[0];
-                  } else {
-                    _this2.interfaces = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("device/template", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this2.interfaces = response.data.inputs[0];
+        } else {
+          _this2.interfaces = null;
+        }
+      });
     },
     getSatelits: function getSatelits() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("satelits").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.satelits = response.data.data;
-                  } else {
-                    _this3.satelits = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("satelits").then(function (response) {
+        if (response.data.status === "success") {
+          _this3.satelits = response.data.data;
+        } else {
+          _this3.satelits = null;
+        }
+      });
     },
     getDVBS: function getDVBS() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.get("dvb").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this4.dvbs = response.data.data;
-                  } else {
-                    _this4.dvbs = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.get("dvb").then(function (response) {
+        if (response.data.status === "success") {
+          _this4.dvbs = response.data.data;
+        } else {
+          _this4.dvbs = null;
+        }
+      });
     },
     getPolarizace: function getPolarizace() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.get("polarizace").then(function (response) {
-                  _this5.polarizaces = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+      axios.get("polarizace").then(function (response) {
+        _this5.polarizaces = response.data;
+      });
     },
     openEditWindowForInterface: function openEditWindowForInterface() {
       this.getSatelits();
@@ -2173,35 +1861,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveInterface: function saveInterface() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.post("device/powerVu/interface", {
-                  deviceId: _this6.$route.params.id,
-                  sat: _this6.sat,
-                  dvb: _this6.dvb,
-                  freq: _this6.freq,
-                  polarizace: _this6.polarizace,
-                  symbolrate: _this6.symbolrate,
-                  fec: _this6.fec,
-                  asi: _this6.asi
-                }).then(function (response) {
-                  _this6.$store.state.alerts = response.data;
-                  _this6.editInterfaceSablonaData = false;
+      axios.post("device/powerVu/interface", {
+        deviceId: this.$route.params.id,
+        sat: this.sat,
+        dvb: this.dvb,
+        freq: this.freq,
+        polarizace: this.polarizace,
+        symbolrate: this.symbolrate,
+        fec: this.fec,
+        asi: this.asi
+      }).then(function (response) {
+        _this6.$store.state.alerts = response.data;
+        _this6.editInterfaceSablonaData = false;
 
-                  _this6.loadDeviceTemplate();
-                });
-
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
+        _this6.loadDeviceTemplate();
+      });
     }
   },
   watch: {
@@ -2222,14 +1896,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2544,40 +2210,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     loadTranscoderData: function loadTranscoderData() {
-      var _this = this;
+      var currentObj = this;
+      axios.post("device/transcoderData", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.gpu) {
+          if (typeof response.data.gpu.fb_memory_usage !== "undefined") {
+            currentObj.gpuStat = response.data;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var currentObj;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                currentObj = _this;
-                _context.next = 3;
-                return axios.post("device/transcoderData", {
-                  deviceId: _this.$route.params.id
-                }).then(function (response) {
-                  if (response.data.gpu) {
-                    if (typeof response.data.gpu.fb_memory_usage !== "undefined") {
-                      currentObj.gpuStat = response.data;
-
-                      if (typeof response.data.gpu.fb_memory_usage !== "undefined") {
-                        currentObj.ramUsage = response.data.gpu.fb_memory_usage;
-                        currentObj.ramTotal = currentObj.ramUsage.total.replace(" MiB", "");
-                        currentObj.ramUsed = currentObj.ramUsage.used.replace(" MiB", "");
-                        currentObj.ramPercent = currentObj.ramUsed * 100 / currentObj.ramTotal;
-                      }
-                    }
-                  }
-                });
-
-              case 3:
-              case "end":
-                return _context.stop();
+            if (typeof response.data.gpu.fb_memory_usage !== "undefined") {
+              currentObj.ramUsage = response.data.gpu.fb_memory_usage;
+              currentObj.ramTotal = currentObj.ramUsage.total.replace(" MiB", "");
+              currentObj.ramUsed = currentObj.ramUsage.used.replace(" MiB", "");
+              currentObj.ramPercent = currentObj.ramUsed * 100 / currentObj.ramTotal;
             }
           }
-        }, _callee);
-      }))();
+        }
+      });
     },
     destroyEveryThing: function destroyEveryThing() {
       this.gpuStat = "";
@@ -2610,14 +2259,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2658,29 +2299,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadChannelsOnDevice: function loadChannelsOnDevice() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("device/channels", {
-                  deviceId: _this.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this.channels = response.data.data;
-                  } else {
-                    _this.channels = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("device/channels", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this.channels = response.data.data;
+        } else {
+          _this.channels = null;
+        }
+      });
     }
   },
   watch: {
@@ -2701,14 +2328,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+//
+//
+//
 //
 //
 //
@@ -2921,79 +2543,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDeviceInformation: function loadDeviceInformation() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("device/info_sum", {
-                  deviceId: _this2.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this2.deviceInformations = response.data.data;
-                  } else {
-                    _this2.deviceInformations = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("device/info_sum", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this2.deviceInformations = response.data.data;
+        } else {
+          _this2.deviceInformations = null;
+        }
+      });
     },
     loadCategories: function loadCategories() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("device/categories").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this3.categories = response.data.data;
-                  } else {
-                    _this3.categories = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.get("device/categories").then(function (response) {
+        if (response.data.status === "success") {
+          _this3.categories = response.data.data;
+        } else {
+          _this3.categories = null;
+        }
+      });
     },
     loadVendors: function loadVendors() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.get("vendors").then(function (response) {
-                  if (response.data.status === "success") {
-                    _this4.vendors = response.data.data;
-                  } else {
-                    _this4.vendors = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+      axios.get("vendors").then(function (response) {
+        if (response.data.status === "success") {
+          _this4.vendors = response.data.data;
+        } else {
+          _this4.vendors = null;
+        }
+      });
     },
     openEditWindowForDevice: function openEditWindowForDevice() {
       this.loadCategories();
@@ -3003,41 +2583,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveDeviceInfo: function saveDeviceInfo() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post("device/edit", {
-                  deviceId: _this5.$route.params.id,
-                  name: _this5.name,
-                  ip: _this5.ip,
-                  login_user: _this5.login_user,
-                  login_password: _this5.login_password,
-                  category: _this5.category,
-                  vendor: _this5.vendor
-                }).then(function (response) {
-                  _this5.$store.state.alerts = response.data;
-                  _this5.editDeviceData = false;
+      axios.post("device/edit", {
+        deviceId: this.$route.params.id,
+        name: this.name,
+        ip: this.ip,
+        login_user: this.login_user,
+        login_password: this.login_password,
+        category: this.category,
+        vendor: this.vendor
+      }).then(function (response) {
+        _this5.$store.state.alerts = response.data;
+        _this5.editDeviceData = false;
 
-                  _this5.loadDeviceInformation();
+        _this5.loadDeviceInformation();
 
-                  _this5.name = "";
-                  _this5.ip = "";
-                  _this5.login_user = "";
-                  _this5.login_password = "";
-                  _this5.category = "";
-                  _this5.vendor = "";
-                });
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+        _this5.name = "";
+        _this5.ip = "";
+        _this5.login_user = "";
+        _this5.login_password = "";
+        _this5.category = "";
+        _this5.vendor = "";
+      });
     }
   },
   watch: {
@@ -3058,18 +2624,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
-//
-//
-//
 //
 //
 //
@@ -3214,29 +2768,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDeviceTemplate: function loadDeviceTemplate() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("device/template", {
-                  deviceId: _this2.$route.params.id
-                }).then(function (response) {
-                  if (response.data.status === "success") {
-                    _this2.template = response.data.data.template;
-                  } else {
-                    _this2.template = null;
-                  }
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("device/template", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        if (response.data.status === "success") {
+          _this2.template = response.data.data.template;
+        } else {
+          _this2.template = null;
+        }
+      });
     },
     openEditWindowForInterface: function openEditWindowForInterface() {
       this.editInterfaceSablonaData = true;
@@ -3263,22 +2803,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Interfaces_blankomInterfacesComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Interfaces/_blankomInterfacesComponent */ "./resources/js/components/devices/Interfaces/_blankomInterfacesComponent.vue");
-/* harmony import */ var _Interfaces_fteInterfacesComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Interfaces/_fteInterfacesComponent */ "./resources/js/components/devices/Interfaces/_fteInterfacesComponent.vue");
-/* harmony import */ var _Interfaces_powerVuInterfacesComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Interfaces/_powerVuInterfacesComponent */ "./resources/js/components/devices/Interfaces/_powerVuInterfacesComponent.vue");
-/* harmony import */ var _Interfaces_interfacesforChannelsComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Interfaces/_interfacesforChannelsComponent */ "./resources/js/components/devices/Interfaces/_interfacesforChannelsComponent.vue");
-/* harmony import */ var _deviceInfoComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./_deviceInfoComponent */ "./resources/js/components/devices/_deviceInfoComponent.vue");
-/* harmony import */ var _deviceTemplateComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./_deviceTemplateComponent */ "./resources/js/components/devices/_deviceTemplateComponent.vue");
-/* harmony import */ var _channelsOnDeviceComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./_channelsOnDeviceComponent */ "./resources/js/components/devices/_channelsOnDeviceComponent.vue");
-/* harmony import */ var _Transcoder_TranscoderComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Transcoder/TranscoderComponent */ "./resources/js/components/devices/Transcoder/TranscoderComponent.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _Interfaces_blankomInterfacesComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Interfaces/_blankomInterfacesComponent */ "./resources/js/components/devices/Interfaces/_blankomInterfacesComponent.vue");
+/* harmony import */ var _Interfaces_fteInterfacesComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Interfaces/_fteInterfacesComponent */ "./resources/js/components/devices/Interfaces/_fteInterfacesComponent.vue");
+/* harmony import */ var _Interfaces_powerVuInterfacesComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Interfaces/_powerVuInterfacesComponent */ "./resources/js/components/devices/Interfaces/_powerVuInterfacesComponent.vue");
+/* harmony import */ var _Interfaces_interfacesforChannelsComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Interfaces/_interfacesforChannelsComponent */ "./resources/js/components/devices/Interfaces/_interfacesforChannelsComponent.vue");
+/* harmony import */ var _deviceInfoComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_deviceInfoComponent */ "./resources/js/components/devices/_deviceInfoComponent.vue");
+/* harmony import */ var _deviceTemplateComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./_deviceTemplateComponent */ "./resources/js/components/devices/_deviceTemplateComponent.vue");
+/* harmony import */ var _channelsOnDeviceComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./_channelsOnDeviceComponent */ "./resources/js/components/devices/_channelsOnDeviceComponent.vue");
+/* harmony import */ var _Transcoder_TranscoderComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Transcoder/TranscoderComponent */ "./resources/js/components/devices/Transcoder/TranscoderComponent.vue");
 //
 //
 //
@@ -3351,14 +2883,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   components: {
-    "deviceinformation-component": _deviceInfoComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
-    "devicetemplate-component": _deviceTemplateComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
-    "channelsondevice-component": _channelsOnDeviceComponent__WEBPACK_IMPORTED_MODULE_7__["default"],
-    "blankominputs-component": _Interfaces_blankomInterfacesComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    "fteinputs-component": _Interfaces_fteInterfacesComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    "powervu-component": _Interfaces_powerVuInterfacesComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
-    "interfaces-component": _Interfaces_interfacesforChannelsComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
-    "transcoder-compoennt": _Transcoder_TranscoderComponent__WEBPACK_IMPORTED_MODULE_8__["default"]
+    "deviceinformation-component": _deviceInfoComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
+    "devicetemplate-component": _deviceTemplateComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+    "channelsondevice-component": _channelsOnDeviceComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
+    "blankominputs-component": _Interfaces_blankomInterfacesComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    "fteinputs-component": _Interfaces_fteInterfacesComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    "powervu-component": _Interfaces_powerVuInterfacesComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    "interfaces-component": _Interfaces_interfacesforChannelsComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
+    "transcoder-compoennt": _Transcoder_TranscoderComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   created: function created() {
     this.loadDeviceNameById();
@@ -3368,48 +2900,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadDeviceNameById: function loadDeviceNameById() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.post("device/name", {
-                  deviceId: _this.$route.params.id
-                }).then(function (response) {
-                  _this.deviceName = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      axios.post("device/name", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        _this.deviceName = response.data;
+      });
     },
     loadDeviceVendor: function loadDeviceVendor() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post("device/vendor", {
-                  deviceId: _this2.$route.params.id
-                }).then(function (response) {
-                  _this2.deviceVendor = response.data;
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      axios.post("device/vendor", {
+        deviceId: this.$route.params.id
+      }).then(function (response) {
+        _this2.deviceVendor = response.data;
+      });
     }
   },
   watch: {

@@ -36,8 +36,8 @@ export default {
         this.getSources();
     },
     methods: {
-        async getSources() {
-            await axios.get("sources").then(response => {
+        getSources() {
+            axios.get("sources").then(response => {
                 this.sources = response.data;
             });
         }

@@ -28,7 +28,10 @@
                     <v-row>
                         <span class="ml-6" v-if="deviceInformations.ip != null">
                             <strong>IP: </strong>
-                            <a target="_blank" :href="'http://'+deviceInformations.ip">
+                            <a
+                                target="_blank"
+                                :href="'http://' + deviceInformations.ip"
+                            >
                                 {{ deviceInformations.ip }}
                             </a>
                         </span>
@@ -207,8 +210,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        async loadDeviceInformation() {
-            await axios
+        loadDeviceInformation() {
+            axios
                 .post("device/info_sum", {
                     deviceId: this.$route.params.id
                 })
@@ -220,8 +223,8 @@ export default {
                     }
                 });
         },
-        async loadCategories() {
-            await axios.get("device/categories").then(response => {
+        loadCategories() {
+            axios.get("device/categories").then(response => {
                 if (response.data.status === "success") {
                     this.categories = response.data.data;
                 } else {
@@ -229,8 +232,8 @@ export default {
                 }
             });
         },
-        async loadVendors() {
-            await axios.get("vendors").then(response => {
+        loadVendors() {
+            axios.get("vendors").then(response => {
                 if (response.data.status === "success") {
                     this.vendors = response.data.data;
                 } else {
@@ -244,8 +247,8 @@ export default {
             this.editDeviceData = true;
         },
 
-        async saveDeviceInfo() {
-            await axios
+        saveDeviceInfo() {
+            axios
                 .post("device/edit", {
                     deviceId: this.$route.params.id,
                     name: this.name,

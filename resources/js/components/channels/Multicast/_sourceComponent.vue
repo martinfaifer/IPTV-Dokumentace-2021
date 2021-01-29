@@ -81,12 +81,16 @@
                                 </span>
                             </v-col>
 
-                            <v-col cols="12" v-if="prijem.path != null" class="mt-1">
+                            <v-col
+                                cols="12"
+                                v-if="prijem.path != null"
+                                class="mt-1"
+                            >
                                 <span class="ml-6">
                                     <strong>
-                                        Absolutní cesta ke scriptu: 
+                                        Absolutní cesta ke scriptu:
                                     </strong>
-                                    {{prijem.path}}
+                                    {{ prijem.path }}
                                 </span>
                             </v-col>
 
@@ -325,21 +329,21 @@ export default {
                 this.showMenu = true;
             });
         },
-        async openEditDialog() {
-            await axios.get("device/prijem").then(response => {
+        openEditDialog() {
+            axios.get("device/prijem").then(response => {
                 this.GetMoreInformationAboutThisDevice(this.prijem.name);
                 this.items = response.data;
                 this.editDialog = true;
             });
         },
-        async saveData() {
+        saveData() {
             if (this.deviceInformation === null) {
                 this.deviceInformation = null;
             } else {
                 this.deviceInformation = this.deviceInformation.outputInterfaces;
             }
 
-            await axios
+            axios
                 .post("device/prijem/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.prijem.name,
@@ -361,8 +365,8 @@ export default {
                     }
                 });
         },
-        async GetMoreInformationAboutThisDevice(data) {
-            await axios
+        GetMoreInformationAboutThisDevice(data) {
+            axios
                 .post("device/info", {
                     deviceName: data
                 })
@@ -398,8 +402,8 @@ export default {
             this.editDialog = false;
             this.loadPrijem();
         },
-        async removeData() {
-            await axios
+        removeData() {
+            axios
                 .post("device/prijem/remove", {
                     channelId: this.$route.params.id
                 })
@@ -409,8 +413,8 @@ export default {
                 });
         },
 
-        async loadPrijem() {
-            await axios
+        loadPrijem() {
+            axios
                 .post("prijem", {
                     channelId: this.$route.params.id
                 })

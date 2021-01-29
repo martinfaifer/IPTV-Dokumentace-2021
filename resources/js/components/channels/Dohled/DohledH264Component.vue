@@ -33,7 +33,6 @@
                                 :src="dohled.img"
                             >
                             </v-img>
-                            
                         </v-col>
                         <v-col>
                             <strong>
@@ -87,8 +86,8 @@ export default {
         this.loadDohledDatat();
     },
     methods: {
-        async loadDohledDatat() {
-            await axios
+        loadDohledDatat() {
+            axios
                 .post("channel/h264/dohled", {
                     channelId: this.$route.params.id
                 })

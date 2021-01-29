@@ -317,9 +317,9 @@ export default {
         this.loadTranscoderData();
     },
     methods: {
-        async loadTranscoderData() {
+        loadTranscoderData() {
             let currentObj = this;
-            await axios
+            axios
                 .post("device/transcoderData", {
                     deviceId: this.$route.params.id
                 })

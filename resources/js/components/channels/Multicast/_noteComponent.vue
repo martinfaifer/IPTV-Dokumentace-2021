@@ -155,11 +155,11 @@ export default {
                 this.showMenu = true;
             });
         },
-        async saveNote() {
-            await axios
+        saveNote() {
+            axios
                 .post("note/create", {
                     note: this.noteText,
-                    id: this.$route.params.id,
+                    id: this.$route.params.id
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
@@ -172,8 +172,8 @@ export default {
             this.newNoteDialog = false;
             this.noteText = null;
         },
-        async deleteNote() {
-            await axios
+        deleteNote() {
+            axios
                 .post("note/delete", {
                     noteId: this.noteId
                 })
@@ -182,9 +182,9 @@ export default {
                     this.loadNotes();
                 });
         },
-        async loadNotes() {
+        loadNotes() {
             // obecná fn , kdy se bude hlídat uri a dle toho se bude hledat tag pro daný source
-            await axios
+            axios
                 .post("notes", {
                     id: this.$route.params.id,
                     datatype: this.checkUri()

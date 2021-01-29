@@ -254,8 +254,8 @@ export default {
             });
         },
 
-        async loadDeviceTemplate() {
-            await axios
+        loadDeviceTemplate() {
+            axios
                 .post("device/template", {
                     deviceId: this.$route.params.id
                 })
@@ -268,8 +268,8 @@ export default {
                 });
         },
 
-        async getSatelits() {
-            await axios.get("satelits").then(response => {
+        getSatelits() {
+            axios.get("satelits").then(response => {
                 if (response.data.status === "success") {
                     this.satelits = response.data.data;
                 } else {
@@ -278,8 +278,8 @@ export default {
             });
         },
 
-        async getDVBS() {
-            await axios.get("dvb").then(response => {
+        getDVBS() {
+            axios.get("dvb").then(response => {
                 if (response.data.status === "success") {
                     this.dvbs = response.data.data;
                 } else {
@@ -288,8 +288,8 @@ export default {
             });
         },
 
-        async getPolarizace() {
-            await axios.get("polarizace").then(response => {
+        getPolarizace() {
+            axios.get("polarizace").then(response => {
                 this.polarizaces = response.data;
             });
         },
@@ -301,8 +301,8 @@ export default {
             this.editInterfaceSablonaData = true;
         },
 
-        async saveInterface() {
-            await axios
+        saveInterface() {
+            axios
                 .post("device/powerVu/interface", {
                     deviceId: this.$route.params.id,
                     sat: this.sat,

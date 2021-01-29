@@ -24,40 +24,49 @@ Vue.component("apexchart", VueApexCharts);
 
 // Auth
 // Login
-const LoginComponent = () =>
-    import(
-        "./components/Auth/LoginComponent" /* webpackChunkName: "resource/js/components/Auth/LoginComponent" */
-    );
+// const LoginComponent = () =>
+//     import(
+//         "./components/Auth/LoginComponent" /* webpackChunkName: "resource/js/components/Auth/LoginComponent" */
+//     );
+import LoginComponent from "./components/Auth/LoginComponent";
+// const NavigationComponent = () =>
+//     import(
+//         "./components/NavigationComponent" /* webpackChunkName: "resource/js/components/NavigationComponent" */
+//     );
+import NavigationComponent from "./components/NavigationComponent";
 
-const NavigationComponent = () =>
-    import(
-        "./components/NavigationComponent" /* webpackChunkName: "resource/js/components/NavigationComponent" */
-    );
+// const ChannelComponent = () =>
+//     import(
+//         "./components/channels/ChannelComponent.vue" /* webpackChunkName: "resource/js/components/channels/ChannelComponent.vue" */
+//     );
+import ChannelComponent from "./components/channels/ChannelComponent";
 
-const ChannelComponent = () =>
-    import(
-        "./components/channels/ChannelComponent.vue" /* webpackChunkName: "resource/js/components/channels/ChannelComponent.vue" */
-    );
+// const DeviceComponent = () =>
+//     import(
+//         "./components/devices/DeviceComponent" /* webpackChunkName: "resource/js/components/devices/DeviceComponent" */
+//     );
 
-const DeviceComponent = () =>
-    import(
-        "./components/devices/DeviceComponent" /* webpackChunkName: "resource/js/components/devices/DeviceComponent" */
-    );
+import DeviceComponent from "./components/devices/DeviceComponent";
 
-const CardComponent = () =>
-    import(
-        "./components/Cards/CardComponent" /* webpackChunkName: "resource/js/components/Cards/CardComponent" */
-    );
+// const CardComponent = () =>
+//     import(
+//         "./components/Cards/CardComponent" /* webpackChunkName: "resource/js/components/Cards/CardComponent" */
+//     );
+import CardComponent from "./components/Cards/CardComponent";
 
-const SettinsComponent = () =>
-    import(
-        "./components/Settings/_obecneSettingsComponent" /* webpackChunkName: "resource/js/components/Settings/_obecneSettingsComponent" */
-    );
+// const SettinsComponent = () =>
+//     import(
+//         "./components/Settings/_obecneSettingsComponent" /* webpackChunkName: "resource/js/components/Settings/_obecneSettingsComponent" */
+//     );
 
-const PageNotFoundComponent = () =>
-    import(
-        "./components/PageNotFoundComponent" /* webpackChunkName: "resource/js/components/PageNotFoundComponent" */
-    );
+import SettinsComponent from "./components/Settings/_obecneSettingsComponent";
+
+// const PageNotFoundComponent = () =>
+//     import(
+//         "./components/PageNotFoundComponent" /* webpackChunkName: "resource/js/components/PageNotFoundComponent" */
+//     );
+
+import PageNotFoundComponent from "./components/PageNotFoundComponent";
 
 let routes = [
     {

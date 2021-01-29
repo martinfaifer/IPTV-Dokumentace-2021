@@ -237,8 +237,8 @@ export default {
         this.loadM3u8Kvality();
     },
     methods: {
-        async loadM3u8Kvality() {
-            await axios
+        loadM3u8Kvality() {
+            axios
                 .post("h264/channel/m3u8", {
                     channelId: this.$route.params.id,
                     type: "h264"
@@ -251,8 +251,8 @@ export default {
                     }
                 });
         },
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("h264/channel/edit", {
                     channelId: this.$route.params.id,
                     kdekoliv: this.m3u8s.kdekoliv,
@@ -276,8 +276,8 @@ export default {
                     }
                 });
         },
-        async openDialog() {
-            await axios
+        openDialog() {
+            axios
                 .post("h264/channel/kvalityForEdit", {
                     channelId: this.$route.params.id,
                     type: "h264"
@@ -302,8 +302,8 @@ export default {
             });
         },
 
-        async loadChunkStoreId() {
-            await axios
+        loadChunkStoreId() {
+            axios
                 .post("unicast/chunkStoreId", {
                     channelId: this.$route.params.id
                 })
@@ -311,8 +311,8 @@ export default {
                     this.chunkStoreId = response.data;
                 });
         },
-        async loadOutputKvality() {
-            await axios
+        loadOutputKvality() {
+            axios
                 .post("h264/channel/kvality", {
                     channelId: this.$route.params.id,
                     type: "h264"

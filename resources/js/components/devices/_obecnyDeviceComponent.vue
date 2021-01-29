@@ -87,8 +87,8 @@ export default {
         this.loadDeviceVendor();
     },
     methods: {
-        async loadDeviceNameById() {
-            await axios
+        loadDeviceNameById() {
+            axios
                 .post("device/name", {
                     deviceId: this.$route.params.id
                 })
@@ -97,8 +97,8 @@ export default {
                 });
         },
 
-        async loadDeviceVendor() {
-            await axios
+        loadDeviceVendor() {
+            axios
                 .post("device/vendor", {
                     deviceId: this.$route.params.id
                 })

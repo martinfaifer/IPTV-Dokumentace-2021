@@ -227,13 +227,13 @@ export default {
                 this.showMenu = true;
             });
         },
-        async getMultiplexors() {
-            await axios.get("device/multiplexors").then(response => {
+        getMultiplexors() {
+            axios.get("device/multiplexors").then(response => {
                 this.items = response.data;
             });
         },
-        async loadMultiplexor() {
-            await axios
+        loadMultiplexor() {
+            axios
                 .post("multiplexor", {
                     channelId: this.$route.params.id
                 })
@@ -255,8 +255,8 @@ export default {
             this.editMultiplexor = false;
         },
 
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("channel/multiplexer/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.multiplexor.name
@@ -272,8 +272,8 @@ export default {
                 });
         },
 
-        async removeMultiplexor() {
-            await axios
+        removeMultiplexor() {
+            axios
                 .post("channel/multiplexer/remove", {
                     channelId: this.$route.params.id
                 })

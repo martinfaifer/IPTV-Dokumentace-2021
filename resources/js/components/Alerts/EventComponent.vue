@@ -59,8 +59,8 @@ export default {
         this.getEvents();
     },
     methods: {
-        async getEvents() {
-            await axios.get("events/today").then(response => {
+        getEvents() {
+            axios.get("events/today").then(response => {
                 if (response.data.status === "success") {
                     this.events = response.data.events;
                     this.dialog = true;

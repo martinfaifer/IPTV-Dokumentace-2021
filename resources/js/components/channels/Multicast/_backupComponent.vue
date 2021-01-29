@@ -220,9 +220,9 @@ export default {
                 this.showMenu = true;
             });
         },
-        async loadBackup() {
+        loadBackup() {
             try {
-                await axios
+                axios
                     .post("backup", {
                         channelId: this.$route.params.id
                     })
@@ -237,8 +237,8 @@ export default {
                 this.backup = null;
             }
         },
-        async GetMoreInformationAboutThisDevice(data) {
-            await axios
+        GetMoreInformationAboutThisDevice(data) {
+            axios
                 .post("device/info", {
                     deviceName: data
                 })
@@ -260,8 +260,8 @@ export default {
             this.loadBackup();
         },
 
-        async saveData() {
-            await axios
+        saveData() {
+            axios
                 .post("device/backup/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.backup.name,
@@ -280,8 +280,8 @@ export default {
                 });
         },
 
-        async removeData() {
-            await axios
+        removeData() {
+            axios
                 .post("device/backup/remove", {
                     channelId: this.$route.params.id
                 })

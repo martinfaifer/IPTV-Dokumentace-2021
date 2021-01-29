@@ -78,7 +78,6 @@
                                             index) in currentSablona"
                                             :key="index"
                                         >
-
                                             <v-text-field
                                                 :label="index"
                                                 v-bind:value="item"
@@ -109,9 +108,6 @@
                     </v-dialog>
                 </v-row>
             </template>
-
-
-
         </div>
     </v-main>
 </template>
@@ -144,8 +140,8 @@ export default {
             });
         },
 
-        async loadDeviceTemplate() {
-            await axios
+        loadDeviceTemplate() {
+            axios
                 .post("device/template", {
                     deviceId: this.$route.params.id
                 })
@@ -162,9 +158,7 @@ export default {
             this.editInterfaceSablonaData = true;
         },
         saveInterface(item) {
-            console.log(
-                item
-            );
+            console.log(item);
         }
     },
     watch: {

@@ -13,9 +13,8 @@
                         <!-- component pro získání chunk store id -->
                         <h265info-component></h265info-component>
                     </v-col>
-                    
                 </v-row>
-            
+
                 <v-row class="mt-4">
                     <v-col>
                         <!-- transcoder component -->
@@ -164,8 +163,8 @@ export default {
         closeDialog() {
             this.outputDialog = false;
         },
-        async savedata() {
-            await axios
+        savedata() {
+            axios
                 .post("h265/create", {
                     channelId: this.$route.params.id,
                     addToTranscoder: this.addToTranscoder,
@@ -175,15 +174,13 @@ export default {
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
-                    // this.$route.push("/");
-                    // this.$route.push("/channel/" + response.data.channelId + "/h264");
                     this.loadChannelNameById();
                     this.checkIfIs();
                     this.outputDialog = false;
                 });
         },
-        async createOutput() {
-            await axios.get("device/transcodersAndSatelits").then(response => {
+        createOutput() {
+            axios.get("device/transcodersAndSatelits").then(response => {
                 this.transcoders = response.data;
                 this.outputDialog = true;
             });
@@ -197,8 +194,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        async loadChannelNameById() {
-            await axios
+        loadChannelNameById() {
+            axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })
@@ -206,8 +203,8 @@ export default {
                     this.channelName = response.data;
                 });
         },
-        async checkIfIs() {
-            await axios
+        checkIfIs() {
+            axios
                 .post("h265/check", {
                     channelId: this.$route.params.id
                 })

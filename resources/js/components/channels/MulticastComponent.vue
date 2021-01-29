@@ -66,14 +66,14 @@ export default {
         "backup-component": BackupComponent,
         "calendar-component": CalendarComponent,
         "note-component": NoteComponent,
-        "dohled-component" : TestDohledComponent
+        "dohled-component": TestDohledComponent
     },
     created() {
         this.loadChannelNameById();
     },
     methods: {
-        async loadChannelNameById() {
-            await axios
+        loadChannelNameById() {
+            axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })

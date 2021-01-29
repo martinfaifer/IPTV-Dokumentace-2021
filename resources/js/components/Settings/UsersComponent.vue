@@ -38,9 +38,9 @@ export default {
         this.getUsers();
     },
     methods: {
-        async getUsers() {
+        getUsers() {
             try {
-                await axios.get("users").then(response => {
+                axios.get("users").then(response => {
                     if (response.data.status === "success") {
                         this.users = response.data.users;
                     } else {

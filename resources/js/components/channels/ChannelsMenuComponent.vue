@@ -620,7 +620,7 @@ export default {
             multicastZdroj: null,
             sources: [],
             channelName: null,
-            photo: null,
+            photo: null
         };
     },
 
@@ -633,8 +633,8 @@ export default {
             this.photo = event.target.files[0];
         },
 
-        async saveChannelName() {
-            await axios
+        saveChannelName() {
+            axios
                 .post("channel/name/edit", {
                     channelId: this.channelId,
                     channelName: this.channelName
@@ -652,8 +652,8 @@ export default {
                     }
                 });
         },
-        async editChannelNameDialog() {
-            await axios
+        editChannelNameDialog() {
+            axios
                 .post("channel/name", {
                     channelId: this.channelId
                 })
@@ -663,15 +663,15 @@ export default {
                 });
         },
 
-        async createNewChannelDialog() {
-            await axios.get("sources").then(response => {
+        createNewChannelDialog() {
+            axios.get("sources").then(response => {
                 this.sources = response.data;
                 this.createNewChannel = true;
             });
         },
 
-        async saveNewChannel() {
-            await axios
+        saveNewChannel() {
+            axios
                 .post("channel/create", {
                     channelName: this.channelName,
                     multicastZdroj: this.multicastZdroj,
@@ -708,8 +708,8 @@ export default {
             this.createEventDialog = true;
         },
 
-        async saveEvent() {
-            await axios
+        saveEvent() {
+            axios
                 .post("event/create", {
                     channelId: this.channelId,
                     start_day: this.start_day,
@@ -730,8 +730,8 @@ export default {
                         .catch(err => {});
                 });
         },
-        async addMultiplexer() {
-            await axios
+        addMultiplexer() {
+            axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "multiplexor"
@@ -747,8 +747,8 @@ export default {
                 });
         },
 
-        async GetMoreInformationAboutThisDevice(data) {
-            await axios
+        GetMoreInformationAboutThisDevice(data) {
+            axios
                 .post("device/info", {
                     deviceName: data
                 })
@@ -757,8 +757,8 @@ export default {
                 });
         },
 
-        async addBackupPrijem() {
-            await axios
+        addBackupPrijem() {
+            axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "backup"
@@ -773,8 +773,8 @@ export default {
                 });
         },
 
-        async addPrijem() {
-            await axios
+        addPrijem() {
+            axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "prijem"
@@ -789,8 +789,8 @@ export default {
                     }
                 });
         },
-        async saveBackupPrijemData() {
-            await axios
+        saveBackupPrijemData() {
+            axios
                 .post("device/backup/edit", {
                     channelId: this.channelId,
                     deviceName: this.backup,
@@ -811,8 +811,8 @@ export default {
                     }
                 });
         },
-        async savePrijemData() {
-            await axios
+        savePrijemData() {
+            axios
                 .post("device/prijem/edit", {
                     channelId: this.channelId,
                     deviceName: this.prijem,
@@ -834,8 +834,8 @@ export default {
                 });
         },
 
-        async saveMultiplexerdata() {
-            await axios
+        saveMultiplexerdata() {
+            axios
                 .post("channel/multiplexer/edit", {
                     channelId: this.channelId,
                     deviceName: this.multiplexer.name
@@ -868,8 +868,8 @@ export default {
             this.event = null;
         },
 
-        async loadchannels() {
-            await axios.get("channels").then(response => {
+        loadchannels() {
+            axios.get("channels").then(response => {
                 this.channels = response.data;
             });
         },
@@ -883,8 +883,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        async openDialogEditCurrentChannel() {
-            await axios
+        openDialogEditCurrentChannel() {
+            axios
                 .post("channel", {
                     channelId: this.channelId
                 })
@@ -901,23 +901,23 @@ export default {
                 });
         },
         // MOZNA ZRUSIT  A PRESUNOUT DO TAGŮ
-        async getIptvPackages() {
-            await axios.get("packages").then(response => {
+        getIptvPackages() {
+            axios.get("packages").then(response => {
                 this.packages = response.data;
             });
         },
-        async getPrijemDevices() {
-            await axios.get("device/prijem").then(response => {
+        getPrijemDevices() {
+            axios.get("device/prijem").then(response => {
                 this.prijems = response.data;
             });
         },
-        async getMultiplexors() {
-            await axios.get("devices/multiplexors").then(response => {
+        getMultiplexors() {
+            axios.get("devices/multiplexors").then(response => {
                 this.editMultiplexors = response.data;
             });
         },
-        async getMulticastSources() {
-            await axios.get("sources").then(response => {
+        getMulticastSources() {
+            axios.get("sources").then(response => {
                 this.deviceInformation = response.data;
             });
         },
@@ -926,8 +926,8 @@ export default {
             this.deleteDialog = true;
         },
 
-        async removeChannel() {
-            await axios
+        removeChannel() {
+            axios
                 .post("channel/delete", {
                     channelId: this.channelId
                 })
