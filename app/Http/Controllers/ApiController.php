@@ -47,132 +47,144 @@ class ApiController extends Controller
 
     public static function check_notifications_from_dohled(): array
     {
-        if (!Api::where('type', "iptv_alerts")->first()) {
-            return [];
-        }
+        try {
+            if (!Api::where('type', "iptv_alerts")->first()) {
+                return [];
+            }
 
-        $apiData = Api::where('type', "iptv_alerts")->first();
+            $apiData = Api::where('type', "iptv_alerts")->first();
 
-        $client = new Client;
 
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            return json_decode($body, true);
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                return json_decode($body, true);
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
 
     public static function fill_doku_from_dohled()
     {
-        foreach (Multicast::where('stb_ip', "!=", null)->get(['channelId', 'stb_ip']) as $multicast) {
 
+        try {
+            //code...
 
-            $client = new Client;
+            foreach (Multicast::where('stb_ip', "!=", null)->get(['channelId', 'stb_ip']) as $multicast) {
 
-            $response = $client->post("93.91.154.55/api/getInformationAboutStream", [
-                'form_params' => [
-                    'hello' => "873134d5-6324-4555-aa6d-fcdb1f7a9f4f",
-                    'multicastUri' => $multicast->stb_ip . ":1234"
-                ]
-            ]);
-            // echo $response->getStatusCode();
-            if ($body = $response->getBody()->getContents()) {
-                $status = json_decode($body, true);
+                $client = new Client;
 
-                if ($status["status"] === "success") {
+                $response = $client->post("93.91.154.55/api/getInformationAboutStream", [
+                    'form_params' => [
+                        'hello' => "873134d5-6324-4555-aa6d-fcdb1f7a9f4f",
+                        'multicastUri' => $multicast->stb_ip . ":1234"
+                    ]
+                ]);
+                // echo $response->getStatusCode();
+                if ($body = $response->getBody()->getContents()) {
+                    $status = json_decode($body, true);
 
-                    // vyhození již existujících
-                    if (!ChannelToDohled::where('channelId', $multicast->channelId)->first()) {
-                        ChannelToDohled::create(
-                            [
-                                'channelId' => $multicast->channelId,
-                                'dohledId' => $status["streamData"][0]["streamId"]
-                            ]
-                        );
+                    if ($status["status"] === "success") {
+
+                        // vyhození již existujících
+                        if (!ChannelToDohled::where('channelId', $multicast->channelId)->first()) {
+                            ChannelToDohled::create(
+                                [
+                                    'channelId' => $multicast->channelId,
+                                    'dohledId' => $status["streamData"][0]["streamId"]
+                                ]
+                            );
+                        }
                     }
                 }
             }
-        }
 
-        // plnění h264 a h265
-        if (H264::first()) {
-            foreach (H264::get() as $h264) {
+            // plnění h264 a h265
+            if (H264::first()) {
+                foreach (H264::get() as $h264) {
+                    if (UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->first()) {
+                        foreach (UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->get() as $h264Output) {
+                            $output = str_replace("http://217.75.209.82:10224/udp/", "", $h264Output->output);
+                            $output = str_replace("udp://", "", $h264Output->output);
 
-                if (UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->first()) {
-                    foreach (UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->get() as $h264Output) {
+                            $client = new Client;
 
-                        $output = str_replace("http://217.75.209.82:10224/udp/", "", $h264Output->output);
-                        $output = str_replace("udp://", "", $h264Output->output);
+                            $response = $client->post("93.91.154.55/api/getInformationAboutStream", [
+                                'form_params' => [
+                                    'hello' => "873134d5-6324-4555-aa6d-fcdb1f7a9f4f",
+                                    'multicastUri' => $output
+                                ]
+                            ]);
+                            if ($body = $response->getBody()->getContents()) {
+                                $status = json_decode($body, true);
 
-                        $client = new Client;
+                                if ($status["status"] === "success") {
 
-                        $response = $client->post("93.91.154.55/api/getInformationAboutStream", [
-                            'form_params' => [
-                                'hello' => "873134d5-6324-4555-aa6d-fcdb1f7a9f4f",
-                                'multicastUri' => $output
-                            ]
-                        ]);
-                        if ($body = $response->getBody()->getContents()) {
-                            $status = json_decode($body, true);
-
-                            if ($status["status"] === "success") {
-
-                                // vyhození již existujících
-                                if (!ChannelToDohled::where('H264Id', $h264->id)->first()) {
-                                    ChannelToDohled::create(
-                                        [
-                                            'H264Id' => $h264->id,
-                                            'dohledId' => $status["streamData"][0]["streamId"]
-                                        ]
-                                    );
+                                    // vyhození již existujících
+                                    if (!ChannelToDohled::where('H264Id', $h264->id)->first()) {
+                                        ChannelToDohled::create(
+                                            [
+                                                'H264Id' => $h264->id,
+                                                'dohledId' => $status["streamData"][0]["streamId"]
+                                            ]
+                                        );
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
 
 
-        if (H265::first()) {
-            foreach (H265::get() as $h265) {
-                if (UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->first()) {
-                    foreach (UnicastKvalitaChannelOutput::where('h264Id', $h265->id)->get() as $h265Output) {
+            if (H265::first()) {
+                foreach (H265::get() as $h265) {
+                    if (UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->first()) {
+                        foreach (UnicastKvalitaChannelOutput::where('h264Id', $h265->id)->get() as $h265Output) {
+                            $output = str_replace("http://217.75.209.82:10224/udp/", "", $h265Output->output);
+                            $output = str_replace("udp://", "", $h265Output->output);
+                            $client = new Client;
 
-                        $output = str_replace("http://217.75.209.82:10224/udp/", "", $h265Output->output);
-                        $output = str_replace("udp://", "", $h265Output->output);
-                        $client = new Client;
+                            $response = $client->post("93.91.154.55/api/getInformationAboutStream", [
+                                'form_params' => [
+                                    'hello' => "873134d5-6324-4555-aa6d-fcdb1f7a9f4f",
+                                    'multicastUri' => $output
+                                ]
+                            ]);
+                            if ($body = $response->getBody()->getContents()) {
+                                $status = json_decode($body, true);
 
-                        $response = $client->post("93.91.154.55/api/getInformationAboutStream", [
-                            'form_params' => [
-                                'hello' => "873134d5-6324-4555-aa6d-fcdb1f7a9f4f",
-                                'multicastUri' => $output
-                            ]
-                        ]);
-                        if ($body = $response->getBody()->getContents()) {
-                            $status = json_decode($body, true);
+                                if ($status["status"] === "success") {
 
-                            if ($status["status"] === "success") {
-
-                                // vyhození již existujících
-                                if (!ChannelToDohled::where('H265Id', $h265->id)->first()) {
-                                    ChannelToDohled::create(
-                                        [
-                                            'H265Id' => $h265->id,
-                                            'dohledId' => $status["streamData"][0]["streamId"]
-                                        ]
-                                    );
+                                    // vyhození již existujících
+                                    if (!ChannelToDohled::where('H265Id', $h265->id)->first()) {
+                                        ChannelToDohled::create(
+                                            [
+                                                'H265Id' => $h265->id,
+                                                'dohledId' => $status["streamData"][0]["streamId"]
+                                            ]
+                                        );
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
@@ -189,89 +201,111 @@ class ApiController extends Controller
      */
     public static function create_channel_to_dohled(string $nazev, string $streamUrl, bool $dohledovano, bool $vytvaretNahled, $channelId)
     {
+        try {
 
-        if (!Api::where('type', "iptv_stream_create")->first()) {
-            return [];
-        }
+            if (!Api::where('type', "iptv_stream_create")->first()) {
+                return [];
+            }
 
-        $apiData = Api::where('type', "iptv_stream_create")->first();
+            $apiData = Api::where('type', "iptv_stream_create")->first();
 
-        $client = new Client;
 
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'nazev' => $nazev,
-                "stream_url" => $streamUrl,
-                "dohledovano" => $dohledovano,
-                "vytvaretNahled" => $vytvaretNahled,
-                "status" => "waiting"
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            $odpovedZeServeru = json_decode($body, true);
-            if ($odpovedZeServeru["status"] === "success") {
-                if (!ChannelToDohled::where('channelId', $channelId)->first()) {
-                    ChannelToDohled::create(
-                        [
-                            'channelId' => $channelId,
-                            'dohledId' => $odpovedZeServeru["channelId"]
-                        ]
-                    );
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'nazev' => $nazev,
+                    "stream_url" => $streamUrl,
+                    "dohledovano" => $dohledovano,
+                    "vytvaretNahled" => $vytvaretNahled,
+                    "status" => "waiting"
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $odpovedZeServeru = json_decode($body, true);
+                if ($odpovedZeServeru["status"] === "success") {
+                    if (!ChannelToDohled::where('channelId', $channelId)->first()) {
+                        ChannelToDohled::create(
+                            [
+                                'channelId' => $channelId,
+                                'dohledId' => $odpovedZeServeru["channelId"]
+                            ]
+                        );
+                    }
                 }
             }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
 
     public static function return_information_about_channel($channelId): array
     {
-        if (!Api::where('type', "iptv_stream_info")->first()) {
-            return [];
-        }
+        try {
+            if (!Api::where('type', "iptv_stream_info")->first()) {
+                return [];
+            }
 
-        $apiData = Api::where('type', "iptv_stream_info")->first();
+            $apiData = Api::where('type', "iptv_stream_info")->first();
 
-        $client = new Client;
 
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'streamId' => $channelId
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            return json_decode($body, true);
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamId' => $channelId
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                return json_decode($body, true);
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
 
     public static function cerate_new_event($request, $streamId)
     {
-        if (!Api::where('type', "iptv_event_create")->first()) {
-            return [];
-        }
+        try {
+            if (!Api::where('type', "iptv_event_create")->first()) {
+                return [];
+            }
 
-        $apiData = Api::where('type', "iptv_event_create")->first();
+            $apiData = Api::where('type', "iptv_event_create")->first();
 
-        $client = new Client;
 
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'streamId' => $streamId,
-                "start_day" => $request->start_day,
-                "start_time" => $request->start_time,
-                "end_day" => $request->end_day,
-                "end_time" => $request->end_time,
-                "every_day" => null,
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            return json_decode($body, true);
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamId' => $streamId,
+                    "start_day" => $request->start_day,
+                    "start_time" => $request->start_time,
+                    "end_day" => $request->end_day,
+                    "end_time" => $request->end_time,
+                    "every_day" => null,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                return json_decode($body, true);
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
@@ -287,83 +321,102 @@ class ApiController extends Controller
 
     public static function return_transcoder_ip($transcoderName)
     {
-        if (!Api::where('type', "transcoder")->first()) {
-            return [];
-        }
+        try {
 
-        $apiData = Api::where('type', "transcoder")->first();
-
-        $client = new Client;
-
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'transcoder' => $transcoderName,
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            $transcoderData = json_decode($body, true);
-            if ($transcoderData["status"] === "success") {
-                return $transcoderData["ip"];
-            } else {
-                return null;
+            if (!Api::where('type', "transcoder")->first()) {
+                return [];
             }
+
+            $apiData = Api::where('type', "transcoder")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'transcoder' => $transcoderName,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                if ($transcoderData["status"] === "success") {
+                    return $transcoderData["ip"];
+                } else {
+                    return null;
+                }
+            }
+        } catch (\Throwable $th) {
+            return null;
         }
     }
 
 
     public static function try_to_find_streamId($address)
     {
-        if (!Api::where('type', "transcoder_find_stream")->first()) {
-            return [];
-        }
-
-        $apiData = Api::where('type', "transcoder_find_stream")->first();
-
-        $client = new Client;
-
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'address' => $address,
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            $transcoderData = json_decode($body, true);
-            if ($transcoderData["status"] === "success") {
-                return $transcoderData["streamId"];
-            } else {
-                return null;
+        try {
+            if (!Api::where('type', "transcoder_find_stream")->first()) {
+                return [];
             }
+
+            $apiData = Api::where('type', "transcoder_find_stream")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'address' => $address,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                if ($transcoderData["status"] === "success") {
+                    return $transcoderData["streamId"];
+                } else {
+                    return null;
+                }
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
     public static function get_streamStatus_from_transcoder($streamId)
     {
-        if (!Api::where('type', "transcoder_stream_status")->first()) {
-            return [];
-        }
-
-        $apiData = Api::where('type', "transcoder_stream_status")->first();
-
-        $client = new Client;
-
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'streamId' => $streamId,
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            $transcoderData = json_decode($body, true);
-            if ($transcoderData["status"] === "success") {
-                return $transcoderData["streamStatus"];
-            } else {
-                return null;
+        try {
+            if (!Api::where('type', "transcoder_stream_status")->first()) {
+                return [];
             }
+
+            $apiData = Api::where('type', "transcoder_stream_status")->first();
+
+
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamId' => $streamId,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                if ($transcoderData["status"] === "success") {
+                    return $transcoderData["streamStatus"];
+                } else {
+                    return null;
+                }
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 
@@ -371,24 +424,30 @@ class ApiController extends Controller
 
     public static function reboot_stream($streamId)
     {
-        if (!Api::where('type', "transcoder_stream_restart")->first()) {
-            return [];
-        }
+        try {
+            if (!Api::where('type', "transcoder_stream_restart")->first()) {
+                return [];
+            }
 
-        $apiData = Api::where('type', "transcoder_stream_restart")->first();
+            $apiData = Api::where('type', "transcoder_stream_restart")->first();
 
-        $client = new Client;
+            $client = new Client;
 
-        $response = $client->post($apiData->uri, [
-            'form_params' => [
-                'hello' => $apiData->token,
-                'streamId' => $streamId,
-            ]
-        ]);
-        // echo $response->getStatusCode();
-        if ($body = $response->getBody()->getContents()) {
-            $transcoderData = json_decode($body, true);
-            return $transcoderData;
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamId' => $streamId,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                return $transcoderData;
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
         }
     }
 }

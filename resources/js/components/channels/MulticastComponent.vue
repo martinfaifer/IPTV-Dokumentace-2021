@@ -1,20 +1,20 @@
 <template>
     <v-main>
         <v-container fluid class="ml-3">
-            <div>
+            <div class="mr-15">
                 <!-- Zobrazení názvu kanálu -->
                 <h2>{{ channelName }}</h2>
                 <v-divider inline> </v-divider>
             </div>
 
-            <v-row class=" mt-6">
+            <v-row class="mr-15 mt-6">
                 <v-col>
                     <!-- component pro nacteni zdroje multicastu -->
                     <multicast-component></multicast-component>
                 </v-col>
             </v-row>
 
-            <v-row class="mt-4">
+            <v-row class="mt-4 mr-15">
                 <!-- multiplexor component -->
                 <multiplexor-component></multiplexor-component>
 
@@ -25,7 +25,7 @@
                 <backup-component></backup-component>
             </v-row>
 
-            <v-row class="mt-6">
+            <v-row class="mt-6 mr-15">
                 <v-col>
                     <!-- kalendar component -->
                     <calendar-component></calendar-component>
@@ -37,7 +37,7 @@
             </v-row>
 
             <!-- TEST napojení na dohled -->
-            <v-row class="mt-">
+            <v-row class="mr-15">
                 <v-col>
                     <dohled-component></dohled-component>
                 </v-col>

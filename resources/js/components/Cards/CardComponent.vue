@@ -6,18 +6,13 @@
         </div>
 
         <div v-else>
-            <v-container class="ml-16">
-                <!-- štítky component -->
-                <!-- <tag-component></tag-component> -->
-                <!-- konec štítků -->
-
+            <v-container fluid class="ml-16">
                 <v-card flat class="ml-16">
-                    <v-container class="ml-16 mt-6">
+                    <v-container fluid class="ml-16 mt-6">
                         <!-- INCLUDE KOMPONENTŮ -->
 
                         <!-- Device information component -->
                         <obecneCard-component></obecneCard-component>
-
                     </v-container>
                 </v-card>
             </v-container>
@@ -26,7 +21,7 @@
 </template>
 <script>
 import DefaultComponent from "../Default/DefaultComponent";
-import TagComponent from "../Tags/TagComponent";
+
 import ObecneCardComponent from "./CardObecnyComponent";
 export default {
     data() {
@@ -37,7 +32,6 @@ export default {
 
     components: {
         "default-component": DefaultComponent,
-        "tag-component": TagComponent,
         "obecneCard-component": ObecneCardComponent
     },
     created() {},

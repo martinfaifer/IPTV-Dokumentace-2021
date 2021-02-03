@@ -489,9 +489,17 @@ class DeviceController extends Controller
 
             foreach (Multicast::where('deviceId', $request->deviceId)->get() as $multicast) {
                 // dle id vyhledání nazvu
+                $interface =  DeviceInterfaceController::return_interface_names_belongsToChannel($multicast->deviceInterface);
+                if (is_null($interface)) {
+                    $interface = null;
+                } else {
+
+                    $interface = $interface[0]["interface"];
+                }
                 $outputArr[] = array(
                     'id' => $multicast->channelId,
-                    'nazev' => Channel::where('id', $multicast->channelId)->first()->nazev
+                    'nazev' => Channel::where('id', $multicast->channelId)->first()->nazev,
+                    'interface' => $interface
                 );
             }
         }
@@ -503,7 +511,8 @@ class DeviceController extends Controller
                 // dle id vyhledání nazvu
                 $outputArr[] = array(
                     'id' => $multiplexor->channelId,
-                    'nazev' => Channel::where('id', $multiplexor->channelId)->first()->nazev
+                    'nazev' => Channel::where('id', $multiplexor->channelId)->first()->nazev,
+                    'interface' => ""
                 );
             }
         }
@@ -515,7 +524,8 @@ class DeviceController extends Controller
                 // dle id vyhledání nazvu
                 $outputArr[] = array(
                     'id' => $h264->channelId,
-                    'nazev' => Channel::where('id', $h264->channelId)->first()->nazev . " H264"
+                    'nazev' => Channel::where('id', $h264->channelId)->first()->nazev . " H264",
+                    'interface' => ""
                 );
             }
         }
@@ -528,7 +538,8 @@ class DeviceController extends Controller
                 // dle id vyhledání nazvu
                 $outputArr[] = array(
                     'id' => $h265->channelId,
-                    'nazev' => Channel::where('id', $h265->channelId)->first()->nazev . " H265"
+                    'nazev' => Channel::where('id', $h265->channelId)->first()->nazev . " H265",
+                    'interface' => ""
                 );
             }
         }
@@ -1022,9 +1033,14 @@ class DeviceController extends Controller
 
             if ($device->vendor === 4) {
                 $transcoderIp = ApiController::return_transcoder_ip($device->name);
-
-                return Http::get('http://' . $transcoderIp . '/tcontrol.php?CMD=NVSTATS');
+                if (!is_null($transcoderIp)) {
+                    return Http::get('http://' . $transcoderIp . '/tcontrol.php?CMD=NVSTATS');
+                }
+            } else {
+                return null;
             }
+        } else {
+            return null;
         }
     }
 }

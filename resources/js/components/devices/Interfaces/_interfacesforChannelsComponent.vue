@@ -1,7 +1,7 @@
 <template>
     <v-main>
         <v-card
-            class="mr-10"
+            class="mr-10 mr-15"
             flat
             color="#F5F5F7"
             v-if="deviceInterfaces != null"

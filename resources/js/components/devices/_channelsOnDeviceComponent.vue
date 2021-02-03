@@ -14,7 +14,21 @@
                     :headers="headers"
                     :items="channels"
                     :search="search"
-                ></v-data-table>
+                >
+                    <template v-slot:item.akce="{ item }">
+                        <v-btn
+                            small
+                            icon
+                            link
+                            :to="'/channel/' + item.id"
+                            target="_blank"
+                        >
+                            <v-icon small>
+                                mdi-arrow-right
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                </v-data-table>
             </v-card-text>
         </v-card>
     </v-main>
@@ -30,6 +44,14 @@ export default {
                     text: "kanál",
                     align: "start",
                     value: "nazev"
+                },
+                {
+                    text: "",
+                    value: "interface"
+                },
+                {
+                    text: "",
+                    value: "akce"
                 }
             ]
         };

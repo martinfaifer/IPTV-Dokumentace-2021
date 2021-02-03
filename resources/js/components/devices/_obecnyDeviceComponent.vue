@@ -1,34 +1,34 @@
 <template>
     <v-main>
-        <v-container fluid class="ml-3">
-            <div>
+        <v-container fluid class="ml-3 mr-15">
+            <div class="mr-15">
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ deviceName }}</h2>
-                <v-divider class="mr-10" inline> </v-divider>
+                <v-divider class="mr-15" inline> </v-divider>
             </div>
 
-            <v-row class="mt-4" v-if="deviceVendor === 'nVidia'">
+            <v-row class="mt-4 mr-15" v-if="deviceVendor === 'nVidia'">
                 <v-col cols="12">
                     <!-- informace o transcoerech / hw usage -->
                     <transcoder-compoennt></transcoder-compoennt>
                 </v-col>
             </v-row>
 
-            <v-row class=" mt-6">
+            <v-row class=" mt-6 mr-15">
                 <v-col>
                     <!-- component pro nacteni zobecných informací -->
                     <deviceinformation-component></deviceinformation-component>
                 </v-col>
             </v-row>
 
-            <v-row class=" mt-4">
+            <v-row class=" mt-4 mr-15">
                 <v-col>
                     <!-- component pro nacteni zobecných informací -->
                     <interfaces-component></interfaces-component>
                 </v-col>
             </v-row>
 
-            <v-row class="mt-4">
+            <v-row class="mt-4 mr-15">
                 <v-col>
                     <!-- sablona component -->
                     <blankominputs-component
@@ -44,7 +44,7 @@
             </v-row>
 
             <!-- kanály na zarizení -->
-            <v-row class="mt-4">
+            <v-row class="mt-4 mr-15">
                 <v-col>
                     <!-- channels component -->
                     <channelsondevice-component></channelsondevice-component>

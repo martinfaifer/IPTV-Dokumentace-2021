@@ -1,13 +1,13 @@
 <template>
     <v-main>
         <v-container fluid class="ml-3">
-            <div>
+            <div class="mr-15">
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ thisCardNumber }}</h2>
-                <v-divider class="mr-10" inline> </v-divider>
+                <v-divider class="mr-15" inline> </v-divider>
             </div>
 
-            <v-row class=" mt-6">
+            <v-row class=" mt-6 mr-15">
                 <v-col>
                     <carddevice-component class="mr-10"></carddevice-component>
                 </v-col>

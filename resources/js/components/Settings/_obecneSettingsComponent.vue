@@ -1,9 +1,9 @@
 <template>
     <v-main>
         <div>
-            <v-container class="ml-16">
+            <v-container fluid class="ml-16 ">
                 <v-card flat class="ml-16">
-                    <v-container class="ml-16 mt-6">
+                    <v-container fluid class="ml-16 mt-6 mr-15">
                         <!-- INCLUDE KOMPONENTŮ -->
                         <default-component></default-component>
                     </v-container>

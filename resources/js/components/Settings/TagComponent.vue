@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card flat>
+        <v-card flat class="mr-15">
             <v-card-title>
                 <v-text-field
                     v-model="search"

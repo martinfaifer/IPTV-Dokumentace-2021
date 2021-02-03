@@ -1,12 +1,7 @@
 <template>
     <v-main>
         <v-container fluid class="ml-3">
-            <div>
-                <!-- <h2>{{ this.$route.params.name }}</h2>
-                <v-divider class="mr-10" inline> </v-divider> -->
-            </div>
-
-            <v-row class="mt-4 mr-10">
+            <v-row class="mt-4 mr-15">
                 <v-col cols="12">
                     <tag-component
                         v-if="this.$route.params.name === 'tag'"
@@ -37,11 +32,6 @@
                         v-if="this.$route.params.name === 'category'"
                     ></category-component>
                 </v-col>
-            </v-row>
-
-            <!-- kanály na zarizení -->
-            <v-row class="mt-4">
-                <v-col> </v-col>
             </v-row>
         </v-container>
     </v-main>

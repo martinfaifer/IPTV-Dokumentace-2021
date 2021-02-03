@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChannelToDohledsTable extends Migration
+class CreateWikisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateChannelToDohledsTable extends Migration
      */
     public function up()
     {
-        Schema::create('channel_to_dohleds', function (Blueprint $table) {
+        Schema::create('wikis', function (Blueprint $table) {
             $table->id();
-            $table->string('channelId')->nullable()->index();
-            $table->string('H264Id')->nullable()->index();
-            $table->string('H265Id')->index()->nullable();
-            $table->string('dohledId')->index()->nullable();
+            $table->string('main_kategorie')->index()->nullable();
+            $table->string('sub_kategorie')->index()->nullable();
+            $table->string('id_main_kategorie')->index()->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateChannelToDohledsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('channel_to_dohleds');
+        Schema::dropIfExists('wikis');
     }
 }

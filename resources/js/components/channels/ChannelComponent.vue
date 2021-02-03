@@ -6,9 +6,9 @@
         </div>
 
         <div v-else>
-            <v-container class="ml-16">
+            <v-container fluid class="ml-16">
                 <!-- štítky component -->
-                <tag-component></tag-component>
+                <tag-component class="mr-15"></tag-component>
                 <!-- konec štítků -->
 
                 <!-- navigace na přepnutí detailů karnálu ( multicast, h264, h265 , informace z dohledu) -->
@@ -43,6 +43,7 @@
 
                             <!-- multicast komponent -->
                             <multicast-component
+                                class="mr-15"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' + this.$route.params.id
@@ -51,6 +52,7 @@
 
                             <!-- h264 komponent -->
                             <h264baseinfo-component
+                                class="mr-15"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +
@@ -61,6 +63,7 @@
 
                             <!-- h265 komponent -->
                             <h265baseinfo-component
+                            class="mr-15"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +

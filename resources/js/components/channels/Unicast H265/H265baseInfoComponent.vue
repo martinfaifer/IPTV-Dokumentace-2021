@@ -1,35 +1,35 @@
 <template>
     <v-main>
         <v-container fluid class="ml-3">
-            <div>
+            <div class="mr-15">
                 <!-- Zobrazení názvu kanálu -->
                 <h2>{{ channelName }} - H265</h2>
                 <v-divider inline> </v-divider>
             </div>
 
             <div v-if="exist === 'exist'">
-                <v-row class="mt-4">
+                <v-row class="mt-4 mr-15">
                     <v-col>
                         <!-- component pro získání chunk store id -->
                         <h265info-component></h265info-component>
                     </v-col>
                 </v-row>
 
-                <v-row class="mt-4">
+                <v-row class="mt-4 mr-15">
                     <v-col>
                         <!-- transcoder component -->
                         <transcoder-component></transcoder-component>
                     </v-col>
                 </v-row>
 
-                <v-row class="mt-4">
+                <v-row class="mt-4 mr-15">
                     <v-col>
                         <!-- transcoder component -->
                         <dohled-component></dohled-component>
                     </v-col>
                 </v-row>
             </div>
-            <div v-else-if="exist === 'notexist'" class="mt-4">
+            <div v-else-if="exist === 'notexist'" class="mt-4 mr-15">
                 <v-alert type="warning" @contextmenu="show($event)">
                     Tento formát není nastaven
                 </v-alert>

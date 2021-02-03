@@ -6,13 +6,13 @@
         </div>
 
         <div v-else>
-            <v-container class="ml-16">
+            <v-container fluid class=" ml-10">
                 <!-- štítky component -->
-                <tag-component></tag-component>
+                <tag-component class="mr-15"></tag-component>
                 <!-- konec štítků -->
 
                 <v-card flat class="ml-16">
-                    <v-container class="ml-16 mt-6">
+                    <v-container fluid class="ml-16 mt-6">
                         <!-- INCLUDE KOMPONENTŮ -->
 
                         <!-- Device information component -->

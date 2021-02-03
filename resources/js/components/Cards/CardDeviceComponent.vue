@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card flat color="#F5F5F7" v-if="device != null">
+        <v-card flat color="#F5F5F7" v-if="device != null" class="mr-15">
             <v-card-subtitle>
                 <strong>
                     Zařízení s vazbou na kartu

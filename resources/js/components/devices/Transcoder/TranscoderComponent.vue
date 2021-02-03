@@ -2,7 +2,7 @@
     <div>
         <v-container>
             <!-- konec zobrazeni nazvu encoderu -->
-            <v-row class="justify-center body-2">
+            <v-row class="justify-center body-2" v-if="transcoderData != null">
                 <!-- Využitá RAM -->
                 <v-spacer></v-spacer>
                 <v-row>
@@ -295,6 +295,7 @@
 export default {
     data() {
         return {
+            transcoderData: null,
             gpuStat: "",
             ramUsage: "",
             ramTotal: "",
@@ -324,30 +325,35 @@ export default {
                     deviceId: this.$route.params.id
                 })
                 .then(function(response) {
-                    if (response.data.gpu) {
-                        if (
-                            typeof response.data.gpu.fb_memory_usage !==
-                            "undefined"
-                        ) {
-                            currentObj.gpuStat = response.data;
+                    if (response.data != null) {
+                        currentObj.transcoderData = "string";
+                        if (response.data.gpu) {
                             if (
                                 typeof response.data.gpu.fb_memory_usage !==
                                 "undefined"
                             ) {
-                                currentObj.ramUsage =
-                                    response.data.gpu.fb_memory_usage;
-                                currentObj.ramTotal = currentObj.ramUsage.total.replace(
-                                    " MiB",
-                                    ""
-                                );
-                                currentObj.ramUsed = currentObj.ramUsage.used.replace(
-                                    " MiB",
-                                    ""
-                                );
-                                currentObj.ramPercent =
-                                    (currentObj.ramUsed * 100) /
-                                    currentObj.ramTotal;
+                                currentObj.gpuStat = response.data;
+                                if (
+                                    typeof response.data.gpu.fb_memory_usage !==
+                                    "undefined"
+                                ) {
+                                    currentObj.ramUsage =
+                                        response.data.gpu.fb_memory_usage;
+                                    currentObj.ramTotal = currentObj.ramUsage.total.replace(
+                                        " MiB",
+                                        ""
+                                    );
+                                    currentObj.ramUsed = currentObj.ramUsage.used.replace(
+                                        " MiB",
+                                        ""
+                                    );
+                                    currentObj.ramPercent =
+                                        (currentObj.ramUsed * 100) /
+                                        currentObj.ramTotal;
+                                }
                             }
+                        } else {
+                            currentObj.transcoderData = null;
                         }
                     }
                 });

@@ -28,9 +28,11 @@ use App\Http\Controllers\UnicastChunkStoreIdController;
 use App\Http\Controllers\UnicastKvalitaChannelOutputController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\WikiController;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use JJG\Ping;
 
 Route::get('/', function () {
     return view('welcome');
@@ -264,6 +266,19 @@ Route::post('note/create', [NoteController::class, 'create'])->middleware('auth'
 // endpoint to external system
 Route::get('external_endpoints', [ApiController::class, 'return_endpoints'])->middleware('auth');
 
-// Route::get('test', function () {
-//      if(Event::where('end_day', "<", date("Y-m-d"))->first());
-// });
+// WIKI
+Route::get('wiki', [WikiController::class, 'get']);
+
+
+Route::get('ping', function () {
+
+    $uriArr = (explode('/', "http://93.91.154.55/api/streamAlerts"));
+    $ping = new Ping($uriArr[2], "128", "1");
+    $latency = $ping->ping();
+
+    if ($latency !== false) {
+        return "PING";
+    } else {
+        return "NOPING";
+    }
+});

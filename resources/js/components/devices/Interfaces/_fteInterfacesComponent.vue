@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <div v-if="interfaces != null" class="mr-10">
+        <div v-if="interfaces != null" class="mr-10 mr-15">
             <v-row>
                 <!-- FTE -->
                 <v-col>

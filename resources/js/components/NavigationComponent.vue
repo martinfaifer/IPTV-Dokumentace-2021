@@ -200,17 +200,18 @@
                             v-show="componentType === 'cards'"
                         ></cardsmenu-component>
 
+                        <wikimenu-component  v-show="componentType === 'wiki'"></wikimenu-component>
+
                         <settingsmenu-component
                             v-if="componentType === 'settings'"
                         ></settingsmenu-component>
                     </v-row>
                 </v-navigation-drawer>
                 <!-- konec navigace -->
-
-                <transition name="fade" mode="out-in">
-                    <router-view class="ml-16"> </router-view>
-                </transition>
             </v-row>
+            <transition name="fade" mode="out-in">
+                <router-view class="ml-16 mt-1"> </router-view>
+            </transition>
         </v-card>
 
         <!-- alerting side menu -->
@@ -301,6 +302,7 @@ import DevicesMenuComponent from "./devices/DevicesMenuComponent";
 import SearchCompoennt from "../components/SearchBar/SearchComponent";
 import CardsMenuComponent from "./Cards/CardMenuComponent";
 import EventComponent from "./Alerts/EventComponent";
+import WikiMenuComponent from "./Wiki/WikiMenuCompoennt";
 
 import SettingsMenuComponent from "./Settings/SettingsMenuComponent";
 
@@ -359,6 +361,7 @@ export default {
         "devicessidemenu-component": DevicesMenuComponent,
         "search-compoennt": SearchCompoennt,
         "cardsmenu-component": CardsMenuComponent,
+        "wikimenu-component": WikiMenuComponent,
         "event-component": EventComponent,
         "settingsmenu-component": SettingsMenuComponent
     },

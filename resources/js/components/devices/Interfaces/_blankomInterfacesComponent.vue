@@ -7,7 +7,7 @@
                     <v-card
                         flat
                         color="#F5F5F7"
-                        width="350"
+                        width="330"
                         @contextmenu="
                             show(
                                 $event,
@@ -147,7 +147,7 @@
                     <v-card
                         flat
                         color="#F5F5F7"
-                        width="350"
+                        width="330"
                         @contextmenu="
                             show(
                                 $event,
@@ -281,7 +281,7 @@
                     <v-card
                         flat
                         color="#F5F5F7"
-                        width="350"
+                        width="330"
                         @contextmenu="
                             show(
                                 $event,
@@ -415,7 +415,7 @@
                     <v-card
                         flat
                         color="#F5F5F7"
-                        width="350"
+                        width="330"
                         @contextmenu="
                             show(
                                 $event,
