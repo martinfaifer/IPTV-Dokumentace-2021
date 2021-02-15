@@ -2,8 +2,6 @@
     <v-main>
         <v-treeview
             return-object
-            hoverable
-            shaped
             dense
             open-on-click
             transition
@@ -16,11 +14,12 @@
                     class="font-weight-regular black--text caption"
                     style="text-decoration:none"
                     link
-                    v-bind:to="'/wiki/' + props.item.id"
+                    :to="'/wiki/' + props.item.id"
                     >{{ props.item.name }}</router-link
                 >
             </template>
         </v-treeview>
+
         <!-- <v-menu
             dense
             v-model="showMenu"

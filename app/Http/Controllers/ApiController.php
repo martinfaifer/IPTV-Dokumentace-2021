@@ -35,6 +35,36 @@ class ApiController extends Controller
     }
 
 
+
+    public static function analyze_stream($streamUri): array
+    {
+        try {
+            if (!Api::where('type', "iptv_stream_analyze")->first()) {
+                return [];
+            }
+
+            $apiData = Api::where('type', "iptv_stream_analyze")->first();
+
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamUrl' => $streamUri
+                ]
+            ]);
+            if ($body = $response->getBody()->getContents()) {
+                return json_decode($body, true);
+            }
+        } catch (\Throwable $th) {
+            return [
+                'no response'
+            ];
+        }
+    }
+
+
     public static function check_if_is(): bool
     {
         if (!Api::first()) {
@@ -447,6 +477,68 @@ class ApiController extends Controller
         } catch (\Throwable $th) {
             return [
                 'no response'
+            ];
+        }
+    }
+
+
+
+    public static function find_transcoder($streamId)
+    {
+        try {
+            if (!Api::where('type', "transcoder_transcoder_find")->first()) {
+                return [];
+            }
+
+            $apiData = Api::where('type', "transcoder_transcoder_find")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamId' => $streamId,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                return $transcoderData;
+            }
+        } catch (\Throwable $th) {
+            return [
+                "status" => 'no response'
+            ];
+        }
+    }
+
+
+    public static function send_action_to_transcoder($streamId, $akce): array
+    {
+        try {
+            if (!Api::where('type', "transcoder_stream_manage")->first()) {
+                return [];
+            }
+
+            $apiData = Api::where('type', "transcoder_stream_manage")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'streamId' => $streamId,
+                    'akce' => $akce
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                return $transcoderData;
+            }
+        } catch (\Throwable $th) {
+            return [
+                "status" => 'no response'
             ];
         }
     }

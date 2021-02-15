@@ -2,13 +2,27 @@
     <v-main>
         <v-list dense nav class="ml-12" color="#F5F5F7">
             <v-list-item
-                class="pl-3"
+                class="ml-3"
                 link
                 v-for="channel in channels"
                 :key="channel.id"
                 :to="'/channel/' + channel.id"
                 @contextmenu="show($event, channel.id)"
             >
+                <v-list-item-avatar max-height="20" max-width="20">
+                    <v-img
+                        v-if="channel.logo != null"
+                        :lazy-src="channel.logo"
+                        max-height="32"
+                        max-width="32"
+                        :src="channel.logo"
+                    ></v-img>
+                    <v-img v-else max-height="32" max-width="32">
+                        <v-icon>
+                            mdi-image-of-outline
+                        </v-icon>
+                    </v-img>
+                </v-list-item-avatar>
                 <v-list-item-title> {{ channel.nazev }}</v-list-item-title>
             </v-list-item>
         </v-list>
@@ -27,6 +41,14 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         Změnit název kanálu
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="editChannelLogoDialog()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-pencil</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Logo
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="addMultiplexer()">
@@ -413,14 +435,6 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
-                                <!-- nice to have -->
-                                <!-- <v-col cols="12">
-                                    <v-file-input
-                                        accept="image/png, image/jpeg, image/bmp"
-                                        label="Logo"
-                                        @change="selectFile()"
-                                    ></v-file-input>
-                                </v-col> -->
                             </v-row>
                         </v-container>
                     </v-card-text>
@@ -437,6 +451,43 @@
                             color="green darken-1"
                             text
                             @click="saveChannelName()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="logoDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Vyberte Logo</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-file-input
+                                        label="Logo"
+                                        @change="selectFile"
+                                    ></v-file-input>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="saveChanneLogo()"
                         >
                             Uložit
                         </v-btn>
@@ -620,7 +671,8 @@ export default {
             multicastZdroj: null,
             sources: [],
             channelName: null,
-            photo: null
+            file: "",
+            logoDialog: false
         };
     },
 
@@ -628,14 +680,31 @@ export default {
         this.loadchannels();
     },
     methods: {
+        editChannelLogoDialog() {
+            this.logoDialog = true;
+        },
+        saveChanneLogo() {
+            const formData = new FormData();
+            formData.append("image", this.file, this.file.name);
+            formData.append("channelId", this.channelId);
+            axios.post("channel/logo/save", formData).then(response => {
+                this.$store.state.alerts = response.data.alert;
+                this.logoDialog = false;
+                this.file = "";
+                this.loadchannels();
+                this.$router.push("/").catch(err => {});
+                this.$router
+                    .push("/channel/" + this.channelId)
+                    .catch(err => {});
+            });
+        },
         selectFile(event) {
-            // `files` is always an array because the file input may be in multiple mode
-            this.photo = event.target.files[0];
+            this.file = event;
         },
 
-        saveChannelName() {
-            axios
-                .post("channel/name/edit", {
+        async saveChannelName() {
+            await axios
+                .patch("channel/name/edit", {
                     channelId: this.channelId,
                     channelName: this.channelName
                 })
@@ -652,8 +721,8 @@ export default {
                     }
                 });
         },
-        editChannelNameDialog() {
-            axios
+        async editChannelNameDialog() {
+            await axios
                 .post("channel/name", {
                     channelId: this.channelId
                 })
@@ -663,15 +732,15 @@ export default {
                 });
         },
 
-        createNewChannelDialog() {
-            axios.get("sources").then(response => {
+        async createNewChannelDialog() {
+            await axios.get("sources").then(response => {
                 this.sources = response.data;
                 this.createNewChannel = true;
             });
         },
 
-        saveNewChannel() {
-            axios
+        async saveNewChannel() {
+            await axios
                 .post("channel/create", {
                     channelName: this.channelName,
                     multicastZdroj: this.multicastZdroj,
@@ -708,8 +777,8 @@ export default {
             this.createEventDialog = true;
         },
 
-        saveEvent() {
-            axios
+        async saveEvent() {
+            await axios
                 .post("event/create", {
                     channelId: this.channelId,
                     start_day: this.start_day,
@@ -730,8 +799,8 @@ export default {
                         .catch(err => {});
                 });
         },
-        addMultiplexer() {
-            axios
+        async addMultiplexer() {
+            await axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "multiplexor"
@@ -747,8 +816,8 @@ export default {
                 });
         },
 
-        GetMoreInformationAboutThisDevice(data) {
-            axios
+        async GetMoreInformationAboutThisDevice(data) {
+            await axios
                 .post("device/info", {
                     deviceName: data
                 })
@@ -757,8 +826,8 @@ export default {
                 });
         },
 
-        addBackupPrijem() {
-            axios
+        async addBackupPrijem() {
+            await axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "backup"
@@ -773,8 +842,8 @@ export default {
                 });
         },
 
-        addPrijem() {
-            axios
+        async addPrijem() {
+            await axios
                 .post("channel/check", {
                     channelId: this.channelId,
                     param: "prijem"
@@ -789,9 +858,9 @@ export default {
                     }
                 });
         },
-        saveBackupPrijemData() {
-            axios
-                .post("device/backup/edit", {
+        async saveBackupPrijemData() {
+            await axios
+                .patch("device/backup/edit", {
                     channelId: this.channelId,
                     deviceName: this.backup,
                     channelToInterface: this.prijemInterfaces,
@@ -811,9 +880,9 @@ export default {
                     }
                 });
         },
-        savePrijemData() {
-            axios
-                .post("device/prijem/edit", {
+        async savePrijemData() {
+            await axios
+                .patch("device/prijem/edit", {
                     channelId: this.channelId,
                     deviceName: this.prijem,
                     channelToInterface: this.prijemInterfaces,
@@ -834,9 +903,9 @@ export default {
                 });
         },
 
-        saveMultiplexerdata() {
-            axios
-                .post("channel/multiplexer/edit", {
+        async saveMultiplexerdata() {
+            await axios
+                .patch("channel/multiplexer/edit", {
                     channelId: this.channelId,
                     deviceName: this.multiplexer.name
                 })
@@ -854,6 +923,7 @@ export default {
         },
 
         closeDialog() {
+            this.logoDialog = false;
             this.editChannelName = false;
             this.createNewChannel = false;
             this.createMultiplexerDialog = false;
@@ -866,10 +936,11 @@ export default {
             this.prijems = [];
             this.backup = null;
             this.event = null;
+            this.file = "";
         },
 
-        loadchannels() {
-            axios.get("channels").then(response => {
+        async loadchannels() {
+            await axios.get("channels").then(response => {
                 this.channels = response.data;
             });
         },
@@ -883,8 +954,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        openDialogEditCurrentChannel() {
-            axios
+        async openDialogEditCurrentChannel() {
+            await axios
                 .post("channel", {
                     channelId: this.channelId
                 })
@@ -901,23 +972,23 @@ export default {
                 });
         },
         // MOZNA ZRUSIT  A PRESUNOUT DO TAGŮ
-        getIptvPackages() {
-            axios.get("packages").then(response => {
+        async getIptvPackages() {
+            await axios.get("packages").then(response => {
                 this.packages = response.data;
             });
         },
-        getPrijemDevices() {
-            axios.get("device/prijem").then(response => {
+        async getPrijemDevices() {
+            await axios.get("device/prijem").then(response => {
                 this.prijems = response.data;
             });
         },
-        getMultiplexors() {
-            axios.get("devices/multiplexors").then(response => {
+        async getMultiplexors() {
+            await axios.get("devices/multiplexors").then(response => {
                 this.editMultiplexors = response.data;
             });
         },
-        getMulticastSources() {
-            axios.get("sources").then(response => {
+        async getMulticastSources() {
+            await axios.get("sources").then(response => {
                 this.deviceInformation = response.data;
             });
         },
@@ -926,10 +997,12 @@ export default {
             this.deleteDialog = true;
         },
 
-        removeChannel() {
-            axios
-                .post("channel/delete", {
-                    channelId: this.channelId
+        async removeChannel() {
+            await axios
+                .delete("channel/delete", {
+                    data: {
+                        channelId: this.channelId
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

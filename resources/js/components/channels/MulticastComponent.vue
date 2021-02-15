@@ -3,12 +3,26 @@
         <v-container fluid class="ml-3">
             <div class="mr-15">
                 <!-- Zobrazení názvu kanálu -->
-                <h2>{{ channelName }}</h2>
+                <v-row>
+                    <v-col cols="12" sm="4" md="1" lg="1" v-if="logo != null">
+                        <v-img
+                            :lazy-src="logo"
+                            max-height="64"
+                            max-width="64"
+                            :src="logo"
+                        ></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="8" md="11" lg="11"
+                        ><h2 class="mt-6">
+                            {{ channelName }}
+                        </h2></v-col
+                    >
+                </v-row>
                 <v-divider inline> </v-divider>
             </div>
 
             <v-row class="mr-15 mt-6">
-                <v-col>
+                <v-col cols="12" sm="12" lg="12" md="12">
                     <!-- component pro nacteni zdroje multicastu -->
                     <multicast-component></multicast-component>
                 </v-col>
@@ -56,7 +70,8 @@ import TestDohledComponent from "./Dohled/TestDohledComponent";
 export default {
     data() {
         return {
-            channelName: ""
+            channelName: "",
+            logo: null
         };
     },
     components: {
@@ -70,21 +85,36 @@ export default {
     },
     created() {
         this.loadChannelNameById();
+        this.loadChannelLogo();
     },
     methods: {
-        loadChannelNameById() {
-            axios
+        async loadChannelNameById() {
+            await axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })
                 .then(response => {
                     this.channelName = response.data;
                 });
+        },
+        async loadChannelLogo() {
+            await axios
+                .post("channel/logo", {
+                    channelId: this.$route.params.id
+                })
+                .then(response => {
+                    if(response.data === 'not_exist') {
+                        this.logo = null;
+                    } else {
+                        this.logo = response.data;
+                    }
+                });
         }
     },
     watch: {
         $route(to, from) {
             this.loadChannelNameById();
+            this.loadChannelLogo();
         }
     }
 };

@@ -15,6 +15,11 @@
                 :items="categories"
                 :search="search"
             >
+                <template v-slot:item.icon="{ item }">
+                   <v-icon>
+                       {{item.icon}}
+                   </v-icon>
+                </template>
             </v-data-table>
         </v-card>
     </v-main>
@@ -30,7 +35,11 @@ export default {
                     align: "start",
                     value: "name"
                 },
-                { text: "Akce", value: "akce" }
+                {
+                    text: "Ikona",
+                    value: "icon"
+                }
+                // { text: "Akce", value: "akce" }
             ],
             categories: []
         };
@@ -40,8 +49,8 @@ export default {
         this.getCategories();
     },
     methods: {
-        getCategories() {
-            axios.get("device/categories").then(response => {
+        async getCategories() {
+            await axios.get("device/categories").then(response => {
                 if (response.data.status === "success") {
                     this.categories = response.data.data;
                 } else {

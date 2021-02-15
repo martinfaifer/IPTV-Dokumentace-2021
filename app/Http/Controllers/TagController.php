@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChannelAutoReboot;
 use App\Models\ParedTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -20,6 +21,20 @@ class TagController extends Controller
         return [
             'status' => "success",
             'tags' => Tag::all()
+        ];
+    }
+
+    public function return_only_no_system_tags(): array
+    {
+        if (!Tag::where('system', null)->first()) {
+            return [
+                'status' => "empty"
+            ];
+        }
+
+        return [
+            'status' => "success",
+            'tags' => Tag::where('system', null)->get()
         ];
     }
 
@@ -171,8 +186,11 @@ class TagController extends Controller
             ];
         }
 
+
+
         // vyhedání zda není někde zalozen a odstraní se 
-        if (ParedTag::where('tagId', $request->tagId)->first()) {
+        if ($thisParedTag = ParedTag::where('tagId', $request->tagId)->first()) {
+
             // odebrání vazeb
             foreach (ParedTag::where('tagId', $request->tagId)->get() as $paredtag) {
                 $paredtag->delete();
@@ -210,10 +228,26 @@ class TagController extends Controller
                 break;
             case 'h264':
                 $column = "h264Id";
+
+                if ($request->tagId === 18) {
+                    $createAutoReboot = ChannelAutoRebootController::store($request);
+                    if ($createAutoReboot["status"] === "error") {
+                        return $createAutoReboot;
+                    }
+                }
+
                 break;
 
             case 'h265':
                 $column = "h265Id";
+
+                if ($request->tagId === 18) {
+                    $createAutoReboot = ChannelAutoRebootController::store($request);
+                    if ($createAutoReboot["status"] === "error") {
+                        return $createAutoReboot;
+                    }
+                }
+
                 break;
 
             case 'device':
@@ -256,6 +290,16 @@ class TagController extends Controller
                     'msg' => "Systémové štítky nelze mazat"
                 )
             ];
+        }
+
+        if ($tag->tagId === '18') {
+            if (!is_null($tag->h264Id)) {
+                ChannelAutoRebootController::destroy("h264", $tag->h264Id);
+            }
+
+            if (!is_null($tag->h265Id)) {
+                ChannelAutoRebootController::destroy("h265", $tag->h265Id);
+            }
         }
 
         $tag->delete();

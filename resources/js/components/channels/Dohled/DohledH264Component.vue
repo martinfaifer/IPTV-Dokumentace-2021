@@ -2,9 +2,24 @@
     <v-main>
         <v-card flat color="#F5F5F7" v-if="dohled != null">
             <v-card-subtitle>
-                <strong>
-                    Informace z dohledu
-                </strong>
+                <v-row>
+                    <v-col cols="12" sm="8" md="8" lg="8">
+                        <strong>
+                            Informace z dohledu
+                        </strong>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" lg="4">
+                        <a
+                            style="text-decoration:none"
+                            target="_blank"
+                            :href="
+                                'http://93.91.154.55/#/stream/' +
+                                    dohled.streamId
+                            "
+                            >Proklik do dohledu</a
+                        >
+                    </v-col>
+                </v-row>
             </v-card-subtitle>
 
             <v-card-text class="ml-12 text--center">

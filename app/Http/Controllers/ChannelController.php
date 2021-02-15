@@ -45,6 +45,20 @@ class ChannelController extends Controller
         return Channel::where('id', $request->channelId)->first()->nazev;
     }
 
+    public function get_channel_logo(Request $request)
+    {
+        if (!$channel = Channel::where('id', $request->channelId)->first()) {
+            return "neexistuje";
+        }
+
+
+        if (!is_null($channel->logo)) {
+            return $channel->logo;
+        } else {
+            return "not_exist";
+        }
+    }
+
 
     /**
      * Undocumented function
@@ -531,6 +545,52 @@ class ChannelController extends Controller
             'alert' => array(
                 'status' => "success",
                 'msg' => "Kanál byl úspěšně odebrán"
+            )
+        ];
+    }
+
+
+
+    public function store_logo(Request $request)
+    {
+
+        if (!$channel = Channel::find($request->channelId)) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Nepodařilo se přidat logo"
+                )
+            ];
+        }
+
+        if (empty($request->image) || is_null($request->image)) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Nic nebylo vybráno"
+                )
+            ];
+        }
+
+
+        // store
+        $file = $request->file('image');
+        $name = '/Channel_logos/' . uniqid() . '.' . $file->extension();
+        $file->storePubliclyAs('public', $name);
+
+        $channel->update(
+            [
+                'logo' => "storage" . $name
+            ]
+        );
+
+        return [
+            'status' => "success",
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Logo uloženo"
             )
         ];
     }

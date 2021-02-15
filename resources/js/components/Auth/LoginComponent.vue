@@ -55,10 +55,12 @@
                 </v-col>
             </v-row>
         </v-container>
+         <alert-component></alert-component>
     </v-main>
 </template>
 
 <script>
+import AlertComponent from "../Alerts/AlertComponent";
 export default {
     data() {
         return {
@@ -72,26 +74,29 @@ export default {
         };
     },
 
+    components: {
+        "alert-component": AlertComponent
+    },
     created() {
         this.getUser();
     },
     methods: {
         login() {
-            let currentObj = this;
-             axios
+            axios
                 .post("login", {
                     email: this.email,
                     password: this.password
                 })
-                .then(function(response) {
+                .then(response => {
                     if (response.data.status === "success") {
-                        currentObj.status = null;
+                        this.getUser();
+                        this.status = null;
                         setTimeout(function() {}, 2000);
-                        currentObj.$router.push("/channel");
+                        this.$router.push("/");
                     } else {
-                        currentObj.status = response.data;
+                        this.$store.state.alerts = response.data.alert;
                         setTimeout(function() {
-                            currentObj.status = null;
+                            this.status = null;
                         }, 2000);
                     }
                 });
@@ -99,9 +104,10 @@ export default {
 
         getUser() {
             window.axios.get("user").then(response => {
+                this.$store.state.user = response.data.data;
                 if (response.data.status == "error") {
                 } else {
-                    this.$router.push("/channel");
+                    this.$router.push("/");
                 }
             });
         }

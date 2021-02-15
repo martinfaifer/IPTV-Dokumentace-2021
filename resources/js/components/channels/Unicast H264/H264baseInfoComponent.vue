@@ -3,21 +3,33 @@
         <v-container fluid class="ml-3">
             <div class="mr-15">
                 <!-- Zobrazení názvu kanálu -->
-                <h2>
-                    {{ channelName }} - H264
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <v-icon
-                                v-on="on"
-                                @click="removeH264()"
-                                small
-                                color="red"
-                                >mdi-delete</v-icon
-                            >
-                        </template>
-                        <span>Odebrání H264</span>
-                    </v-tooltip>
-                </h2>
+                <v-row>
+                    <v-col cols="12" sm="1" md="1" lg="1" v-if="logo != null">
+                        <v-img
+                            :lazy-src="logo"
+                            max-height="64"
+                            max-width="64"
+                            :src="logo"
+                        ></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="11" md="11" lg="11">
+                        <h2 class="mt-6">
+                            {{ channelName }} - H264
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-icon
+                                        v-on="on"
+                                        @click="removeH264()"
+                                        small
+                                        color="red"
+                                        >mdi-delete</v-icon
+                                    >
+                                </template>
+                                <span>Odebrání H264</span>
+                            </v-tooltip>
+                        </h2>
+                    </v-col>
+                </v-row>
                 <v-divider inline> </v-divider>
             </div>
 
@@ -144,12 +156,12 @@
                                             ></v-text-field>
                                         </v-col>
 
-                                        <v-col cols="12">
+                                        <!-- <v-col cols="12">
                                             <v-checkbox
                                                 v-model="addToTranscoder"
                                                 label="Založení na transcodér a začít transcodovat"
                                             ></v-checkbox>
-                                        </v-col>
+                                        </v-col> -->
                                     </v-row>
                                 </v-container>
                             </v-card-text>
@@ -209,7 +221,8 @@ export default {
             exist: "",
             showMenu: false,
             x: 0,
-            y: 0
+            y: 0,
+            logo: null
         };
     },
     components: {
@@ -220,10 +233,24 @@ export default {
     created() {
         this.loadChannelNameById();
         this.checkIfIs();
+        this.loadChannelLogo();
     },
     methods: {
-        removeH264() {
-            axios
+         async loadChannelLogo() {
+            await axios
+                .post("channel/logo", {
+                    channelId: this.$route.params.id
+                })
+                .then(response => {
+                    if(response.data === 'not_exist') {
+                        this.logo = null;
+                    } else {
+                        this.logo = response.data;
+                    }
+                });
+        },
+        async removeH264() {
+            await axios
                 .post("h264/delete", {
                     channelId: this.$route.params.id
                 })
@@ -236,14 +263,14 @@ export default {
                     }
                 });
         },
-        createOutput() {
-            axios.get("device/transcoders").then(response => {
+        async createOutput() {
+            await axios.get("device/transcoders").then(response => {
                 this.transcoders = response.data;
                 this.outputDialog = true;
             });
         },
-        savedata() {
-            axios
+        async savedata() {
+            await axios
                 .post("h264/create", {
                     channelId: this.$route.params.id,
                     addToTranscoder: this.addToTranscoder,
@@ -278,8 +305,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadChannelNameById() {
-            axios
+        async loadChannelNameById() {
+            await axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })
@@ -287,8 +314,8 @@ export default {
                     this.channelName = response.data;
                 });
         },
-        checkIfIs() {
-            axios
+        async checkIfIs() {
+            await axios
                 .post("h264/check", {
                     channelId: this.$route.params.id
                 })
@@ -300,6 +327,7 @@ export default {
     watch: {
         $route(to, from) {
             this.loadChannelNameById();
+            this.loadChannelLogo();
         }
     }
 };

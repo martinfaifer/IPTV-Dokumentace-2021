@@ -262,7 +262,7 @@ export default {
 
         saveData() {
             axios
-                .post("device/backup/edit", {
+                .patch("device/backup/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.backup.name,
                     channelToInterface: this.backup.interfaces,
@@ -282,8 +282,10 @@ export default {
 
         removeData() {
             axios
-                .post("device/backup/remove", {
-                    channelId: this.$route.params.id
+                .delete("device/backup/remove", {
+                    data: {
+                        channelId: this.$route.params.id
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

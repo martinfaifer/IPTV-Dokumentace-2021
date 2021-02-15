@@ -15,7 +15,7 @@
                 <v-card-text class="ml-12 text--center">
                     <v-container>
                         <v-row v-if="prijem != null">
-                            <v-col cols="12">
+                            <v-col cols="12" sm="12">
                                 <span class="ml-6">
                                     {{ prijem.name }}
                                     <!-- info -->
@@ -29,6 +29,37 @@
                                         </template>
                                         <span>Rychlá informace o zařízení</span>
                                     </v-tooltip>
+
+                                    <!-- ssh konzole -->
+                                    <v-tooltip
+                                        bottom
+                                        v-if="
+                                            prijem.path != null &&
+                                                prijem.login_user != null &&
+                                                prijem.ip != null
+                                        "
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn
+                                                link
+                                                :href="
+                                                    'ssh:// ' +
+                                                        prijem.login_user +
+                                                        '@' +
+                                                        prijem.ip
+                                                "
+                                                target="_blank"
+                                                small
+                                                icon
+                                            >
+                                                <v-icon small v-on="on">
+                                                    mdi-console
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Spuštění ssh konzole</span>
+                                    </v-tooltip>
+
                                     <!-- hyperlink na device -->
                                     <v-tooltip bottom v-if="prijem.ip != null">
                                         <template v-slot:activator="{ on }">
@@ -344,7 +375,7 @@ export default {
             }
 
             axios
-                .post("device/prijem/edit", {
+                .patch("device/prijem/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.prijem.name,
                     children: this.children,
@@ -404,8 +435,10 @@ export default {
         },
         removeData() {
             axios
-                .post("device/prijem/remove", {
-                    channelId: this.$route.params.id
+                .delete("device/prijem/remove", {
+                    data: {
+                        channelId: this.$route.params.id
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

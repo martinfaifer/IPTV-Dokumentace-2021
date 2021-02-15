@@ -1,16 +1,37 @@
 <template>
     <v-main>
-        <v-list dense nav class="ml-12" color="#F5F5F7">
-            <v-list-item
-                class="pl-3"
-                link
+        <v-list dense nav>
+            <v-list-group
                 v-for="device in devices"
-                :key="device.id"
-                :to="'/device/' + device.id"
-                @contextmenu="show($event, device.id)"
+                :key="device.category"
+                no-action
+                sub-group
+                :value="false"
             >
-                <v-list-item-title> {{ device.name }}</v-list-item-title>
-            </v-list-item>
+                <template v-slot:activator>
+                    <v-list-item-icon>
+                        <v-icon small>{{ device.category_icon }}</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>{{
+                        device.category
+                    }}</v-list-item-title>
+                </template>
+
+                <v-list-item
+                    v-for="subDevice in device.devices"
+                    :key="subDevice.id"
+                    link
+                    :to="'/device/' + subDevice.id"
+                    @contextmenu="show($event, subDevice.id)"
+                >
+                    <v-list-item-icon>
+                        <v-icon small> {{ device.category_icon }}</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        {{ subDevice.name }}
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
         </v-list>
         <v-menu
             dense
@@ -389,7 +410,7 @@ export default {
         },
 
         loadDevices() {
-            axios.get("devices").then(response => {
+            axios.get("device/byCytagories").then(response => {
                 this.devices = response.data;
             });
         },

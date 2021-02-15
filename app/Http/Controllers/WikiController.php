@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Topics;
 use App\Models\Wiki;
 use Illuminate\Http\Request;
 
@@ -100,5 +101,50 @@ class WikiController extends Controller
         }
 
         return $output;
+    }
+
+
+    public function get_topic(Request $request): array
+    {
+
+        if (!$topic = Topics::where('kategorieId', $request->topicId)->first()) {
+            return [
+                'status' => "error",
+                'text' => ""
+            ];
+        }
+
+        return [
+            'status' => "success",
+            'text' => $topic->text
+        ];
+    }
+
+
+    public function update_topic(Request $request): array
+    {
+        if (!$topic = Topics::where('kategorieId', $request->topicId)->first()) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Neexistující článek"
+                )
+            ];
+        }
+
+        $topic->update(
+            [
+                'text' => $request->topic
+            ]
+        );
+
+        return [
+            'status' => "success",
+            'alert' => array(
+                'status' => "success",
+                'msg' => "Článek byl upraven"
+            )
+        ];
     }
 }

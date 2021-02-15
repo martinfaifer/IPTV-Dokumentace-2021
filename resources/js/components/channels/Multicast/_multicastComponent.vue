@@ -15,7 +15,7 @@
             <v-card-text class="ml-12 text--center">
                 <v-container>
                     <v-row v-for="multicast in multicasts" :key="multicast.id">
-                        <v-col cols="12" sm="12" md="3">
+                        <v-col cols="12" sm="12" md="3" lg="3">
                             <strong>Zdroj: </strong>
                             {{ multicast.zdroj }}
                         </v-col>
@@ -215,7 +215,7 @@ export default {
         },
         savedata() {
             axios
-                .post("channel/multicast/edit", {
+                .patch("channel/multicast/edit", {
                     channelId: this.$route.params.id,
                     multicastZdroj: this.editData.multicastZdroj,
                     multicast_ip: this.editData.multicast_ip,

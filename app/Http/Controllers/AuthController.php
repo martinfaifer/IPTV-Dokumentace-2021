@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function logout(Request $request): void
+    public function logout(Request $request): array
     {
         Auth::logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        return NotificationController::notify("success", "success", "Odhlášeno");
     }
 
 
@@ -27,25 +29,14 @@ class AuthController extends Controller
                 // overení stavu a pripadna zmena ( primárne urceno pro změnu stavu z waiting na access)
                 $this->check_or_change_user_status(Auth::user()->id);
 
-                return [
-                    'isAlert' => "isAlert",
-                    'status' => "success",
-                    'msg' => "Úspěšně přihlášeno",
-                ];
+                return NotificationController::notify("success", "success", "Přihlášeno");
             } else {
                 Auth::logout();
-                return [
-                    'isAlert' => "isAlert",
-                    'status' => "error",
-                    'msg' => "Uživatel je zablokován!",
-                ];
+                return NotificationController::notify("error", "error", "Uživatel je zablokován!");
             }
         } else {
-            return [
-                'isAlert' => "isAlert",
-                'status' => "error",
-                'msg' => "Nesprávné údaje!",
-            ];
+
+            return NotificationController::notify("error", "error", "Nesprávné údaje!");
         }
     }
 

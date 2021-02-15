@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <v-card flat color="transparent">
+            <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
             <event-component></event-component>
             <v-toolbar fixed dense flat class="ml-16">
                 <v-spacer></v-spacer>
@@ -16,17 +17,26 @@
                 ><v-spacer></v-spacer>
                 <v-spacer></v-spacer>
                 <v-spacer></v-spacer>
-                <v-icon @click="alertMenu = true" color="red">
-                    mdi-bell-ring-outline
-                </v-icon>
+                <v-badge
+                    :content="alertCount"
+                    :value="alertCount"
+                    color="error"
+                    bottom
+                    overlap
+                >
+                    <v-icon @click="alertMenu = true" color="red">
+                        mdi-bell-ring-outline
+                    </v-icon>
+                </v-badge>
             </v-toolbar>
             <!-- konec alertingu -->
             <v-row>
                 <!--  Navigace -->
-                <v-navigation-drawer fixed>
+                <v-navigation-drawer v-model="drawer" fixed color="#F5F5F7">
                     <v-row class="fill-height" no-gutters>
                         <!-- hlavní navigace, která neměnná -->
                         <v-navigation-drawer
+                            v-model="drawer"
                             fixed
                             color="#253341"
                             mini-variant
@@ -45,6 +55,8 @@
                                             class="text-center subtitle-2"
                                         >
                                             <v-list-item
+                                                link
+                                                to="/user"
                                                 @click="
                                                     editPasswordDialog = true
                                                 "
@@ -57,7 +69,7 @@
                                                     >mdi-account-cog-outline</v-icon
                                                 >
                                             </v-list-item>
-                                            <v-list-item link to="/settings">
+                                            <v-list-item v-if="user.user_role === 'admin'" link to="/settings">
                                                 Nastavení<v-spacer></v-spacer
                                                 ><v-icon
                                                     color="grey"
@@ -99,7 +111,7 @@
                                 </v-list-item>
                             </v-list>
                             <v-divider></v-divider>
-                            <v-list dense nav>
+                            <v-list dense nav >
                                 <v-list-item link v-bind:to="'/channel'">
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on }">
@@ -184,6 +196,26 @@
                                         <span>Wiki</span>
                                     </v-tooltip>
                                 </v-list-item>
+
+                                <v-list-item link v-bind:to="'/calendar'">
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon
+                                                v-on="on"
+                                                @click="componentType = 'calendar'"
+                                                :class="{
+                                                    'white--text':
+                                                        componentType ===
+                                                        'calendar',
+                                                    'grey--text':
+                                                        componentType != 'calendar'
+                                                }"
+                                                >mdi-calendar-text</v-icon
+                                            >
+                                        </template>
+                                        <span>Náhled na události</span>
+                                    </v-tooltip>
+                                </v-list-item>
                             </v-list>
                         </v-navigation-drawer>
                         <!-- zde bude dynamicka cast obsahu pro side menu  sekce channels / devices -> ??? wiki ??? -->
@@ -200,17 +232,25 @@
                             v-show="componentType === 'cards'"
                         ></cardsmenu-component>
 
-                        <wikimenu-component  v-show="componentType === 'wiki'"></wikimenu-component>
+                        <wikimenu-component
+                            v-show="componentType === 'wiki'"
+                        ></wikimenu-component>
 
                         <settingsmenu-component
                             v-if="componentType === 'settings'"
                         ></settingsmenu-component>
+
+                        <usermenu-component
+                            v-if="componentType === 'user'"
+                        ></usermenu-component>
                     </v-row>
                 </v-navigation-drawer>
                 <!-- konec navigace -->
             </v-row>
             <transition name="fade" mode="out-in">
-                <router-view class="ml-16 mt-1"> </router-view>
+                <v-col cols="12" sm="12" md="12" lg="12">
+                    <router-view class="ml-16 mt-1"> </router-view>
+                </v-col>
             </transition>
         </v-card>
 
@@ -306,6 +346,8 @@ import WikiMenuComponent from "./Wiki/WikiMenuCompoennt";
 
 import SettingsMenuComponent from "./Settings/SettingsMenuComponent";
 
+import UserMenuComponent from "./UserMenuComponent";
+
 export default {
     data() {
         return {
@@ -324,7 +366,7 @@ export default {
             menu: false,
             message: false,
             hints: true,
-            user: null,
+            user: [],
             isLoading: false,
             model: null,
             search: null,
@@ -363,7 +405,8 @@ export default {
         "cardsmenu-component": CardsMenuComponent,
         "wikimenu-component": WikiMenuComponent,
         "event-component": EventComponent,
-        "settingsmenu-component": SettingsMenuComponent
+        "settingsmenu-component": SettingsMenuComponent,
+        "usermenu-component": UserMenuComponent
     },
 
     created() {
@@ -394,7 +437,9 @@ export default {
         },
         getUser() {
             axios.get("user").then(response => {
-                // overení pokud není problem s overením csrf tokenu
+                if (response.status === 401) {
+                    this.$router.push("/login");
+                }
 
                 if (response.status === 419) {
                     this.snackbar = true;
@@ -437,6 +482,14 @@ export default {
 
             if (this.$route.path.match("/settings.*")) {
                 this.componentType = "settings";
+            }
+
+            if (this.$route.path.match("/user.*")) {
+                this.componentType = "user";
+            }
+
+            if (this.$route.path.match("/calendar.*")) {
+                this.componentType = "calendar";
             }
         }
     },

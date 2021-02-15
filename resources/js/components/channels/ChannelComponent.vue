@@ -38,6 +38,15 @@
                             >H265</v-tab
                         >
 
+                        <v-tab
+                            link
+                            v-bind:to="
+                                '/channel/' + this.$route.params.id + '/storage'
+                            "
+                            href="#tab-3"
+                            >Soubory</v-tab
+                        >
+
                         <v-tab-item v-model="channelTab" class="ml-16 mt-6">
                             <!-- INCLUDE KOMPONENTŮ -->
 
@@ -63,7 +72,7 @@
 
                             <!-- h265 komponent -->
                             <h265baseinfo-component
-                            class="mr-15"
+                                class="mr-15"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +
@@ -72,14 +81,14 @@
                                 "
                             ></h265baseinfo-component>
                             <!-- dohled API komponent -->
-                            <dohled-component
+                            <channelstorage-component
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +
                                             this.$route.params.id +
-                                            '/dohled'
+                                            '/storage'
                                 "
-                            ></dohled-component>
+                            ></channelstorage-component>
                         </v-tab-item>
                     </v-tabs>
                 </v-card>
@@ -93,6 +102,7 @@ import TagComponent from "../Tags/TagComponent";
 import MulticastComponent from "./MulticastComponent.vue";
 import H264baseInfoComponent from "./Unicast H264/H264baseInfoComponent";
 import H265baseInfoComponent from "./Unicast H265/H265baseInfoComponent";
+import ChannelStorageComponent from "./Storage/ChannelStorageComponent";
 export default {
     data() {
         return {
@@ -106,6 +116,7 @@ export default {
         "multicast-component": MulticastComponent,
         "h264baseinfo-component": H264baseInfoComponent,
         "h265baseinfo-component": H265baseInfoComponent,
+        "channelstorage-component": ChannelStorageComponent,
         "default-component": DefaultComponent,
         "tag-component": TagComponent
     },

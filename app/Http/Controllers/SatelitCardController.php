@@ -69,4 +69,42 @@ class SatelitCardController extends Controller
             'status' => "error"
         ];
     }
+
+
+    public function create(Request $request): array
+    {
+        if (is_null($request->cardNumber) || empty($request->cardNumber)) {
+            return NotificationController::notify("error", "error", "Pole nesmí být prázdé");
+        }
+
+        if (SatelitCard::where('card_number', $request->cardNumber)->first()) {
+            return NotificationController::notify("error", "error", "Karta již je registrována");
+        }
+
+        try {
+            SatelitCard::create(
+                [
+                    'card_number' => $request->cardNumber
+                ]
+            );
+            return NotificationController::notify("success", "success", "Založeno");
+        } catch (\Throwable $th) {
+            return NotificationController::notify();
+        }
+    }
+
+
+    public function remove(Request $request): array
+    {
+        if (!$card = SatelitCard::find($request->cardId)) {
+            return NotificationController::notify("error", "error", "Neexistuje karta s tímto ID");
+        }
+
+        try {
+            $card->delete();
+            return NotificationController::notify("success", "success", "Karta odebrána");
+        } catch (\Throwable $th) {
+            return NotificationController::notify();
+        }
+    }
 }

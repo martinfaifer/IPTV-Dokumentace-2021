@@ -118,9 +118,9 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadTags() {
+        async loadTags() {
             // obecná fn , kdy se bude hlídat uri a dle toho se bude hledat tag pro daný source
-            axios
+            await axios
                 .post("tags", {
                     id: this.$route.params.id,
                     datatype: this.checkUri()
@@ -158,14 +158,14 @@ export default {
             }
         },
 
-        OpenDialogForNewTag() {
-            axios.get("tags").then(response => {
+        async OpenDialogForNewTag() {
+            await axios.get("tags/noSystem").then(response => {
                 this.addetableTags = response.data.tags;
                 this.NewTagsDialog = true;
             });
         },
-        addtag() {
-            axios
+        async addtag() {
+            await axios
                 .post("tag/add", {
                     id: this.$route.params.id,
                     type: this.type,
@@ -177,10 +177,12 @@ export default {
                     this.loadTags();
                 });
         },
-        removeTag() {
-            axios
-                .post("tag/removeFrom", {
-                    tagId: this.tagId
+        async removeTag() {
+            await axios
+                .delete("tag/removeFrom", {
+                    data: {
+                        tagId: this.tagId
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

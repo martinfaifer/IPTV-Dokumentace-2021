@@ -9,6 +9,7 @@
                     single-line
                     hide-details
                 ></v-text-field>
+                <v-spacer></v-spacer>
             </v-card-title>
             <v-data-table :headers="headers" :items="dvbs" :search="search">
             </v-data-table>
@@ -26,7 +27,7 @@ export default {
                     align: "start",
                     value: "dvb"
                 },
-                { text: "Akce", value: "akce" }
+                // { text: "Akce", value: "akce" }
             ],
             dvbs: []
         };
@@ -36,8 +37,8 @@ export default {
         this.getDvbs();
     },
     methods: {
-        getDvbs() {
-            axios.get("dvb").then(response => {
+        async getDvbs() {
+            await axios.get("dvb").then(response => {
                 if (response.data.status === "success") {
                     this.dvbs = response.data.data;
                 } else {

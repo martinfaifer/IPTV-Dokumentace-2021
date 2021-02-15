@@ -24,8 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('dohled:getStatuses_andTryToReboot')->everyMinute(); // získání statusů streamů z dohledu, včetně uatomatického pokusu o restart
-        $schedule->command('events:delete')->dailyAt('01:00');
+        $schedule->command('dohled:getStatuses_andTryToReboot')->runInBackground()->everyMinute(); // získání statusů streamů z dohledu, včetně uatomatického pokusu o restart
+        $schedule->command('events:delete')->dailyAt('01:00')->runInBackground();
+        $schedule->command('channel:autoReboot')->dailyAt('04:00')->runInBackground(); // automatický restart specifických kanálů na transcoderech tyku q0x
+
+        $schedule->command('unicast:findTranscoderAndCheckBound')->runInBackground()->hourly(); // kontrola vazeb
     }
 
     /**

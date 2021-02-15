@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendFileNotification;
 use App\Mail\SendNotification;
 use App\Mail\SendRebootStreamNotification;
 use App\Models\User;
@@ -28,5 +29,11 @@ class SendNotificationController extends Controller
                 Mail::to($to_user->email)->queue(new SendRebootStreamNotification($streamName, $status));
             }
         }
+    }
+
+
+    public static function send_file_notification($mail, $text): void
+    {
+        Mail::to($mail)->queue(new SendFileNotification($mail, $text));
     }
 }

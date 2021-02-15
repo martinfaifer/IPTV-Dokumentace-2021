@@ -19,10 +19,10 @@ class CreateEventsTable extends Migration
             $table->string('start_time')->index();
             $table->string('end_day')->index();
             $table->string('end_time')->index();
-            $table->string('repeat_every_day')->index();
-            $table->string('multicastId')->index();
-            $table->string('h264Id')->index();
-            $table->string('h265Id')->index();
+            $table->string('repeat_every_day')->nullable()->index();
+            $table->string('multicastId')->nullable()->index();
+            $table->string('h264Id')->nullable()->index();
+            $table->string('h265Id')->nullable()->index();
             $table->text('note');
             $table->timestamps();
         });

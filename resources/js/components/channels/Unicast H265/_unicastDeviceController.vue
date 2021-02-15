@@ -77,6 +77,21 @@
                                         Transcoduje
                                     </strong>
                                 </span>
+
+                                <!-- akce na zastavení transcodinku -->
+                                <v-tooltip bottom v-if="transcoder.ip != null">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                            icon
+                                            @click="openInformationDialog('stop')"
+                                        >
+                                            <v-icon small color="red" v-on="on">
+                                                mdi-stop
+                                            </v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Zastavení transcódování kanálu</span>
+                                </v-tooltip>
                             </span>
 
                             <span
@@ -89,6 +104,25 @@
                                         Transcoding je zastaven
                                     </strong>
                                 </span>
+
+                                <!-- akce na spustení transcodinku -->
+                                <v-tooltip bottom v-if="transcoder.ip != null">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                            icon
+                                            @click="openInformationDialog('start')"
+                                        >
+                                            <v-icon
+                                                small
+                                                color="green"
+                                                v-on="on"
+                                            >
+                                                mdi-play
+                                            </v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Spuštění transcódování kanálu</span>
+                                </v-tooltip>
                             </span>
 
                             <span v-else>
@@ -139,7 +173,7 @@
             >
                 <v-card>
                     <v-card-title>
-                        <span class="headline">Založení H265 </span>
+                        <span class="headline">Změna zařízení </span>
                     </v-card-title>
                     <v-card-text>
                         <v-container>
@@ -171,6 +205,42 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+
+            <!-- information dialog pro interakci s transcoderem -->
+
+            <v-dialog v-model="InformationDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline"
+                            >Vážně si přejete provést tuto akci?
+                        </span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12"> </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeInformationDialog()"
+                        >
+                            NE
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="sendInformationDialog()"
+                        >
+                            ANO
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-row>
     </v-main>
 </template>
@@ -178,6 +248,8 @@
 export default {
     data() {
         return {
+            transcoderAction: null,
+            InformationDialog: false,
             transcoderStatus: null,
             transcoders: [],
             transcoder: null,
@@ -193,6 +265,24 @@ export default {
         this.loadStatusFromTramscoder();
     },
     methods: {
+        openInformationDialog(akce) {
+            this.InformationDialog = true;
+            this.transcoderAction = akce;
+        },
+        closeInformationDialog() {
+            this.InformationDialog = false;
+            this.transcoderAction = null;
+        },
+        async sendInformationDialog() {
+            await axios.post('h265/transcoder/manageStream', {
+                channelId: this.$route.params.id,
+                transcoderAction: this.transcoderAction
+            }).then(response => {
+                this.$store.state.alerts = response.data;
+                this.InformationDialog = false;
+                this.loadStatusFromTramscoder();
+            })
+        },
         createOutput() {
             axios.get("device/transcodersAndSatelits").then(response => {
                 this.transcoders = response.data;
@@ -202,7 +292,7 @@ export default {
 
         savedata() {
             axios
-                .post("h265/transcoder/update", {
+                .patch("h265/transcoder/update", {
                     channelId: this.$route.params.id,
                     transcoder: this.transcoder.name
                 })

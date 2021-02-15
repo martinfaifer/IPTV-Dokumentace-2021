@@ -251,8 +251,10 @@ export default {
         },
         deleteEvent(eventId) {
             axios
-                .post("event/delete", {
-                    eventId: eventId
+                .delete("event/delete", {
+                    data: {
+                        eventId: eventId
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

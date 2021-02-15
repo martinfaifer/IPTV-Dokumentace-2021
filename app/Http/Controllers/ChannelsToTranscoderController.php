@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChannelsToTranscoder;
+use App\Models\Device;
 use App\Models\H264;
 use App\Models\H265;
 use App\Models\UnicastKvalitaChannelOutput;
@@ -68,6 +69,50 @@ class ChannelsToTranscoderController extends Controller
                     }
                 }
             };
+        }
+    }
+
+
+
+    public static function find_transcoder(): void
+    {
+
+        // získání dat z ChannelsToTranscoder
+        if (ChannelsToTranscoder::first()) {
+            // 
+            foreach (ChannelsToTranscoder::get() as $channelOnTranscoder) {
+
+                // $channelOnTranscoder->transcoderId => id streamu na transcoderu
+
+                // api komunikace, kde výsledkem by měla být informace o názvu transcoderu
+                $responseFromTranscoder = ApiController::find_transcoder($channelOnTranscoder->transcoderId);
+
+                if ($responseFromTranscoder["status"] === 'success') {
+
+                    // echo $responseFromTranscoder["msg"] . PHP_EOL;
+
+                    // Vyhledání transcoderu dle názvu v odpovedi
+                    if ($transcoder = Device::where('name', $responseFromTranscoder["msg"])->first()) {
+                        // $transcoder->id
+
+                        // update zaznamu
+                        if (!is_null($channelOnTranscoder->H264Id)) {
+                            // update tabulky H264
+                            H264::find($channelOnTranscoder->H264Id)->update(
+                                [
+                                    'deviceId' => $transcoder->id
+                                ]
+                            );
+                        } else {
+                            H265::find($channelOnTranscoder->H265Id)->update(
+                                [
+                                    'deviceId' => $transcoder->id
+                                ]
+                            );
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -19,31 +19,47 @@
                         Vyhledávání ...
                     </v-row>
                     <v-row class="mt-2">
-                        Pro vyvolání tohoto okna stistkněte klávesu 'alt'
+                        Pro vyvolání tohoto okna stistkněte klávesu '/'
                     </v-row>
                 </v-container>
             </span>
         </v-tooltip>
 
         <v-dialog v-model="searchDialogInput" width="500">
-            <v-card flat>
-                <v-card-text class="pt-6">
-                    <v-row>
-                        <v-autocomplete
-                            autofocus
-                            v-model.lazy="model"
-                            :items="entries"
-                            cache-items
-                            hide-no-data
-                            hide-selected
-                            item-text="result"
-                            item-value="url"
-                            placeholder="Vyhledejte v dokumentaci ... "
-                            prepend-inner-icon="mdi-magnify"
-                            return-object
-                        >
-                        </v-autocomplete>
-                    </v-row>
+            <v-card>
+                <v-card-text>
+                    <v-autocomplete
+                        autofocus
+                        v-model.lazy="model"
+                        :items.sync="entries"
+                        hide-no-data
+                        hide-selecte
+                        item-text="result"
+                        item-value="url"
+                        placeholder="Vyhledejte v dokumentaci ... "
+                        prepend-inner-icon="mdi-magnify"
+                        return-object
+                    >
+                        <!-- <template v-slot:selection="{ item }">
+                            <v-list-item>
+                                <v-list-item-avatar
+                                    max-height="20"
+                                    max-width="20"
+                                >
+                                    <v-img
+                                        v-if="item.img != false"
+                                        :lazy-src="item.img"
+                                        max-height="32"
+                                        max-width="32"
+                                        :src="item.img"
+                                    ></v-img>
+                                </v-list-item-avatar>
+                                <v-list-item-title> {{ item.result }}</v-list-item-title>
+                                <v-spacer></v-spacer>
+                                <v-list-item-subtitle>{{item.description}}</v-list-item-subtitle>
+                            </v-list-item>
+                        </template> -->
+                    </v-autocomplete>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -78,7 +94,7 @@ export default {
         var self = this;
         window.addEventListener("keyup", function(event) {
             // vyhledáváaní za pomocí stistknutí ctrl
-            if (event.keyCode == 18) {
+            if (event.keyCode == 111) {
                 self.searchDialog();
             }
         });

@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Http;
 class DeviceController extends Controller
 {
 
+
+    static array $result = [
+        'status' => "empty"
+    ];
+
     /**
      * fn pro vrácen názvu zařízení
      *
@@ -67,13 +72,27 @@ class DeviceController extends Controller
         if (!Device::first()) {
             return [];
         }
-
-        return Device::get(['id', 'name'])->toArray();
+        return Device::get(['id', 'name', 'category'])->toArray();
     }
 
-    static array $result = [
-        'status' => "empty"
-    ];
+
+    public function return_devices_by_categories(): array
+    {
+
+        if (!DeviceCategory::first()) {
+            return [];
+        }
+
+        foreach (DeviceCategory::all() as $category) {
+            $output[] = array(
+                'category' => $category["name"],
+                'category_icon' => $category["icon"],
+                'devices' => Device::where('category', $category["id"])->get(['id', 'name'])
+            );
+        }
+
+        return $output;
+    }
 
     /**
      * fn pro vyhledání zařízení, který , který je spárováno s kanálem

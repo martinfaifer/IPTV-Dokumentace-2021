@@ -192,7 +192,7 @@ export default {
         },
         savedata() {
             axios
-                .post("h264/transcoder/update", {
+                .patch("h264/transcoder/update", {
                     channelId: this.$route.params.id,
                     transcoder: this.transcoder.name
                 })

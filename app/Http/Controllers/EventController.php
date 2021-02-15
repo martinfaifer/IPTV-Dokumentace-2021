@@ -10,6 +10,24 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
 
+    public function index()
+    {
+        if (!Event::first()) {
+            return [];
+        }
+
+        foreach (Event::all() as $event) {
+            $events[] = array(
+                'name' => Channel::find($event['multicastId'])->nazev . " - " . $event["note"],
+                'start' => $event->start_day . " " . $event->start_time,
+                'end' => $event->end_day . " " . $event->end_time,
+                'color' => "info"
+            );
+        }
+
+        return $events;
+    }
+
     public function return_today_event(): array
     {
         if (!Event::where('start_day', date("Y-m-d"))->first()) {

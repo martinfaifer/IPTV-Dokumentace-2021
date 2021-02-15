@@ -2,8 +2,19 @@
     <v-main>
         <v-container fluid class="ml-3">
             <div class="mr-15">
-                <!-- Zobrazení názvu kanálu -->
-                <h2>{{ channelName }} - H265</h2>
+                <v-row>
+                    <v-col cols="12" sm="1" md="1" lg="1" v-if="logo != null">
+                        <v-img
+                            :lazy-src="logo"
+                            max-height="64"
+                            max-width="64"
+                            :src="logo"
+                        ></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="11" md="11" lg="11">
+                        <h2 class="mt-6">{{ channelName }} - H265</h2>
+                    </v-col>
+                </v-row>
                 <v-divider inline> </v-divider>
             </div>
 
@@ -146,7 +157,8 @@ export default {
             exist: "",
             showMenu: false,
             x: 0,
-            y: 0
+            y: 0,
+            logo: null
         };
     },
     components: {
@@ -157,14 +169,28 @@ export default {
     created() {
         this.loadChannelNameById();
         this.checkIfIs();
+        this.loadChannelLogo();
     },
 
     methods: {
         closeDialog() {
             this.outputDialog = false;
         },
-        savedata() {
-            axios
+        async loadChannelLogo() {
+            await axios
+                .post("channel/logo", {
+                    channelId: this.$route.params.id
+                })
+                .then(response => {
+                    if(response.data === 'not_exist') {
+                        this.logo = null;
+                    } else {
+                        this.logo = response.data;
+                    }
+                });
+        },
+        async savedata() {
+            await axios
                 .post("h265/create", {
                     channelId: this.$route.params.id,
                     addToTranscoder: this.addToTranscoder,
@@ -179,8 +205,8 @@ export default {
                     this.outputDialog = false;
                 });
         },
-        createOutput() {
-            axios.get("device/transcodersAndSatelits").then(response => {
+        async createOutput() {
+            await axios.get("device/transcodersAndSatelits").then(response => {
                 this.transcoders = response.data;
                 this.outputDialog = true;
             });
@@ -194,8 +220,8 @@ export default {
                 this.showMenu = true;
             });
         },
-        loadChannelNameById() {
-            axios
+        async loadChannelNameById() {
+            await axios
                 .post("channel/name", {
                     channelId: this.$route.params.id
                 })
@@ -203,8 +229,8 @@ export default {
                     this.channelName = response.data;
                 });
         },
-        checkIfIs() {
-            axios
+        async checkIfIs() {
+            await axios
                 .post("h265/check", {
                     channelId: this.$route.params.id
                 })
@@ -216,6 +242,7 @@ export default {
     watch: {
         $route(to, from) {
             this.loadChannelNameById();
+            this.loadChannelLogo();
         }
     }
 };

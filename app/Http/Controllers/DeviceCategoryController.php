@@ -19,7 +19,7 @@ class DeviceCategoryController extends Controller
 
         return [
             'status' => "success",
-            'data' => DeviceCategory::get(['name'])
+            'data' => DeviceCategory::get(['name', 'id', 'icon'])
         ];
     }
 

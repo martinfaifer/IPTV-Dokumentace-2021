@@ -257,7 +257,7 @@ export default {
 
         savedata() {
             axios
-                .post("channel/multiplexer/edit", {
+                .patch("channel/multiplexer/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.multiplexor.name
                 })
@@ -274,8 +274,10 @@ export default {
 
         removeMultiplexor() {
             axios
-                .post("channel/multiplexer/remove", {
-                    channelId: this.$route.params.id
+                .delete("channel/multiplexer/remove", {
+                    data: {
+                        channelId: this.$route.params.id
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

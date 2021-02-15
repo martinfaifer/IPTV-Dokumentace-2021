@@ -21,12 +21,24 @@ import CardComponent from "./components/Cards/CardComponent";
 import SettinsComponent from "./components/Settings/_obecneSettingsComponent";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";
 import WikiComponent from "./components/Wiki/WikiComponent";
+import CalendarComponent from "./components/CalendarComponent";
+import UserComponent from "./components/UserComponent";
 
 let routes = [
     {
         path: "/",
         component: NavigationComponent,
         children: [
+            {
+                path: "/user",
+                component: UserComponent,
+                children: [
+                    {
+                        path: "/user/:name",
+                        component: UserComponent
+                    }
+                ]
+            },
             {
                 path: "/channel",
                 component: ChannelComponent,
@@ -45,6 +57,10 @@ let routes = [
                     },
                     {
                         path: "/channel/:id/dohled",
+                        component: ChannelComponent
+                    },
+                    {
+                        path: "/channel/:id/storage",
                         component: ChannelComponent
                     }
                 ]
@@ -78,6 +94,10 @@ let routes = [
                         component: WikiComponent
                     }
                 ]
+            },
+            {
+                path: "calendar",
+                component: CalendarComponent
             },
             {
                 path: "/settings",

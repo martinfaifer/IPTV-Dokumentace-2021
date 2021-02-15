@@ -174,8 +174,10 @@ export default {
         },
         deleteNote() {
             axios
-                .post("note/delete", {
-                    noteId: this.noteId
+                .delete("note/delete", {
+                    data: {
+                        noteId: this.noteId
+                    }
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

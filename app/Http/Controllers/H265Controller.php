@@ -213,17 +213,50 @@ class H265Controller extends Controller
     public static function return_dohled_data(Request $request): array
     {
         // vyhledání H264
-        if (!H265::where('channelId', $request->channelId)->first()) {
+        if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
             return [];
         }
 
         // overení existence id v ChannelsToDohled
-        if (!ChannelToDohled::where('H265Id', H265::where('channelId', $request->channelId)->first()->id)->first()) {
+        if (!$channelOnDohled = ChannelToDohled::where('H265Id', $h265->id)->first()) {
             return [];
         }
 
         return ApiController::return_information_about_channel(
-            ChannelToDohled::where('H265Id', H265::where('channelId', $request->channelId)->first()->id)->first()->dohledId
+            $channelOnDohled->dohledId
         );
+    }
+
+
+    public static function manage_stream(Request $request): array
+    {
+        if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Neexistuje stream"
+                )
+            ];
+        }
+
+        // overení existence id v ChannelsToDohled
+        if (!$channelOnTranscoder = ChannelsToTranscoder::where('H265Id', $h265->id)->first()) {
+            return [
+                'status' => "error",
+                'alert' => array(
+                    'status' => "error",
+                    'msg' => "Neexistuje stream s vazbou na transcoder"
+                )
+            ];
+        }
+
+
+        return [
+            ApiController::send_action_to_transcoder(
+                $channelOnTranscoder->transcoderId,
+                $request->transcoderAction
+            )
+        ];
     }
 }

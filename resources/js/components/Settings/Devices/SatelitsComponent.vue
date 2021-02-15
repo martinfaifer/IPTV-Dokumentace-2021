@@ -26,7 +26,7 @@ export default {
                     align: "start",
                     value: "satelit"
                 },
-                { text: "Akce", value: "akce" }
+                // { text: "Akce", value: "akce" }
             ],
             satelits: []
         };
@@ -36,8 +36,8 @@ export default {
         this.getSatelits();
     },
     methods: {
-        getSatelits() {
-            axios.get("satelits").then(response => {
+        async getSatelits() {
+            await axios.get("satelits").then(response => {
                 if (response.data.status === "success") {
                     this.satelits = response.data.data;
                 } else {
