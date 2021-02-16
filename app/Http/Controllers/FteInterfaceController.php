@@ -90,8 +90,8 @@ class FteInterfaceController extends Controller
                     "symbolRate" => $request->symbolrate,
                     "polarizace" => $polarizace,
                     "fec" => $request->fec,
-                    "CIA" . $request->interfaceId => $request->cia["card_number"],
-                    "CIB" . $request->interfaceId => $request->cib["card_number"],
+                    "CIA" . $request->interfaceId => $request->cia["card_number"] ?? null,
+                    "CIB" . $request->interfaceId => $request->cib["card_number"] ?? null,
                 ]
             );
 
@@ -108,12 +108,8 @@ class FteInterfaceController extends Controller
                 'msg' => "Editováno"
             ];
         } catch (\Throwable $th) {
-            //nepodarilo se provest editaci, bude vyvolána chyba 
 
-            return [
-                'status' => "error",
-                'msg' => "Selhala editace! ERROR 500"
-            ];
+            return NotificationController::notify();
         }
     }
 

@@ -19,7 +19,7 @@
                         Vyhledávání ...
                     </v-row>
                     <v-row class="mt-2">
-                        Pro vyvolání tohoto okna stistkněte klávesu '/'
+                        Pro vyvolání tohoto okna stistkněte klávesu '¨'
                     </v-row>
                 </v-container>
             </span>
@@ -40,25 +40,6 @@
                         prepend-inner-icon="mdi-magnify"
                         return-object
                     >
-                        <!-- <template v-slot:selection="{ item }">
-                            <v-list-item>
-                                <v-list-item-avatar
-                                    max-height="20"
-                                    max-width="20"
-                                >
-                                    <v-img
-                                        v-if="item.img != false"
-                                        :lazy-src="item.img"
-                                        max-height="32"
-                                        max-width="32"
-                                        :src="item.img"
-                                    ></v-img>
-                                </v-list-item-avatar>
-                                <v-list-item-title> {{ item.result }}</v-list-item-title>
-                                <v-spacer></v-spacer>
-                                <v-list-item-subtitle>{{item.description}}</v-list-item-subtitle>
-                            </v-list-item>
-                        </template> -->
                     </v-autocomplete>
                 </v-card-text>
             </v-card>
@@ -93,8 +74,8 @@ export default {
     mounted() {
         var self = this;
         window.addEventListener("keyup", function(event) {
-            // vyhledáváaní za pomocí stistknutí ctrl
-            if (event.keyCode == 111) {
+            // vyhledáváaní za pomocí stistknutí ¨
+            if (event.keyCode == 220) {
                 self.searchDialog();
             }
         });

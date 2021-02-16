@@ -3396,25 +3396,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3442,8 +3423,8 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var self = this;
     window.addEventListener("keyup", function (event) {
-      // vyhledáváaní za pomocí stistknutí ctrl
-      if (event.keyCode == 111) {
+      // vyhledáváaní za pomocí stistknutí ¨
+      if (event.keyCode == 220) {
         self.searchDialog();
       }
     });
@@ -36670,7 +36651,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-row", { staticClass: "mt-2" }, [
                     _vm._v(
-                      "\n                    Pro vyvolání tohoto okna stistkněte klávesu '/'\n                "
+                      "\n                    Pro vyvolání tohoto okna stistkněte klávesu '¨'\n                "
                     )
                   ])
                 ],

@@ -111,12 +111,8 @@ class BlankomInterfaceController extends Controller
                 'msg' => "Editováno"
             ];
         } catch (\Throwable $th) {
-            //nepodarilo se provest editaci, bude vyvolána chyba 
 
-            return [
-                'status' => "error",
-                'msg' => "Selhala editace! ERROR 500"
-            ];
+            return NotificationController::notify();
         }
     }
 
