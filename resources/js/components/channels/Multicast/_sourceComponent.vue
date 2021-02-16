@@ -34,7 +34,7 @@
                                     <v-tooltip
                                         bottom
                                         v-if="
-                                            prijem.path != null &&
+                                                prijem.path != null &&
                                                 prijem.login_user != null &&
                                                 prijem.ip != null
                                         "

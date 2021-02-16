@@ -2,9 +2,15 @@
     <v-main>
         <v-card flat color="#F5F5F7" height="250">
             <v-card-subtitle @contextmenu="show($event)">
-                <strong>
-                    Kalendář
-                </strong>
+                <v-row class="ml-1 mr-1 mt-1">
+                    <strong>
+                        Kalendář
+                    </strong>
+                    <v-spacer></v-spacer>
+                    <v-icon small @click="createEventDialog = true">
+                        mdi-plus
+                    </v-icon>
+                </v-row>
             </v-card-subtitle>
             <v-card-text class=" text--center">
                 <v-container v-if="events != null">

@@ -30,6 +30,10 @@
                                     single-line
                                     hide-details
                                 ></v-text-field>
+                                <v-spacer></v-spacer>
+                                <v-btn outlined color="info" @click="openNewDocuDialog()">
+                                    Přidat dokument
+                                </v-btn>
                             </v-card-title>
                             <v-data-table
                                 no-data-text="Neexistují žádné soubory u kanálu"
@@ -125,7 +129,7 @@
                         <v-btn
                             color="blue darken-1"
                             text
-                            @click="newDocuDialog = false"
+                            @click="close()"
                         >
                             Zavřít
                         </v-btn>
@@ -206,6 +210,7 @@ export default {
                 this.showFiles();
                 this.newDocuDialog = false;
                 this.file = "";
+                this.checkbox = false;
             });
         },
         show(e) {
@@ -242,6 +247,13 @@ export default {
         openNewDocuDialog() {
             this.newDocuDialog = true;
             this.loadUsers();
+        },
+        async close() {
+            this.newDocuDialog = false;
+            this.file = null;
+            this.usersToNotify = null;
+            this.textToSend = null;
+            this.checkbox = false;
         },
         async loadUsers() {
             await axios.get("users").then(response => {

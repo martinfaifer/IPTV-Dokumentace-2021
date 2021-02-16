@@ -1948,7 +1948,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     alert: function alert() {
@@ -2821,6 +2820,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Wiki_WikiMenuCompoennt__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Wiki/WikiMenuCompoennt */ "./resources/js/components/Wiki/WikiMenuCompoennt.vue");
 /* harmony import */ var _Settings_SettingsMenuComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Settings/SettingsMenuComponent */ "./resources/js/components/Settings/SettingsMenuComponent.vue");
 /* harmony import */ var _UserMenuComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UserMenuComponent */ "./resources/js/components/UserMenuComponent.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -8430,6 +8438,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -9100,6 +9114,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -10158,6 +10178,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -10241,6 +10265,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                   _this2.newDocuDialog = false;
                   _this2.file = "";
+                  _this2.checkbox = false;
                 });
 
               case 7:
@@ -10316,7 +10341,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.newDocuDialog = true;
       this.loadUsers();
     },
-    loadUsers: function loadUsers() {
+    close: function close() {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
@@ -10324,17 +10349,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _context5.next = 2;
-                return axios.get("users").then(function (response) {
-                  _this6.items = response.data.users;
-                });
+                _this6.newDocuDialog = false;
+                _this6.file = null;
+                _this6.usersToNotify = null;
+                _this6.textToSend = null;
+                _this6.checkbox = false;
 
-              case 2:
+              case 5:
               case "end":
                 return _context5.stop();
             }
           }
         }, _callee5);
+      }))();
+    },
+    loadUsers: function loadUsers() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return axios.get("users").then(function (response) {
+                  _this7.items = response.data.users;
+                });
+
+              case 2:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
       }))();
     }
   },
@@ -34236,7 +34283,6 @@ var render = function() {
               attrs: {
                 timeout: -1,
                 value: true,
-                absolute: "",
                 bottom: "",
                 color: _vm.alert.status,
                 right: ""
@@ -35564,7 +35610,7 @@ var render = function() {
     [
       _c(
         "v-container",
-        { staticClass: "ml-16 mr-15", attrs: { fluid: "" } },
+        { staticClass: "ml-16 mr-15 mt-8", attrs: { fluid: "" } },
         [
           _c(
             "v-card",
@@ -35612,24 +35658,29 @@ var render = function() {
         "v-card",
         { attrs: { flat: "", color: "transparent" } },
         [
-          _c("v-app-bar-nav-icon", {
-            on: {
-              click: function($event) {
-                _vm.drawer = true
-              }
-            }
-          }),
-          _vm._v(" "),
           _c("event-component"),
           _vm._v(" "),
           _c(
-            "v-toolbar",
-            { staticClass: "ml-16", attrs: { fixed: "", dense: "", flat: "" } },
+            "v-app-bar",
+            {
+              staticClass: "ml-16 elevation-0",
+              attrs: { fixed: "", dense: "", color: "white" }
+            },
             [
+              _c("v-app-bar-nav-icon", {
+                on: {
+                  click: function($event) {
+                    _vm.drawer = true
+                  }
+                }
+              }),
+              _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
               _c("search-compoennt", { staticClass: "ml-16" }),
               _vm._v(" "),
+              _c("v-spacer"),
+              _c("v-spacer"),
               _c("v-spacer"),
               _vm._v(" "),
               _c("v-spacer"),
@@ -36254,7 +36305,7 @@ var render = function() {
               _c(
                 "v-col",
                 { attrs: { cols: "12", sm: "12", md: "12", lg: "12" } },
-                [_c("router-view", { staticClass: "ml-16 mt-1" })],
+                [_c("router-view", { staticClass: "ml-16 mt-8" })],
                 1
               )
             ],
@@ -38878,7 +38929,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                        Založit\n                    "
+                            "\n                        Uložit\n                    "
                           )
                         ]
                       )
@@ -42758,7 +42809,34 @@ var render = function() {
                 }
               }
             },
-            [_c("strong", [_vm._v("\n                Kalendář\n            ")])]
+            [
+              _c(
+                "v-row",
+                { staticClass: "ml-1 mr-1 mt-1" },
+                [
+                  _c("strong", [
+                    _vm._v("\n                    Kalendář\n                ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-icon",
+                    {
+                      attrs: { small: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.createEventDialog = true
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    mdi-plus\n                ")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
           ),
           _vm._v(" "),
           _c(
@@ -44304,7 +44382,34 @@ var render = function() {
                 }
               }
             },
-            [_c("strong", [_vm._v("\n                Poznámky\n            ")])]
+            [
+              _c(
+                "v-row",
+                { staticClass: "ml-1 mt-1 mr-1" },
+                [
+                  _c("strong", [
+                    _vm._v("\n                    Poznámky\n                ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-icon",
+                    {
+                      attrs: { small: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.newNoteDialog = true
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    mdi-plus\n                ")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
           ),
           _vm._v(" "),
           _c(
@@ -45829,7 +45934,26 @@ var render = function() {
                                 },
                                 expression: "search"
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { outlined: "", color: "info" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.openNewDocuDialog()
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Přidat dokument\n                            "
+                                )
+                              ]
+                            )
                           ],
                           1
                         ),
@@ -46086,7 +46210,7 @@ var render = function() {
                           attrs: { color: "blue darken-1", text: "" },
                           on: {
                             click: function($event) {
-                              _vm.newDocuDialog = false
+                              return _vm.close()
                             }
                           }
                         },

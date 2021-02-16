@@ -1,16 +1,16 @@
 <template>
     <v-app>
         <v-card flat color="transparent">
-            <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
             <event-component></event-component>
-            <v-toolbar fixed dense flat class="ml-16">
+            <v-app-bar fixed dense color="white" class="ml-16 elevation-0">
+                <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
 
                 <!-- search -->
                 <search-compoennt class="ml-16"></search-compoennt>
                 <!-- search bar -->
 
-                <v-spacer></v-spacer>
+                <v-spacer></v-spacer><v-spacer></v-spacer><v-spacer></v-spacer>
                 <v-spacer></v-spacer>
                 <v-spacer></v-spacer>
                 <v-spacer></v-spacer><v-spacer></v-spacer><v-spacer></v-spacer
@@ -28,7 +28,7 @@
                         mdi-bell-ring-outline
                     </v-icon>
                 </v-badge>
-            </v-toolbar>
+            </v-app-bar>
             <!-- konec alertingu -->
             <v-row>
                 <!--  Navigace -->
@@ -69,7 +69,13 @@
                                                     >mdi-account-cog-outline</v-icon
                                                 >
                                             </v-list-item>
-                                            <v-list-item v-if="user.user_role === 'admin'" link to="/settings">
+                                            <v-list-item
+                                                v-if="
+                                                    user.user_role === 'admin'
+                                                "
+                                                link
+                                                to="/settings"
+                                            >
                                                 Nastavení<v-spacer></v-spacer
                                                 ><v-icon
                                                     color="grey"
@@ -111,7 +117,7 @@
                                 </v-list-item>
                             </v-list>
                             <v-divider></v-divider>
-                            <v-list dense nav >
+                            <v-list dense nav>
                                 <v-list-item link v-bind:to="'/channel'">
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on }">
@@ -202,13 +208,16 @@
                                         <template v-slot:activator="{ on }">
                                             <v-icon
                                                 v-on="on"
-                                                @click="componentType = 'calendar'"
+                                                @click="
+                                                    componentType = 'calendar'
+                                                "
                                                 :class="{
                                                     'white--text':
                                                         componentType ===
                                                         'calendar',
                                                     'grey--text':
-                                                        componentType != 'calendar'
+                                                        componentType !=
+                                                        'calendar'
                                                 }"
                                                 >mdi-calendar-text</v-icon
                                             >
@@ -249,7 +258,7 @@
             </v-row>
             <transition name="fade" mode="out-in">
                 <v-col cols="12" sm="12" md="12" lg="12">
-                    <router-view class="ml-16 mt-1"> </router-view>
+                    <router-view class="ml-16 mt-8"> </router-view>
                 </v-col>
             </transition>
         </v-card>

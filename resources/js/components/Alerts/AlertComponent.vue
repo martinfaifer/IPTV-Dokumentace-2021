@@ -4,7 +4,6 @@
             v-if="alert != null"
             :timeout="-1"
             :value="true"
-            absolute
             bottom
             :color="alert.status"
             right

@@ -100,7 +100,6 @@ class EventController extends Controller
                 ApiController::cerate_new_event($request, $channelData->dohledId);
             }
         }
-        // 
 
         return [
             'status' => "success",
