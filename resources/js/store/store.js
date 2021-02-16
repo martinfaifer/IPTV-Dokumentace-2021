@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         alerts: null,
+        dohledAccess: null,
         user: []
     },
     actions: {},
@@ -18,6 +19,10 @@ export const store = new Vuex.Store({
         updateUser(state, user) {
             state.user.push(user);
         },
+
+        updateDohledSatatus(state, dohledStatus) {
+            state.dohledAccess.push(dohledStatus);
+        }
     },
     getters: {}
 });

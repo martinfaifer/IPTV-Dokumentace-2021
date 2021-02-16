@@ -36,7 +36,7 @@ class ApiController extends Controller
 
 
 
-    public static function analyze_stream($streamUri): array
+    public static function analyze_stream(string $streamUri): array
     {
         try {
             if (!Api::where('type', "iptv_stream_analyze")->first()) {
@@ -51,7 +51,7 @@ class ApiController extends Controller
             $response = $client->post($apiData->uri, [
                 'form_params' => [
                     'hello' => $apiData->token,
-                    'streamUrl' => $streamUri
+                    'streamUrl' => $streamUri . ":1234"
                 ]
             ]);
             if ($body = $response->getBody()->getContents()) {

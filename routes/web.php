@@ -88,6 +88,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/multicast/edit', [MulticastController::class, 'update']);
         Route::patch('/multiplexer/edit', [ChannelController::class, 'edit_multiplexor']);
         Route::delete('/multiplexer/remove', [ChannelController::class, 'remove_multiplexor']);
+        Route::post('/analyze', [ChannelController::class, 'channel_analyze']);
     });
 
     // získání multicastových infomrací

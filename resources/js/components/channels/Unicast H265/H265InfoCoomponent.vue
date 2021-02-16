@@ -83,6 +83,15 @@
                         Upravit výstupní kvality
                     </v-list-item-title>
                 </v-list-item>
+
+                <v-list-item v-if="dohled != null" @click="AnalyzeChannel()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-magnify</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Analyzovat kanál
+                    </v-list-item-title>
+                </v-list-item>
             </v-list>
         </v-menu>
 
@@ -131,6 +140,11 @@
 </template>
 <script>
 export default {
+    computed: {
+        dohled() {
+            return this.$store.state.dohledAccess;
+        }
+    },
     data() {
         return {
             editDataDialog: false,
@@ -210,6 +224,16 @@ export default {
                     } else {
                         this.kvalityOutput = null;
                     }
+                });
+        },
+        AnalyzeChannel() {
+            axios
+                .post("channel/analyze", {
+                    channelId: this.$route.params.id,
+                    type: "h265"
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
                 });
         }
     },

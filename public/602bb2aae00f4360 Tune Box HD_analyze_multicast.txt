@@ -1,0 +1,204 @@
+Array
+(
+    [status] => success
+    [data] => Array
+        (
+            [ts] => Array
+                (
+                    [0] => id=1
+                    [1] => services=1
+                    [2] => clearservices=1
+                    [3] => scrambledservices=0
+                    [4] => pids=6
+                    [5] => clearpids=6
+                    [6] => scrambledpids=0
+                    [7] => pcrpids=1
+                    [8] => unreferencedpids=0
+                    [9] => packets=4677
+                    [10] => invalidsyncs=0
+                    [11] => transporterrors=0
+                    [12] => suspectignored=0
+                    [13] => bytes=879276
+                    [14] => bitrate=7035799
+                    [15] => bitrate204=7634590
+                    [16] => userbitrate=0
+                    [17] => userbitrate204=0
+                    [18] => pcrbitrate=7035799
+                    [19] => pcrbitrate204=7634590
+                    [20] => duration=0
+                    [21] => 
+                )
+
+            [global] => Array
+                (
+                    [0] => pid
+                    [1] => pid=17
+                    [2] => access=clear
+                    [3] => servcount=0
+                    [4] => bitrate=1504
+                    [5] => bitrate204=1632
+                    [6] => packets=1
+                    [7] => clear=1
+                    [8] => scrambled=0
+                    [9] => invalidscrambling=0
+                    [10] => af=0
+                    [11] => pcr=0
+                    [12] => discontinuities=0
+                    [13] => duplicated=0
+                    [14] => unitstart=1
+                    [15] => description=SDT/BAT
+                )
+
+            [service] => Array
+                (
+                    [0] => id=1
+                    [1] => tsid=1
+                    [2] => orignetwid=1
+                    [3] => access=clear
+                    [4] => pids=3
+                    [5] => clearpids=3
+                    [6] => scrambledpids=0
+                    [7] => packets=4672
+                    [8] => bitrate=7028277
+                    [9] => bitrate204=7626428
+                    [10] => servtype=1
+                    [11] => pmtpid=1003
+                    [12] => pcrpid=600
+                    [13] => pidlist=600,601,1003
+                    [14] => provider=SPI
+                    [15] => name=360TUNEBOX HD (M_SENC)
+                )
+
+            [pids] => Array
+                (
+                    [0] => Array
+                        (
+                            [0] => pid=0
+                            [1] => access=clear
+                            [2] => servcount=0
+                            [3] => bitrate=3008
+                            [4] => bitrate204=3264
+                            [5] => packets=2
+                            [6] => clear=2
+                            [7] => scrambled=0
+                            [8] => invalidscrambling=0
+                            [9] => af=0
+                            [10] => pcr=0
+                            [11] => discontinuities=0
+                            [12] => duplicated=0
+                            [13] => unitstart=2
+                            [14] => description=PAT
+                        )
+
+                    [1] => Array
+                        (
+                            [0] => pid=1
+                            [1] => access=clear
+                            [2] => servcount=0
+                            [3] => bitrate=3008
+                            [4] => bitrate204=3264
+                            [5] => packets=2
+                            [6] => clear=2
+                            [7] => scrambled=0
+                            [8] => invalidscrambling=0
+                            [9] => af=0
+                            [10] => pcr=0
+                            [11] => discontinuities=0
+                            [12] => duplicated=0
+                            [13] => unitstart=2
+                            [14] => description=CAT
+                        )
+
+                    [2] => Array
+                        (
+                            [0] => pid=17
+                            [1] => access=clear
+                            [2] => servcount=0
+                            [3] => bitrate=1504
+                            [4] => bitrate204=1632
+                            [5] => packets=1
+                            [6] => clear=1
+                            [7] => scrambled=0
+                            [8] => invalidscrambling=0
+                            [9] => af=0
+                            [10] => pcr=0
+                            [11] => discontinuities=0
+                            [12] => duplicated=0
+                            [13] => unitstart=1
+                            [14] => description=SDT/BAT
+                        )
+
+                    [3] => Array
+                        (
+                            [0] => pid=600
+                            [1] => access=clear
+                            [2] => streamid=224
+                            [3] => video
+                            [4] => servcount=1
+                            [5] => servlist=1
+                            [6] => bitrate=6772539
+                            [7] => bitrate204=7348925
+                            [8] => packets=4502
+                            [9] => clear=4502
+                            [10] => scrambled=0
+                            [11] => invalidscrambling=0
+                            [12] => af=50
+                            [13] => pcr=28
+                            [14] => discontinuities=0
+                            [15] => duplicated=0
+                            [16] => pes=21
+                            [17] => invalidpesprefix=0
+                            [18] => description=AVC video (1920x1080, main profile, level 4.0, 4
+                            [19] => 2
+                            [20] => 0)
+                        )
+
+                    [4] => Array
+                        (
+                            [0] => pid=601
+                            [1] => access=clear
+                            [2] => streamid=192
+                            [3] => audio
+                            [4] => servcount=1
+                            [5] => servlist=1
+                            [6] => bitrate=252729
+                            [7] => bitrate204=274237
+                            [8] => packets=168
+                            [9] => clear=168
+                            [10] => scrambled=0
+                            [11] => invalidscrambling=0
+                            [12] => af=42
+                            [13] => pcr=0
+                            [14] => discontinuities=0
+                            [15] => duplicated=0
+                            [16] => pes=42
+                            [17] => invalidpesprefix=0
+                            [18] => description=MPEG-1 Audio (Audio layer II, 224 kb/s, @48,000 Hz, stereo)
+                        )
+
+                    [5] => Array
+                        (
+                            [0] => pid=1003
+                            [1] => pmt
+                            [2] => access=clear
+                            [3] => servcount=1
+                            [4] => servlist=1
+                            [5] => bitrate=3008
+                            [6] => bitrate204=3264
+                            [7] => packets=2
+                            [8] => clear=2
+                            [9] => scrambled=0
+                            [10] => invalidscrambling=0
+                            [11] => af=0
+                            [12] => pcr=0
+                            [13] => discontinuities=0
+                            [14] => duplicated=0
+                            [15] => unitstart=2
+                            [16] => description=PMT
+                        )
+
+                )
+
+        )
+
+)

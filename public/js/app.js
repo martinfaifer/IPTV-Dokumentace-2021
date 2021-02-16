@@ -7921,8 +7921,10 @@ __webpack_require__.r(__webpack_exports__);
         channelId: this.$route.params.id
       }).then(function (response) {
         if (response.data.status === "success") {
+          _this.$store.state.dohledAccess = "success";
           _this.dohled = response.data.streamData;
         } else {
+          _this.$store.state.dohledAccess = null;
           _this.dohled = null;
         }
       });
@@ -8704,7 +8706,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    dohled: function dohled() {
+      return this.$store.state.dohledAccess;
+    }
+  },
   data: function data() {
     return {
       editData: null,
@@ -8785,6 +8801,16 @@ __webpack_require__.r(__webpack_exports__);
 
           _this5.loadMulticast();
         }
+      });
+    },
+    AnalyzeChannel: function AnalyzeChannel() {
+      var _this6 = this;
+
+      axios.post('channel/analyze', {
+        channelId: this.$route.params.id,
+        type: "multicast"
+      }).then(function (response) {
+        _this6.$store.state.alerts = response.data.alert;
       });
     }
   },
@@ -10624,7 +10650,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    dohled: function dohled() {
+      return this.$store.state.dohledAccess;
+    }
+  },
   data: function data() {
     return {
       m3u8s: [],
@@ -10733,6 +10772,16 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this6.kvalityOutput = null;
         }
+      });
+    },
+    AnalyzeChannel: function AnalyzeChannel() {
+      var _this7 = this;
+
+      axios.post("channel/analyze", {
+        channelId: this.$route.params.id,
+        type: "h264"
+      }).then(function (response) {
+        _this7.$store.state.alerts = response.data.alert;
       });
     }
   },
@@ -11598,7 +11647,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    dohled: function dohled() {
+      return this.$store.state.dohledAccess;
+    }
+  },
   data: function data() {
     return {
       editDataDialog: false,
@@ -11679,6 +11742,16 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this5.kvalityOutput = null;
         }
+      });
+    },
+    AnalyzeChannel: function AnalyzeChannel() {
+      var _this6 = this;
+
+      axios.post("channel/analyze", {
+        channelId: this.$route.params.id,
+        type: "h265"
+      }).then(function (response) {
+        _this6.$store.state.alerts = response.data.alert;
       });
     }
   },
@@ -36305,7 +36378,7 @@ var render = function() {
               _c(
                 "v-col",
                 { attrs: { cols: "12", sm: "12", md: "12", lg: "12" } },
-                [_c("router-view", { staticClass: "ml-16 mt-8" })],
+                [_c("router-view", { staticClass: "ml-16 mt-10" })],
                 1
               )
             ],
@@ -43501,7 +43574,38 @@ var render = function() {
                   ])
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _vm.dohled != null
+                ? _c(
+                    "v-list-item",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.AnalyzeChannel()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { "x-small": "" } }, [
+                            _vm._v("mdi-magnify")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [
+                        _vm._v(
+                          "\n                    Analyzovat kanál\n                "
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -46596,7 +46700,38 @@ var render = function() {
                   ])
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _vm.dohled != null
+                ? _c(
+                    "v-list-item",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.AnalyzeChannel()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { "x-small": "" } }, [
+                            _vm._v("mdi-magnify")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [
+                        _vm._v(
+                          "\n                    Analyzovat kanál\n                "
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -48081,7 +48216,38 @@ var render = function() {
                   ])
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _vm.dohled != null
+                ? _c(
+                    "v-list-item",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.AnalyzeChannel()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { "x-small": "" } }, [
+                            _vm._v("mdi-magnify")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [
+                        _vm._v(
+                          "\n                    Analyzovat kanál\n                "
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -120126,6 +120292,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     alerts: null,
+    dohledAccess: null,
     user: []
   },
   actions: {},
@@ -120135,6 +120302,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     updateUser: function updateUser(state, user) {
       state.user.push(user);
+    },
+    updateDohledSatatus: function updateDohledSatatus(state, dohledStatus) {
+      state.dohledAccess.push(dohledStatus);
     }
   },
   getters: {}

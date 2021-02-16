@@ -100,8 +100,10 @@ export default {
                 })
                 .then(response => {
                     if (response.data.status === "success") {
+                        this.$store.state.dohledAccess = "success";
                         this.dohled = response.data.streamData;
                     } else {
+                        this.$store.state.dohledAccess = null;
                         this.dohled = null;
                     }
                 });

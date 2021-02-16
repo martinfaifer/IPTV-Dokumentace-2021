@@ -258,7 +258,7 @@
             </v-row>
             <transition name="fade" mode="out-in">
                 <v-col cols="12" sm="12" md="12" lg="12">
-                    <router-view class="ml-16 mt-8"> </router-view>
+                    <router-view class="ml-16 mt-10"> </router-view>
                 </v-col>
             </transition>
         </v-card>

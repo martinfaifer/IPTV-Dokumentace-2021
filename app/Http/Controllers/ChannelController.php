@@ -7,10 +7,13 @@ use App\Models\Channel;
 use App\Models\ChannelToDohled;
 use App\Models\Device;
 use App\Models\DeviceHasChild;
+use App\Models\Dokumenation;
 use App\Models\H264;
+use App\Models\H265;
 use App\Models\LinuxPath;
 use App\Models\Multicast;
 use App\Models\MulticastSource;
+use App\Models\UnicastKvalitaChannelOutput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -593,5 +596,67 @@ class ChannelController extends Controller
                 'msg' => "Logo uloženo"
             )
         ];
+    }
+
+
+
+    public function channel_analyze(Request $request)
+    {
+
+        switch ($request->type) {
+            case 'multicast':
+                $apiResponse = ApiController::analyze_stream(Multicast::where('channelId', $request->channelId)->first()->stb_ip);
+
+                return $this->channel_analyze_response($apiResponse, $request->channelId, $request->type);
+
+                break;
+
+            case 'h264':
+
+                $apiResponse = ApiController::analyze_stream(
+                    str_replace(":1234", "", UnicastKvalitaChannelOutput::where('h264Id', H264::where('channelId', $request->channelId)->first()->id)->first()->output)
+                );
+
+                return $this->channel_analyze_response($apiResponse, $request->channelId, $request->type);
+
+                break;
+
+            case 'h265':
+
+                $apiResponse = ApiController::analyze_stream(
+                    str_replace(":1234", "", UnicastKvalitaChannelOutput::where('h265Id', H265::where('channelId', $request->channelId)->first()->id)->first()->output)
+                );
+
+                return $this->channel_analyze_response($apiResponse, $request->channelId, $request->type);
+
+                break;
+
+            default:
+                return NotificationController::notify();
+                break;
+        }
+    }
+
+    public function channel_analyze_response($responseFromDohled, $channelId, $type): array
+    {
+        if ($responseFromDohled['status'] != 'success') {
+            return NotificationController::notify("error", "error", "Analýza selhala");
+        }
+
+        // uložení do souboru + uložení do db
+        $fileName = uniqid() . Channel::find($channelId)->nazev . '_analyze_' . $type . '.txt';
+        $newFile = fopen('storage/Channel_docu/' . $fileName, "w");
+        fwrite($newFile, print_r($responseFromDohled, true));
+        fclose($newFile);
+
+        Dokumenation::create(
+            [
+                'name' => $fileName,
+                'path' => "/storage/Channel_docu/" . $fileName,
+                'channelId' => $channelId
+            ]
+        );
+
+        return NotificationController::notify("success", "success", "Analýza uložena");
     }
 }
