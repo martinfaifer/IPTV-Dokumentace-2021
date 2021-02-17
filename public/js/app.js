@@ -2802,6 +2802,253 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Contacts/ContactComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Contacts/ContactComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      editDialog: false,
+      contact: null,
+      showMenu: false,
+      x: 0,
+      y: 0
+    };
+  },
+  created: function created() {
+    this.loadContact();
+  },
+  methods: {
+    show: function show(e) {
+      var _this = this;
+
+      e.preventDefault();
+      this.showMenu = false;
+      this.x = e.clientX;
+      this.y = e.clientY;
+      this.$nextTick(function () {
+        _this.showMenu = true;
+      });
+    },
+    loadContact: function loadContact() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("contact/channel/" + _this2.$route.params.id).then(function (response) {
+                  if (response.data.status) {
+                    _this2.contact = response.data.data;
+                  } else {
+                    _this2.contact = null;
+                  }
+                });
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    remove: function remove() {
+      var _this3 = this;
+
+      axios["delete"]("contact", {
+        data: {
+          id: this.contact.id
+        }
+      }).then(function (response) {
+        _this3.$store.state.alerts = response.data.alert;
+
+        _this3.loadContact();
+      });
+    },
+    savedata: function savedata() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this4.editDialog = false;
+                _context2.next = 3;
+                return axios.patch("contact", {
+                  full_name: _this4.contact.full_name,
+                  telephone: _this4.contact.telephone,
+                  email: _this4.contact.email,
+                  id: _this4.contact.id
+                }).then(function (response) {
+                  _this4.$store.state.alerts = response.data.alert;
+
+                  _this4.loadContact();
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    }
+  },
+  watch: {
+    $route: function $route(to, from) {
+      this.loadContact();
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NavigationComponent.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NavigationComponent.vue?vue&type=script&lang=js& ***!
@@ -6862,11 +7109,74 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _ref;
 
     return _ref = {
+      contactDialog: false,
+      fullName: null,
+      email: null,
+      telephone: null,
       dohledovat: false,
       vytvaretNahled: false,
       zalozitDoDohledu: false,
@@ -7319,6 +7629,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }))();
     },
     closeDialog: function closeDialog() {
+      this.contactDialog = false;
+      this.fullName = "";
+      this.email = "";
+      this.telephone = "";
       this.logoDialog = false;
       this.editChannelName = false;
       this.createNewChannel = false;
@@ -7520,6 +7834,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee19);
+      }))();
+    },
+    addContact: function addContact() {
+      this.contactDialog = true;
+    },
+    saveContact: function saveContact() {
+      var _this22 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee20$(_context20) {
+          while (1) {
+            switch (_context20.prev = _context20.next) {
+              case 0:
+                _context20.next = 2;
+                return axios.post("contact/store", {
+                  channelId: _this22.channelId,
+                  full_name: _this22.fullName,
+                  email: _this22.email,
+                  telephone: _this22.telephone
+                }).then(function (response) {
+                  _this22.$store.state.alerts = response.data.alert;
+
+                  _this22.closeDialog();
+                });
+
+              case 2:
+                _this22.$router.push("/")["catch"](function (err) {});
+
+                _this22.$router.push("/channel/" + _this22.channelId)["catch"](function (err) {});
+
+              case 4:
+              case "end":
+                return _context20.stop();
+            }
+          }
+        }, _callee20);
       }))();
     }
   }
@@ -9866,7 +10216,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Multicast_backupComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Multicast/_backupComponent */ "./resources/js/components/channels/Multicast/_backupComponent.vue");
 /* harmony import */ var _Multicast_calendarComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Multicast/_calendarComponent */ "./resources/js/components/channels/Multicast/_calendarComponent.vue");
 /* harmony import */ var _Multicast_noteComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Multicast/_noteComponent */ "./resources/js/components/channels/Multicast/_noteComponent.vue");
-/* harmony import */ var _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Dohled/TestDohledComponent */ "./resources/js/components/channels/Dohled/TestDohledComponent.vue");
+/* harmony import */ var _Contacts_ContactComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Contacts/ContactComponent */ "./resources/js/components/Contacts/ContactComponent.vue");
+/* harmony import */ var _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Dohled/TestDohledComponent */ "./resources/js/components/channels/Dohled/TestDohledComponent.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -9934,6 +10285,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -9955,7 +10313,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     "backup-component": _Multicast_backupComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
     "calendar-component": _Multicast_calendarComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
     "note-component": _Multicast_noteComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
-    "dohled-component": _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
+    "contact-component": _Contacts_ContactComponent__WEBPACK_IMPORTED_MODULE_7__["default"],
+    "dohled-component": _Dohled_TestDohledComponent__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
   created: function created() {
     this.loadChannelNameById();
@@ -35644,6 +36003,380 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Contacts/ContactComponent.vue?vue&type=template&id=43b26ebe&":
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Contacts/ContactComponent.vue?vue&type=template&id=43b26ebe& ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-main",
+    [
+      _vm.contact != null
+        ? _c(
+            "v-card",
+            {
+              attrs: { flat: "", color: "#F5F5F7" },
+              on: {
+                contextmenu: function($event) {
+                  return _vm.show($event)
+                }
+              }
+            },
+            [
+              _c("v-card-subtitle", [
+                _c("strong", [
+                  _vm._v("\n                Kontakt\n            ")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                { staticClass: "ml-12 text--center" },
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { sm: "12", md: "4", lg: "4" } },
+                            [
+                              _c("strong", [
+                                _vm._v(
+                                  "\n                            Kontaktní osoba:\n                        "
+                                )
+                              ]),
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(_vm.contact.full_name) +
+                                  "\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { sm: "12", md: "4", lg: "4" } },
+                            [
+                              _c("strong", [
+                                _vm._v(
+                                  "\n                            Telefon:\n                        "
+                                )
+                              ]),
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(_vm.contact.telephone) +
+                                  "\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { sm: "12", md: "4", lg: "4" } },
+                            [
+                              _c("strong", [
+                                _vm._v(
+                                  "\n                            Email:\n                        "
+                                )
+                              ]),
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(_vm.contact.email) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-menu",
+        {
+          attrs: {
+            dense: "",
+            "position-x": _vm.x,
+            "position-y": _vm.y,
+            absolute: "",
+            "offset-y": ""
+          },
+          model: {
+            value: _vm.showMenu,
+            callback: function($$v) {
+              _vm.showMenu = $$v
+            },
+            expression: "showMenu"
+          }
+        },
+        [
+          _c(
+            "v-list",
+            { attrs: { dense: "" } },
+            [
+              _c(
+                "v-list-item",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.editDialog = true
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "v-list-item-icon",
+                    [
+                      _c("v-icon", { attrs: { "x-small": "" } }, [
+                        _vm._v("mdi-pencil")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [
+                    _vm._v("\n                    Upravit\n                ")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.remove()
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "v-list-item-icon",
+                    [
+                      _c("v-icon", { attrs: { "x-small": "" } }, [
+                        _vm._v("mdi-delete")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [
+                    _vm._v("\n                    Odebrat\n                ")
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.contact != null
+        ? _c(
+            "v-row",
+            { attrs: { justify: "center" } },
+            [
+              _c(
+                "v-dialog",
+                {
+                  attrs: { persistent: "", "max-width": "1000px" },
+                  model: {
+                    value: _vm.editDialog,
+                    callback: function($$v) {
+                      _vm.editDialog = $$v
+                    },
+                    expression: "editDialog"
+                  }
+                },
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", [
+                        _c("span", { staticClass: "headline" }, [
+                          _vm._v("Editace ")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-container",
+                            [
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          dense: "",
+                                          label: "Kontaktní osoba",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.contact.full_name,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.contact,
+                                              "full_name",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "contact.full_name"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          dense: "",
+                                          label: "Telefon",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.contact.telephone,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.contact,
+                                              "telephone",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "contact.telephone"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          dense: "",
+                                          label: "Email",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.contact.email,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.contact, "email", $$v)
+                                          },
+                                          expression: "contact.email"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.editDialog = false
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Zavřít\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "green darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.savedata()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Upravit\n                    "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Default/DefaultComponent.vue?vue&type=template&id=4e717756&":
 /*!***************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Default/DefaultComponent.vue?vue&type=template&id=4e717756& ***!
@@ -40126,7 +40859,9 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("v-list-item-title", [
-                    _vm._v("\n                    Logo\n                ")
+                    _vm._v(
+                      "\n                    Přidat / změnit logo\n                "
+                    )
                   ])
                 ],
                 1
@@ -40242,6 +40977,35 @@ var render = function() {
                   _c("v-list-item-title", [
                     _vm._v(
                       "\n                    Přidat událost\n                "
+                    )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.addContact()
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "v-list-item-icon",
+                    [
+                      _c("v-icon", { attrs: { "x-small": "" } }, [
+                        _vm._v("mdi-account-box-outline")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [
+                    _vm._v(
+                      "\n                    Přidat kontakt\n                "
                     )
                   ])
                 ],
@@ -41263,6 +42027,148 @@ var render = function() {
                           on: {
                             click: function($event) {
                               return _vm.saveChanneLogo()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Uložit\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "1000px" },
+              model: {
+                value: _vm.contactDialog,
+                callback: function($$v) {
+                  _vm.contactDialog = $$v
+                },
+                expression: "contactDialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Přidejte kontakt")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-container",
+                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Kontaktní osoba" },
+                                    model: {
+                                      value: _vm.fullName,
+                                      callback: function($$v) {
+                                        _vm.fullName = $$v
+                                      },
+                                      expression: "fullName"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "email" },
+                                    model: {
+                                      value: _vm.email,
+                                      callback: function($$v) {
+                                        _vm.email = $$v
+                                      },
+                                      expression: "email"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "telefoní číslo" },
+                                    model: {
+                                      value: _vm.telephone,
+                                      callback: function($$v) {
+                                        _vm.telephone = $$v
+                                      },
+                                      expression: "telephone"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.closeDialog()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Zavřít\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.saveContact()
                             }
                           }
                         },
@@ -45876,7 +46782,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
-            { staticClass: "mt-4 mr-15" },
+            { staticClass: "mt-6 mr-15" },
             [
               _c("multiplexor-component"),
               _vm._v(" "),
@@ -45901,6 +46807,20 @@ var render = function() {
           _c(
             "v-row",
             { staticClass: "mr-15" },
+            [
+              _c(
+                "v-col",
+                { attrs: { cols: "12", sm: "12", lg: "12", md: "12" } },
+                [_c("contact-component")],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { staticClass: " mt-6 mr-15" },
             [_c("v-col", [_c("dohled-component")], 1)],
             1
           )
@@ -116555,6 +117475,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardObecnyComponent_vue_vue_type_template_id_4653566c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardObecnyComponent_vue_vue_type_template_id_4653566c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Contacts/ContactComponent.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/Contacts/ContactComponent.vue ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ContactComponent_vue_vue_type_template_id_43b26ebe___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ContactComponent.vue?vue&type=template&id=43b26ebe& */ "./resources/js/components/Contacts/ContactComponent.vue?vue&type=template&id=43b26ebe&");
+/* harmony import */ var _ContactComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/Contacts/ContactComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ContactComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ContactComponent_vue_vue_type_template_id_43b26ebe___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ContactComponent_vue_vue_type_template_id_43b26ebe___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Contacts/ContactComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Contacts/ContactComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/Contacts/ContactComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ContactComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Contacts/ContactComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Contacts/ContactComponent.vue?vue&type=template&id=43b26ebe&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/components/Contacts/ContactComponent.vue?vue&type=template&id=43b26ebe& ***!
+  \**********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactComponent_vue_vue_type_template_id_43b26ebe___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ContactComponent.vue?vue&type=template&id=43b26ebe& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Contacts/ContactComponent.vue?vue&type=template&id=43b26ebe&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactComponent_vue_vue_type_template_id_43b26ebe___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactComponent_vue_vue_type_template_id_43b26ebe___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

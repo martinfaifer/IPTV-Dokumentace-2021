@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlankomInterfaceController;
 use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DeviceCategoryController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceInterfaceController;
@@ -269,5 +270,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/delete', [FolderController::class, 'delete']);
         Route::post('/add', [FolderController::class, 'add_file']);
         Route::post('files', [FolderController::class, 'return_files_belongsTo_channel']);
+    });
+
+    Route::group(['prefix' => 'contact'], function () {
+        Route::post('/store', [ContactController::class, 'store']);
+        Route::get('/channel/{channelId}', [ContactController::class, 'show']);
+        Route::get('/card/{cardId}', [ContactController::class, 'show']);
+        Route::patch('/', [ContactController::class, 'update']);
+        Route::delete('/', [ContactController::class, 'destroy']);
     });
 });

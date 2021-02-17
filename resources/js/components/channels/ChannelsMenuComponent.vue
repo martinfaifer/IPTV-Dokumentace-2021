@@ -48,7 +48,7 @@
                         <v-icon x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
-                        Logo
+                        Přidat / změnit logo
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="addMultiplexer()">
@@ -83,6 +83,16 @@
                         Přidat událost
                     </v-list-item-title>
                 </v-list-item>
+
+                <v-list-item @click="addContact()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-account-box-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat kontakt
+                    </v-list-item-title>
+                </v-list-item>
+
                 <v-divider></v-divider>
                 <v-list-item @click="createNewChannelDialog()">
                     <v-list-item-icon>
@@ -495,6 +505,55 @@
                 </v-card>
             </v-dialog>
 
+            <v-dialog v-model="contactDialog" persistent max-width="1000px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Přidejte kontakt</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Kontaktní osoba"
+                                        v-model="fullName"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field label="email" v-model="email">
+                                    </v-text-field>
+                                </v-col>
+
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="telefoní číslo"
+                                        v-model="telephone"
+                                    >
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog()"
+                        >
+                            Zavřít
+                        </v-btn>
+                        <v-btn
+                            color="green darken-1"
+                            text
+                            @click="saveContact()"
+                        >
+                            Uložit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
             <!-- CREATE NEW CHANNEL  DIALOG-->
 
             <v-dialog v-model="createNewChannel" persistent max-width="1000px">
@@ -624,6 +683,10 @@
 export default {
     data() {
         return {
+            contactDialog: false,
+            fullName: null,
+            email: null,
+            telephone: null,
             dohledovat: false,
             vytvaretNahled: false,
             zalozitDoDohledu: false,
@@ -923,6 +986,10 @@ export default {
         },
 
         closeDialog() {
+            this.contactDialog = false;
+            this.fullName = "";
+            this.email = "";
+            this.telephone = "";
             this.logoDialog = false;
             this.editChannelName = false;
             this.createNewChannel = false;
@@ -1012,6 +1079,26 @@ export default {
                         this.$router.push("/").catch(err => {});
                     }
                 });
+        },
+
+        addContact() {
+            this.contactDialog = true;
+        },
+        async saveContact() {
+            await axios
+                .post("contact/store", {
+                    channelId: this.channelId,
+                    full_name: this.fullName,
+                    email: this.email,
+                    telephone: this.telephone
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.closeDialog();
+                });
+
+            this.$router.push("/").catch(err => {});
+            this.$router.push("/channel/" + this.channelId).catch(err => {});
         }
     }
 };

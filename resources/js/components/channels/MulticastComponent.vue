@@ -28,7 +28,7 @@
                 </v-col>
             </v-row>
 
-            <v-row class="mt-4 mr-15">
+            <v-row class="mt-6 mr-15">
                 <!-- multiplexor component -->
                 <multiplexor-component></multiplexor-component>
 
@@ -49,9 +49,15 @@
                     <note-component></note-component>
                 </v-col>
             </v-row>
+            <v-row class="mr-15">
+                <v-col cols="12" sm="12" lg="12" md="12">
+                    <!-- kontakt  -->
+                    <contact-component></contact-component>
+                </v-col>
+            </v-row>
 
             <!-- TEST napojení na dohled -->
-            <v-row class="mr-15">
+            <v-row class=" mt-6 mr-15">
                 <v-col>
                     <dohled-component></dohled-component>
                 </v-col>
@@ -66,6 +72,7 @@ import SourceComponent from "./Multicast/_sourceComponent";
 import BackupComponent from "./Multicast/_backupComponent";
 import CalendarComponent from "./Multicast/_calendarComponent";
 import NoteComponent from "./Multicast/_noteComponent";
+import ContactComponent from "../Contacts/ContactComponent";
 import TestDohledComponent from "./Dohled/TestDohledComponent";
 export default {
     data() {
@@ -81,6 +88,7 @@ export default {
         "backup-component": BackupComponent,
         "calendar-component": CalendarComponent,
         "note-component": NoteComponent,
+        "contact-component": ContactComponent,
         "dohled-component": TestDohledComponent
     },
     created() {
