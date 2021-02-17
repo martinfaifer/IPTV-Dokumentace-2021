@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Api;
+use App\Models\Channel;
 use App\Models\ChannelToDohled;
 use App\Models\H264;
 use App\Models\H265;
@@ -337,6 +338,41 @@ class ApiController extends Controller
                 'no response'
             ];
         }
+    }
+
+
+    public function return_channels(): array
+    {
+
+        // multicasty
+        foreach (Channel::all() as $channel) {
+            // multicast
+            $output[] = array(
+                'nazev' => $channel->nazev,
+                'url' => Multicast::where('channelId', $channel->id)->first()->stb_ip . ":1234"
+            );
+            // h264
+            if ($h264 = H264::where('channelId', $channel->id)->first()) {
+                if ($outputUri = UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->first())
+                    $output[] = array(
+                        'nazev' => $channel->nazev . ". H264",
+                        'url' => $outputUri->output
+                    );
+                unset($outputUri);
+            }
+            // h265
+            if ($h265 =  H265::where('channelId', $channel->id)->first()) {
+                if ($outputUri = UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->first()) {
+                    $output[] = array(
+                        'nazev' => $channel->nazev . ". H265",
+                        'url' => $outputUri->output
+                    );
+                }
+                unset($outputUri);
+            }
+        }
+
+        return $output;
     }
 
 

@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('iptv/alerts', [ApiController::class, 'check_notifications_from_dohled']);
+
+Route::get('channel/return', [ApiController::class, 'return_channels']);
