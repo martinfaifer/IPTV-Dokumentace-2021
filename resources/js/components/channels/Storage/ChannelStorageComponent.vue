@@ -41,6 +41,9 @@
                                 :items="files"
                                 :search="search"
                             >
+                            <template v-slot:item.created_at="{ item }">
+                                   <span> {{new Date(item.created_at)}} </span>
+                                </template>
                                 <template v-slot:item.akce="{ item }">
                                     <a
                                         style="text-decoration:none"
@@ -169,6 +172,10 @@ export default {
                     text: "Název",
                     align: "start",
                     value: "name"
+                },
+                {
+                    text: "Datum vytvoření",
+                    value: "created_at"
                 },
                 {
                     text: "Akce",

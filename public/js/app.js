@@ -10548,6 +10548,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -10568,6 +10571,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Název",
         align: "start",
         value: "name"
+      }, {
+        text: "Datum vytvoření",
+        value: "created_at"
       }, {
         text: "Akce",
         value: "akce"
@@ -46971,6 +46977,21 @@ var render = function() {
                             search: _vm.search
                           },
                           scopedSlots: _vm._u([
+                            {
+                              key: "item.created_at",
+                              fn: function(ref) {
+                                var item = ref.item
+                                return [
+                                  _c("span", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(new Date(item.created_at)) +
+                                        " "
+                                    )
+                                  ])
+                                ]
+                              }
+                            },
                             {
                               key: "item.akce",
                               fn: function(ref) {
