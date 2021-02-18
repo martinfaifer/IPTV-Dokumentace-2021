@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Satelit;
-use Illuminate\Http\Request;
 
 class SatelitController extends Controller
 {

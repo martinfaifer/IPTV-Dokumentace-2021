@@ -652,21 +652,21 @@
                                         </v-col>
 
                                         <v-col cols="12">
-                                            <v-text-field
-                                                dense
+                                            <v-select
                                                 label="LNB"
                                                 v-model="lnb"
-                                                required
-                                            ></v-text-field>
+                                                :items="lnbVoltageItems"
+                                                dense
+                                            ></v-select>
                                         </v-col>
 
                                         <v-col cols="12">
-                                            <v-text-field
+                                            <v-select
                                                 dense
-                                                label="LNB 22k"
                                                 v-model="lnb22k"
-                                                required
-                                            ></v-text-field>
+                                                :items="lnb22khzItems"
+                                                label="LNB 22k"
+                                            ></v-select>
                                         </v-col>
 
                                         <v-col cols="12">
@@ -712,6 +712,8 @@
 export default {
     data() {
         return {
+            lnb22khzItems: ["on", "off"],
+            lnbVoltageItems: ["off", "13V", "18V"],
             cards: [],
             interfaceId: "",
             polarizaces: [],
@@ -839,7 +841,7 @@ export default {
                     ci: this.ci
                 })
                 .then(response => {
-                    this.$store.state.alerts = response.data;
+                    this.$store.state.alerts = response.data.alert;
                     this.editInterfaceSablonaData = false;
                     this.loadDeviceTemplate();
                 });

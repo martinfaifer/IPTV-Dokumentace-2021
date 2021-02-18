@@ -10,9 +10,6 @@ use App\Models\H265;
 use App\Models\Multicast;
 use App\Models\UnicastKvalitaChannelOutput;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 
 class ApiController extends Controller
 {

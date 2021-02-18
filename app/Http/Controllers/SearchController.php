@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BlankomInterface;
 use App\Models\Channel;
 use App\Models\Device;
 use App\Models\Multicast;
-use App\Models\Satelit;
 use App\Models\SatelitCard;
 use App\Models\Wiki;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 class SearchController extends Controller
 {

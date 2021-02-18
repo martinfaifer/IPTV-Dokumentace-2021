@@ -13,7 +13,6 @@ use App\Models\H265;
 use App\Models\LinuxPath;
 use App\Models\Multicast;
 use App\Models\ParedTag;
-use Illuminate\Http\Request;
 
 class CrashedChannelsController extends Controller
 {

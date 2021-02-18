@@ -353,7 +353,7 @@ export default {
                     cib: this.cib
                 })
                 .then(response => {
-                    this.$store.state.alerts = response.data;
+                    this.$store.state.alerts = response.data.alert;
                     this.editInterfaceSablonaData = false;
                     this.loadDeviceTemplate();
                 });

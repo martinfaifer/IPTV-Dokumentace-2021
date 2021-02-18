@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use React\EventLoop\Factory;
 
 class BackgroundProcessController extends Controller

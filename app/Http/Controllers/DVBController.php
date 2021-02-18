@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DVB;
-use Illuminate\Http\Request;
 
 class DVBController extends Controller
 {

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeviceCategory;
-use Illuminate\Http\Request;
 
 class DeviceCategoryController extends Controller
 {

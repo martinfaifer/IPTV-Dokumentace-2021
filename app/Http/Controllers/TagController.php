@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ChannelAutoReboot;
 use App\Models\ParedTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;

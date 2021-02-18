@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeviceTemplate;
-use Illuminate\Http\Request;
+
 
 class DeviceTemplateController extends Controller
 {

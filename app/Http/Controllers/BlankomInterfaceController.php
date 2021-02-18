@@ -85,6 +85,14 @@ class BlankomInterfaceController extends Controller
                 $polarizace = $request->polarizace["polarizace"];
             }
 
+            // overeni, zda existuje v $request->ci klic card_number
+            if (is_array($request->ci)) {
+                $ci = $request->ci['card_number'];
+            } else {
+                $ci = $request->ci ?? null;
+            }
+
+
             BlankomInterface::where('deviceId', $request->deviceId)->update(
                 [
                     "rf" . $request->interfaceId . "_sat" => $sat,
@@ -95,7 +103,7 @@ class BlankomInterfaceController extends Controller
                     "rf" . $request->interfaceId . "_fec" => $request->fec,
                     "rf" . $request->interfaceId . "_freq" => $request->freq,
                     "rf" . $request->interfaceId . "_pol" => $polarizace,
-                    "CI" . $request->interfaceId => $request->ci["card_number"] ?? null
+                    "CI" . $request->interfaceId => $ci
                 ]
             );
 
@@ -106,10 +114,7 @@ class BlankomInterfaceController extends Controller
                 "editoval"
             ));
 
-            return [
-                'status' => "success",
-                'msg' => "Editováno"
-            ];
+            return NotificationController::notify("success", "success", "Editováno");
         } catch (\Throwable $th) {
 
             return NotificationController::notify();

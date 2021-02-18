@@ -357,6 +357,8 @@ import SettingsMenuComponent from "./Settings/SettingsMenuComponent";
 
 import UserMenuComponent from "./UserMenuComponent";
 
+// import TutorialComponent from "./TutorialComponent";
+
 export default {
     data() {
         return {
@@ -415,7 +417,8 @@ export default {
         "wikimenu-component": WikiMenuComponent,
         "event-component": EventComponent,
         "settingsmenu-component": SettingsMenuComponent,
-        "usermenu-component": UserMenuComponent
+        "usermenu-component": UserMenuComponent,
+        // "tutorial-component": TutorialComponent
     },
 
     created() {

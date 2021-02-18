@@ -82,6 +82,19 @@ class FteInterfaceController extends Controller
                 $polarizace = $request->polarizace["polarizace"];
             }
 
+            // overeni, zda existuje v $request->ci klic card_number
+            if (is_array($request->cia)) {
+                $cia = $request->cia['card_number'];
+            } else {
+                $cia = $request->cia ?? null;
+            }
+
+            if (is_array($request->cib)) {
+                $cib = $request->cib['card_number'];
+            } else {
+                $cib = $request->cib ?? null;
+            }
+
             FteInterface::where('deviceId', $request->deviceId)->update(
                 [
                     "dvb" => $dvb,
@@ -90,8 +103,8 @@ class FteInterfaceController extends Controller
                     "symbolRate" => $request->symbolrate,
                     "polarizace" => $polarizace,
                     "fec" => $request->fec,
-                    "CIA" . $request->interfaceId => $request->cia["card_number"] ?? null,
-                    "CIB" . $request->interfaceId => $request->cib["card_number"] ?? null,
+                    "CIA" . $request->interfaceId => $cia,
+                    "CIB" . $request->interfaceId => $cib,
                 ]
             );
 
@@ -103,10 +116,7 @@ class FteInterfaceController extends Controller
                 "editoval"
             ));
 
-            return [
-                'status' => "success",
-                'msg' => "Editováno"
-            ];
+            return NotificationController::notify("success", "success", "Editováno");
         } catch (\Throwable $th) {
 
             return NotificationController::notify();

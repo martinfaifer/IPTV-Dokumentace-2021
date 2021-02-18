@@ -3421,6 +3421,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+ // import TutorialComponent from "./TutorialComponent";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3479,7 +3480,8 @@ __webpack_require__.r(__webpack_exports__);
     "wikimenu-component": _Wiki_WikiMenuCompoennt__WEBPACK_IMPORTED_MODULE_6__["default"],
     "event-component": _Alerts_EventComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
     "settingsmenu-component": _Settings_SettingsMenuComponent__WEBPACK_IMPORTED_MODULE_7__["default"],
-    "usermenu-component": _UserMenuComponent__WEBPACK_IMPORTED_MODULE_8__["default"]
+    "usermenu-component": _UserMenuComponent__WEBPACK_IMPORTED_MODULE_8__["default"] // "tutorial-component": TutorialComponent
+
   },
   created: function created() {
     this.getUser();
@@ -14104,6 +14106,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      lnb22khzItems: ["on", "off"],
+      lnbVoltageItems: ["off", "13V", "18V"],
       cards: [],
       interfaceId: "",
       polarizaces: [],
@@ -14221,7 +14225,7 @@ __webpack_require__.r(__webpack_exports__);
         lnb22k: this.lnb22k,
         ci: this.ci
       }).then(function (response) {
-        _this7.$store.state.alerts = response.data;
+        _this7.$store.state.alerts = response.data.alert;
         _this7.editInterfaceSablonaData = false;
 
         _this7.loadDeviceTemplate();
@@ -14601,7 +14605,7 @@ __webpack_require__.r(__webpack_exports__);
         cia: this.cia,
         cib: this.cib
       }).then(function (response) {
-        _this7.$store.state.alerts = response.data;
+        _this7.$store.state.alerts = response.data.alert;
         _this7.editInterfaceSablonaData = false;
 
         _this7.loadDeviceTemplate();
@@ -52535,11 +52539,11 @@ var render = function() {
                                       "v-col",
                                       { attrs: { cols: "12" } },
                                       [
-                                        _c("v-text-field", {
+                                        _c("v-select", {
                                           attrs: {
-                                            dense: "",
                                             label: "LNB",
-                                            required: ""
+                                            items: _vm.lnbVoltageItems,
+                                            dense: ""
                                           },
                                           model: {
                                             value: _vm.lnb,
@@ -52557,11 +52561,11 @@ var render = function() {
                                       "v-col",
                                       { attrs: { cols: "12" } },
                                       [
-                                        _c("v-text-field", {
+                                        _c("v-select", {
                                           attrs: {
                                             dense: "",
-                                            label: "LNB 22k",
-                                            required: ""
+                                            items: _vm.lnb22khzItems,
+                                            label: "LNB 22k"
                                           },
                                           model: {
                                             value: _vm.lnb22k,

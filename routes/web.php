@@ -29,7 +29,6 @@ use App\Http\Controllers\UnicastKvalitaChannelOutputController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WikiController;
-use App\Models\SatelitCardVendor;
 use Illuminate\Support\Facades\Route;
 
 

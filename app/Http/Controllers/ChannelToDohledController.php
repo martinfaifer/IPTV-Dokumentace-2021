@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Multicast;
-use Illuminate\Http\Request;
 
 class ChannelToDohledController extends Controller
 {

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Device;
-use Illuminate\Http\Request;
 use phpseclib3\Net\SSH2;
 
 class SshController extends Controller

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ChannelToDohled;
 use App\Models\ParedTag;
-use Illuminate\Http\Request;
 
 class ParedTagController extends Controller
 {

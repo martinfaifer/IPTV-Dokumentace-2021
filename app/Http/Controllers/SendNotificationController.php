@@ -6,7 +6,6 @@ use App\Mail\SendFileNotification;
 use App\Mail\SendNotification;
 use App\Mail\SendRebootStreamNotification;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class SendNotificationController extends Controller

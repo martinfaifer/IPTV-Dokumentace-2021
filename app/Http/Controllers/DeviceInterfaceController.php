@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeviceInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class DeviceInterfaceController extends Controller
