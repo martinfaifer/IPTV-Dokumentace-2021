@@ -5,14 +5,137 @@ namespace App\Http\Controllers;
 use App\Models\Api;
 use App\Models\Channel;
 use App\Models\ChannelToDohled;
+use App\Models\Device;
 use App\Models\H264;
 use App\Models\H265;
+use App\Models\M3u8;
 use App\Models\Multicast;
+use App\Models\UnicastChunkStoreId;
 use App\Models\UnicastKvalitaChannelOutput;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
+    public $token = "d4c3ed93-3768-48c0-98b6-1717108157e9";
+
+    /**
+     * ověření připojení externího systemu do doku
+     *
+     * @param Request $request->hello
+     * @return void
+     */
+    public function say_hello(Request $request): string
+    {
+        return ($request->hello === $this->token)
+            ? "success"
+            : "error";
+    }
+
+
+    public function retun_information_about_stream(Request $request): array
+    {
+        if ($this->say_hello($request) === "error") {
+            return [
+                'status' => "error"
+            ];
+        }
+        if (!isset($request->stream_url)) {
+            return [
+                'status' => "error"
+            ];
+        }
+
+
+        $streamUrl = str_replace(":1234", "", $request->stream_url);
+
+        $multicast = Multicast::where('stb_ip', $streamUrl)->first();
+
+        $unicast = UnicastKvalitaChannelOutput::where('output', $request->stream_url)->first();
+
+        if (!$multicast && !$unicast) {
+            return [
+                'status' => "not found"
+            ];
+        }
+
+        if (!$multicast) {
+            // multicast neexistuje
+
+            // existuje unicast , nutno zjistit H264 || H265
+            if (!is_null($unicast->h264Id)) {
+                // vyhledání dle H264
+                if ($h264 = H264::find($unicast->h264Id)) {
+                    // channelId , deviceId
+                    $multicast = Multicast::find($h264->channelId);
+                    $h264Device = Device::find($h264->deviceId);
+                }
+            } else {
+                // vyhledání dle h265
+
+                if ($h265 = H265::find($unicast->h265Id)) {
+                    // channelId , deviceId
+                    $multicast = Multicast::find($h265->channelId);
+                    $h265Device = Device::find($h265->deviceId);
+                }
+            }
+        }
+
+        if (!$unicast) {
+
+            if ($h264 = H264::where('channelId', $multicast->channelId)->first()) {
+                $h264Output = array(
+                    'chunk_Store_id' => UnicastChunkStoreId::where('channelId', $multicast->id)->first(),
+                    'm3u8_stb' => M3u8::where('h264id', $h264->id)->first()->local,
+                    'm3u8_HLS_kdekoliv' => M3u8::where('h264id', $h264->id)->first()->kdekoliv,
+                    'm3u8_mobile' => M3u8::where('h264id', $h264->id)->first()->mobile,
+
+                );
+                $h264Device = Device::find($h264->deviceId)->name;
+                $h264DeviceId = $h264->deviceId;
+            } else {
+                $h264Output = array();
+                $h264Device = null;
+                $h264DeviceId = null;
+            }
+
+            if ($h265 = H265::where('channelId', $multicast->channelId)->first()) {
+
+                $h265Output = $h265->id;
+                $h265Device = Device::find($h265->deviceId)->name;
+                $h265DeviceId = $h265->deviceId;
+            } else {
+                $h265Output = null;
+                $h265Device = null;
+                $h265DeviceId = null;
+            }
+        }
+
+        $channel = Channel::find($multicast->channelId);
+        $multicastDevice = Device::find($multicast->deviceId);
+
+
+        return [
+            'status' => "success",
+            'channelData' => array(
+                'id' => $multicast->channelId,
+                'nazev' => $channel->nazev,
+                'ipKstb' => $multicast->stb_ip
+            ),
+            'prijem' => array(
+                'id' => $multicastDevice->id,
+                'name' => $multicastDevice->name
+            ),
+            'multiplexer' =>  Device::where('id', $request->multiplexerId)->first(),
+            'h264' => $h264Output,
+            'h264Device' => $h264Device,
+            'h264DeviceId' => $h264DeviceId,
+            'h265' => $h265Output,
+            'h265Device' => $h265Device,
+            'h265DeviceId' => $h265DeviceId,
+        ];
+    }
+
     /**
      * fn pro výpis všech endpoitu po API
      *
