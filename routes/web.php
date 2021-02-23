@@ -65,8 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // searchs => vyhledání v celé aplikaci, pripaveny json s url a popisem pro rychlejší vyhledání
-    Route::get('search', [SearchController::class, 'search']);
-    Route::post('search/realtime', [SearchController::class, 'realtime_search']);
+    Route::prefix('search')->group(function () {
+        Route::get('/', [SearchController::class, 'search']);
+        Route::post('/realtime', [SearchController::class, 'realtime_search']);
+        Route::get('/filter/{filter}/{item}', [SearchController::class, 'filter']);
+        Route::post('/filterData', [SearchController::class, 'filterData']);
+    });
 
 
     // Sekce  kanály

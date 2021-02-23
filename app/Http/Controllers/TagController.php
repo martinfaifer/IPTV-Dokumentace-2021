@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
+use App\Models\Device;
+use App\Models\DeviceCategory;
+use App\Models\H264;
+use App\Models\H265;
+use App\Models\Multicast;
 use App\Models\ParedTag;
 use App\Models\Tag;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class TagController extends Controller
 {
@@ -310,5 +318,109 @@ class TagController extends Controller
                 'msg' => "Oderáno"
             )
         ];
+    }
+
+
+
+    public static function get_tagName_result($tagName)
+    {
+
+        $tag = Tag::where('tagName', $tagName)->first();
+
+        if (!ParedTag::where('tagId', $tag->id)->first()) {
+            return [];
+        }
+
+        foreach (ParedTag::where('tagId', $tag->id)->get() as $tagData) {
+
+            if (!is_null($tagData->deviceId)) {
+                // vyhledání zařízení
+                $device = Device::find($tagData->deviceId);
+                $filteredOutput[] = array(
+                    'id' => "device" . uniqid(),
+                    'img' => "false",
+                    'icon' => DeviceCategory::find($device->category)->icon,
+                    'name' => $device->name,
+                    'url' => '/device/' . $device->id
+                );
+
+                unset($device);
+            }
+
+            if (!is_null($tagData->multicastId)) {
+                //  vyhledání kanálu, dle multicastu
+                $channel = Channel::where('id', $tagData->multicastId)->first();
+
+                if (isset($channel->nazev)) {
+                    $filteredOutput[] = array(
+                        'id' => 'multicast' . uniqid(),
+                        'img' => $channel->logo,
+                        'icon' => "false",
+                        'name' => $channel->nazev,
+                        'url' => '/channel/' . $channel->id
+                    );
+                }
+
+                unset($channel);
+            }
+
+            if (!is_null($tagData->h264Id)) {
+                // vyhledání dle H264
+                $channel = Channel::where('id', $tagData->h264Id)->first();
+
+                $filteredOutput[] = array(
+                    'id' => 'h264' . uniqid(),
+                    'img' => $channel->logo,
+                    'icon' => "false",
+                    'name' => $channel->nazev,
+                    'url' => '/channel/' . $channel->id . '/h264'
+                );
+
+                unset($channel);
+            }
+
+            if (!is_null($tagData->h265Id)) {
+                // vyhledání dle H265
+                $channel = Channel::where('id', $tagData->h265Id)->first();
+
+                $filteredOutput[] = array(
+                    'id' => 'h265' . uniqid(),
+                    'img' => $channel->logo,
+                    'icon' => "false",
+                    'name' => $channel->nazev,
+                    'url' => '/channel/' . $channel->id . '/h265'
+                );
+
+                unset($channel);
+            }
+        }
+
+        return $filteredOutput;
+    }
+
+    /**
+     * výpis dat dle štítku
+     *
+     * @param string $tagId
+     * @return array
+     */
+    public static function show_by_tag($tagName): array
+    {
+        if (Str::contains($tagName, ',')) {
+
+            $tagNames = explode(",", $tagName);
+
+            foreach ($tagNames as $singleTagName) {
+                $output[] = self::get_tagName_result($singleTagName);
+            }
+
+            if (count($output) >= 2) {
+                $output = Arr::collapse($output);
+            }
+
+            return $output;
+        } else {
+            return self::get_tagName_result($tagName);
+        }
     }
 }

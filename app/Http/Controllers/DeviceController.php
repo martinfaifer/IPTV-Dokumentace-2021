@@ -15,6 +15,8 @@ use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 class DeviceController extends Controller
 {
@@ -517,6 +519,7 @@ class DeviceController extends Controller
                 }
                 $outputArr[] = array(
                     'id' => $multicast->channelId,
+                    'logo' => Channel::where('id', $multicast->channelId)->first()->logo,
                     'nazev' => Channel::where('id', $multicast->channelId)->first()->nazev,
                     'interface' => $interface
                 );
@@ -530,6 +533,7 @@ class DeviceController extends Controller
                 // dle id vyhledání nazvu
                 $outputArr[] = array(
                     'id' => $multiplexor->channelId,
+                    'logo' => Channel::where('id', $multiplexor->channelId)->first()->logo,
                     'nazev' => Channel::where('id', $multiplexor->channelId)->first()->nazev,
                     'interface' => ""
                 );
@@ -543,6 +547,7 @@ class DeviceController extends Controller
                 // dle id vyhledání nazvu
                 $outputArr[] = array(
                     'id' => $h264->channelId,
+                    'logo' => Channel::where('id', $h264->channelId)->first()->logo,
                     'nazev' => Channel::where('id', $h264->channelId)->first()->nazev . " H264",
                     'interface' => ""
                 );
@@ -557,6 +562,7 @@ class DeviceController extends Controller
                 // dle id vyhledání nazvu
                 $outputArr[] = array(
                     'id' => $h265->channelId,
+                    'logo' => Channel::where('id', $h265->channelId)->first()->logo,
                     'nazev' => Channel::where('id', $h265->channelId)->first()->nazev . " H265",
                     'interface' => ""
                 );
@@ -1060,6 +1066,111 @@ class DeviceController extends Controller
             }
         } else {
             return null;
+        }
+    }
+
+
+
+    public static function get_device_result($device)
+    {
+
+        $outputArr = array();
+
+        $thisDevice = Device::where('name', $device)->first();
+
+        // multicast
+        if (Multicast::where('deviceId', $thisDevice->id)->first()) {
+
+            foreach (Multicast::where('deviceId', $thisDevice->id)->get() as $multicast) {
+                // dle id vyhledání nazvu
+                $channel = Channel::where('id', $multicast->channelId)->first();
+                $outputArr[] = array(
+                    'id' => $multicast->channelId,
+                    'img' => $channel->logo,
+                    'icon' => "false",
+                    'name' => $channel->nazev,
+                    'url' => '/channel/' .  $channel->id
+                );
+
+                unset($channel);
+            }
+        }
+
+        // multiplexor
+        if (Multicast::where('multiplexerId', $thisDevice->id)->first()) {
+
+            foreach (Multicast::where('multiplexerId', $thisDevice->id)->get() as $multiplexor) {
+                // dle id vyhledání nazvu
+                $channel = Channel::where('id', $multiplexor->channelId)->first();
+                $outputArr[] = array(
+                    'id' => $multiplexor->channelId,
+                    'img' => $channel->logo,
+                    'icon' => "false",
+                    'name' => $channel->nazev,
+                    'url' => '/channel/' .  $channel->id
+                );
+
+                unset($channel);
+            }
+        }
+
+        // H264
+        if (H264::where('deviceId', $thisDevice->id)->first()) {
+
+            foreach (H264::where('deviceId', $thisDevice->id)->get() as $h264) {
+                // dle id vyhledání nazvu
+                $channel = Channel::where('id', $h264->channelId)->first();
+                $outputArr[] = array(
+                    'id' => $h264->channelId,
+                    'img' => $channel->logo,
+                    'icon' => "false",
+                    'name' => $channel->nazev . " H264",
+                    'url' => '/channel/' . $channel->id . '/h264'
+                );
+                unset($channel);
+            }
+        }
+
+
+        // H265
+        if (H265::where('deviceId', $thisDevice->id)->first()) {
+
+            foreach (H265::where('deviceId', $thisDevice->id)->get() as $h265) {
+                // dle id vyhledání nazvu
+                $channel = Channel::where('id', $h265->channelId)->first();
+                $outputArr[] = array(
+                    'id' => $h265->channelId,
+                    'img' => $channel->logo,
+                    'icon' => "false",
+                    'name' => $channel->nazev . " H265",
+                    'url' => '/channel/' . $channel->id . '/h265'
+                );
+
+                unset($channel);
+            }
+        }
+
+        return $outputArr;
+    }
+
+
+    public static function show_channels_on_device(string $device): array
+    {
+        if (Str::contains($device, ',')) {
+
+            $devices = explode(",", $device);
+
+            foreach ($devices as $singleDevice) {
+                $output[] = self::get_device_result($singleDevice);
+            }
+
+            if (count($output) >= 2) {
+                $output = Arr::collapse($output);
+            }
+
+            return $output;
+        } else {
+            return self::get_device_result($device);
         }
     }
 }

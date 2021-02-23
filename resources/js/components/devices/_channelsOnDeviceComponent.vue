@@ -15,6 +15,17 @@
                     :items="channels"
                     :search="search"
                 >
+                    <template v-slot:item.logo="{ item }">
+                        <div v-if="item.logo != false || item.logo != false">
+                            <v-img
+                                :lazy-src="item.logo"
+                                max-height="24"
+                                max-width="24"
+                                :src="item.logo"
+                            ></v-img>
+                        </div>
+                    </template>
+
                     <template v-slot:item.akce="{ item }">
                         <v-btn
                             small
@@ -40,6 +51,10 @@ export default {
             channels: null,
             search: "",
             headers: [
+                {
+                    text: "",
+                    value: "logo"
+                },
                 {
                     text: "kanál",
                     align: "start",
