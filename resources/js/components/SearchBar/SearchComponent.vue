@@ -145,11 +145,11 @@
                             </v-data-table>
                         </v-col>
                     </v-row>
-                    <v-row v-if="filteredResult == null" class="text-center blue--text">
+                    <v-row v-if="filteredResult == null" class="text-center">
                         <v-col cols="12">
-                            <h3>
+                            <span class="title">
                                 Zde se zobrazí výsledky
-                            </h3>
+                            </span>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -202,8 +202,8 @@ export default {
                 this.entries = response.data.entries;
             });
         },
-        async searchForCurrentFilter() {
-            await axios
+        searchForCurrentFilter() {
+            axios
                 .post("search/filterData", {
                     filter: this.filter
                 })
@@ -211,9 +211,9 @@ export default {
                     this.filterData = response.data;
                 });
         },
-        async findByFilter() {
+        findByFilter() {
             try {
-                await axios
+                axios
                     .get(
                         "search/filter/" +
                             this.filter +

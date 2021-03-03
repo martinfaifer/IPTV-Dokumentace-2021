@@ -12,7 +12,22 @@
                         ></v-img>
                     </v-col>
                     <v-col cols="12" sm="11" md="11" lg="11">
-                        <h2 class="mt-6">{{ channelName }} - H265</h2>
+                        <h2 class="mt-6">
+                            {{ channelName }} - H265
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-icon
+                                        class="ml-3"
+                                        v-on="on"
+                                        @click="removeH265()"
+                                        small
+                                        color="red"
+                                        >mdi-delete</v-icon
+                                    >
+                                </template>
+                                <span>Odebrání H265</span>
+                            </v-tooltip>
+                        </h2>
                     </v-col>
                 </v-row>
                 <v-divider inline> </v-divider>
@@ -182,7 +197,7 @@ export default {
                     channelId: this.$route.params.id
                 })
                 .then(response => {
-                    if(response.data === 'not_exist') {
+                    if (response.data === "not_exist") {
                         this.logo = null;
                     } else {
                         this.logo = response.data;
@@ -236,6 +251,20 @@ export default {
                 })
                 .then(response => {
                     this.exist = response.data;
+                });
+        },
+        async removeH265() {
+            await axios
+                .post("h265/delete", {
+                    channelId: this.$route.params.id
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    if (response.data.status === "success") {
+                        this.$router
+                            .push("/channel/" + response.data.channelId)
+                            .catch(err => {});
+                    }
                 });
         }
     },

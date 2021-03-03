@@ -209,6 +209,56 @@ class H265Controller extends Controller
         }
     }
 
+    public function edit(Request $request): array
+    {
+        // channelId
+        // p1080
+        // p720
+
+        if (is_null($request->p1080) && is_null($request->p720)) {
+            return NotificationController::notify("error", "error", "Musí být vyplněn alespoň jeden output!");
+        }
+
+        if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
+            return NotificationController::notify("error", "error", "Nebyl nalezen kanál");
+        }
+        // 4  = 1080 , 5 = 720
+
+        if ($p1080 = UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->where('kvalitaId', "4")->first()) {
+            if (is_null($request->p1080)) {
+                $p1080->delete();
+            } else {
+                $p1080->update([
+                    'output' => $request->p1080
+                ]);
+            }
+        } else {
+            UnicastKvalitaChannelOutput::create([
+                'h265Id' => $h265->id,
+                'kvalitaId' => "4",
+                'output' => $request->p1080
+            ]);
+        }
+
+        if ($p720 = UnicastKvalitaChannelOutput::where('h265Id', $h265->id)->where('kvalitaId', "5")->first()) {
+            if (is_null($request->p720)) {
+                $p720->delete();
+            } else {
+                $p720->update([
+                    'output' => $request->p720
+                ]);
+            }
+        } else {
+            UnicastKvalitaChannelOutput::create([
+                'h265Id' => $h265->id,
+                'kvalitaId' => "5",
+                'output' => $request->p720
+            ]);
+        }
+
+        return NotificationController::notify("success", "success", "Upraveno");
+    }
+
     public static function return_dohled_data(Request $request): array
     {
         // vyhledání H264
@@ -257,5 +307,11 @@ class H265Controller extends Controller
                 $request->transcoderAction
             )
         ];
+    }
+
+
+    public function delete_from_web(Request $request): array
+    {
+        return $this->delete($request->channelId);
     }
 }

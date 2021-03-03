@@ -26,10 +26,15 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnicastChunkStoreIdController;
 use App\Http\Controllers\UnicastKvalitaChannelOutputController;
+use App\Http\Controllers\UnicastOutputForDeviceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WikiController;
+use App\Models\StreamerAndPortBound;
+use App\Models\UnicastOutputForDevice;
 use Illuminate\Support\Facades\Route;
+
+use Illuminate\Support\Arr;
 
 
 // patch = update
@@ -149,6 +154,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/check', [H265Controller::class, 'check_if_exist']);
         Route::post('/create', [H265Controller::class, 'create']);
         Route::post('/channel/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h265_output_for_edit']);
+        Route::post('/channel/kvality/update', [H265Controller::class, 'edit']);
+        Route::post('/delete', [H265Controller::class, 'delete_from_web']);
 
         Route::group(['prefix' => 'transcoder'], function () {
             Route::post('/', [H265Controller::class, 'return_transcoder_information']);
@@ -167,7 +174,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/edit', [H264Controller::class, 'edit']);
             Route::post('/kvality', [UnicastKvalitaChannelOutputController::class, 'return_output_by_channel']);
             Route::post('/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h264_output_for_edit']);
-            Route::post('/m3u8', [M3u8Controller::class, 'return_m38u_by_id']);
+            // Route::post('/m3u8', [M3u8Controller::class, 'return_m38u_by_id']);
+            Route::post('/m3u8', [UnicastOutputForDeviceController::class, 'show']);
         });
 
         Route::group(['prefix' => 'transcoder'], function () {
@@ -283,3 +291,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/', [ContactController::class, 'destroy']);
     });
 });
+
+
+// Route::get('test',  [UnicastOutputForDeviceController::class, '_test']);
+// Route::get('test/show', function () {
+//     foreach (UnicastOutputForDevice::all() as $output) {
+//         return json_decode($output->output);
+//     }
+// });

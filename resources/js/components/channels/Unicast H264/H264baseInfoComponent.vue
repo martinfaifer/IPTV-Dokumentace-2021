@@ -134,28 +134,6 @@
                                             ></v-text-field>
                                         </v-col>
 
-                                        <!-- m3u8 -->
-                                        <v-col cols="12" sm="12" md="4">
-                                            <v-text-field
-                                                v-model="hlsKdekoliv"
-                                                label="HLS kdekoliv"
-                                            ></v-text-field>
-                                        </v-col>
-
-                                        <v-col cols="12" sm="12" md="4">
-                                            <v-text-field
-                                                v-model="hlsLocal"
-                                                label="HLS local"
-                                            ></v-text-field>
-                                        </v-col>
-
-                                        <v-col cols="12" sm="12" md="4">
-                                            <v-text-field
-                                                v-model="hlsMobile"
-                                                label="HLS mobile"
-                                            ></v-text-field>
-                                        </v-col>
-
                                         <!-- <v-col cols="12">
                                             <v-checkbox
                                                 v-model="addToTranscoder"
@@ -213,9 +191,6 @@ export default {
             output1080: null,
             output720: null,
             output576: null,
-            hlsKdekoliv: null,
-            hlsLocal: null,
-            hlsMobile: null,
             outputDialog: false,
             channelName: "",
             exist: "",
@@ -279,9 +254,6 @@ export default {
                     output1080: this.output1080,
                     output720: this.output720,
                     output576: this.output576,
-                    hlsKdekoliv: this.hlsKdekoliv,
-                    hlsLocal: this.hlsLocal,
-                    hlsMobile: this.hlsMobile
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

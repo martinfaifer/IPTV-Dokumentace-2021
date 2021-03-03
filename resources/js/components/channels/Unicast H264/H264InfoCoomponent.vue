@@ -68,54 +68,24 @@
 
             <v-card-subtitle v-if="m3u8s != null">
                 <strong>
-                    Výstup v m3u8
+                    Výstupy
                 </strong>
             </v-card-subtitle>
 
             <v-card-text class="ml-1 text--center" v-if="m3u8s != null">
                 <v-container fluid>
-                    <v-list-item>
+                    <v-list-item v-for="m3u8 in m3u8s" :key="m3u8">
                         <v-list-item-content>
                             <v-list-item-subtitle>
                                 <span>
                                     <strong>
-                                        HLS kdekoliv:
+                                        <i>{{m3u8}}</i>
                                     </strong>
-                                </span>
-                                <span class="ml-3">
-                                    {{ m3u8s.kdekoliv }}
                                 </span>
                             </v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-subtitle>
-                                <span>
-                                    <strong>
-                                        HLS local:
-                                    </strong>
-                                </span>
-                                <span class="ml-3">
-                                    {{ m3u8s.local }}
-                                </span>
-                            </v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-subtitle>
-                                <span>
-                                    <strong>
-                                        HLS mobile:
-                                    </strong>
-                                </span>
-                                <span class="ml-3">
-                                    {{ m3u8s.mobile }}
-                                </span>
-                            </v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+                
                 </v-container>
             </v-card-text>
         </v-card>
@@ -181,27 +151,6 @@
                                     <v-text-field
                                         v-model="kvalityForDialog.p576"
                                         label="URL pro 720p"
-                                    ></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12">
-                                    <v-text-field
-                                        v-model="m3u8s.kdekoliv"
-                                        label="m3u8 pro HLS kdekoliv"
-                                    ></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12">
-                                    <v-text-field
-                                        v-model="m3u8s.local"
-                                        label="m3u8 pro HLS local"
-                                    ></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12">
-                                    <v-text-field
-                                        v-model="m3u8s.mobile"
-                                        label="m3u8 pro HLS mobile"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>

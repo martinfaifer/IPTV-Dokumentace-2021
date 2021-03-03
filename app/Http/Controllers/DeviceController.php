@@ -1078,6 +1078,10 @@ class DeviceController extends Controller
 
         $thisDevice = Device::where('name', $device)->first();
 
+        if (!$thisDevice) {
+            return $outputArr;
+        }
+
         // multicast
         if (Multicast::where('deviceId', $thisDevice->id)->first()) {
 

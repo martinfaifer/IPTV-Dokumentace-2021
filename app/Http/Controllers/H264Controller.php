@@ -9,6 +9,7 @@ use App\Models\H264;
 use App\Models\M3u8;
 use App\Models\UnicastChunkStoreId;
 use App\Models\UnicastKvalitaChannelOutput;
+use App\Models\UnicastOutputForDevice;
 use Illuminate\Http\Request;
 
 class H264Controller extends Controller
@@ -90,7 +91,7 @@ class H264Controller extends Controller
         if ($h264 = H264::where('channelId', $channelId)->first()) {
 
             // delete m3u8
-            M3u8::where('h264id', $h264->id)->first()->delete();
+            UnicastOutputForDevice::where('h264Id', $h264->id)->first()->delete();
 
             // unicast
             foreach (UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->get() as $kvalita) {
@@ -170,24 +171,7 @@ class H264Controller extends Controller
 
         $h264Id = H264::where('channelId', $request->channelId)->first()->id;
 
-        if (M3u8::where('h264id', $h264Id)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Kanál má již uloženy M3U8"
-                )
-            ];
-        }
-
-        M3u8::create(
-            [
-                'h264id' => $h264Id,
-                'kdekoliv' => $request->hlsKdekoliv,
-                'local' => $request->hlsLocal,
-                "mobile" => $request->hlsMobile
-            ]
-        );
+        UnicastOutputForDeviceController::generate($request);
 
         // 1 = 1080 , 2 = 720 , 3 = 576
         if (
@@ -277,7 +261,7 @@ class H264Controller extends Controller
         try {
             UnicastKvalitaChannelOutputController::h264_update($request);
 
-            M3u8Controller::update_m3u8_h264($request);
+            UnicastOutputForDeviceController::generate($request);
 
             // chunk store Id 
             UnicastChunkStoreIdController::edit($request);
