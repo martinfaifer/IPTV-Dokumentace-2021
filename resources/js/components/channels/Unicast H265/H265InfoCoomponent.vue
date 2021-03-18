@@ -3,38 +3,9 @@
         <v-card
             flat
             color="#F5F5F7"
-            v-if="chunkStoreId != '0'"
+            v-if="kvalityOutput != null"
             @contextmenu="show($event)"
         >
-            <v-card-subtitle>
-                <strong>
-                    Chunk store id
-                </strong>
-            </v-card-subtitle>
-            <v-card-text class="ml-12 text--center">
-                <v-container>
-                    <v-row>
-                        <span class="ml-6">
-                            {{ chunkStoreId }}
-
-                            <!-- info -->
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-btn small icon>
-                                        <v-icon small v-on="on">
-                                            mdi-information
-                                        </v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Informace o chunk Store id</span>
-                            </v-tooltip>
-                        </span>
-                    </v-row>
-                </v-container>
-            </v-card-text>
-
-            <v-divider class="ml-6" width="95%"></v-divider>
-
             <v-card-subtitle>
                 <strong>
                     Výstupní kvality
@@ -57,6 +28,28 @@
                                 </span>
                                 <span class="ml-3">
                                     {{ output.output }}
+                                </span>
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-container>
+            </v-card-text>
+
+            <v-divider class="ml-6" width="95%"></v-divider>
+
+            <v-card-subtitle v-if="m3u8s != null">
+                <strong>
+                    Výstupy
+                </strong>
+            </v-card-subtitle>
+
+            <v-card-text class="ml-1 text--center" v-if="m3u8s != null">
+                <v-container fluid>
+                    <v-list-item v-for="(m3u8, index) in m3u8s" :key="index">
+                        <v-list-item-content>
+                            <v-list-item-subtitle>
+                                <span>
+                                    <i v-html="m3u8"></i>
                                 </span>
                             </v-list-item-subtitle>
                         </v-list-item-content>
@@ -147,8 +140,8 @@ export default {
     },
     data() {
         return {
+            m3u8s: [],
             editDataDialog: false,
-            chunkStoreId: null,
             kvalityOutput: null,
             kvalityForDialog: [],
             showMenu: false,
@@ -157,10 +150,24 @@ export default {
         };
     },
     created() {
-        this.loadChunkStoreId();
         this.loadOutputKvality();
+        this.loadM3u8Kvality();
     },
     methods: {
+        loadM3u8Kvality() {
+            axios
+                .post("h265/channel/m3u8", {
+                    channelId: this.$route.params.id,
+                    type: "h265"
+                })
+                .then(response => {
+                    if (response.data.status === "success") {
+                        this.m3u8s = response.data.data;
+                    } else {
+                        this.m3u8s = null;
+                    }
+                });
+        },
         openDialog() {
             axios
                 .post("h265/channel/kvalityForEdit", {
@@ -187,7 +194,6 @@ export default {
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
 
-                    this.loadChunkStoreId();
                     this.loadOutputKvality();
 
                     this.editDataDialog = false;
@@ -203,15 +209,6 @@ export default {
             });
         },
 
-        loadChunkStoreId() {
-            axios
-                .post("unicast/chunkStoreId", {
-                    channelId: this.$route.params.id
-                })
-                .then(response => {
-                    this.chunkStoreId = response.data;
-                });
-        },
         loadOutputKvality() {
             axios
                 .post("h264/channel/kvality", {
@@ -239,8 +236,8 @@ export default {
     },
     watch: {
         $route(to, from) {
-            this.loadChunkStoreId();
             this.loadOutputKvality();
+            this.loadM3u8Kvality();
         }
     }
 };

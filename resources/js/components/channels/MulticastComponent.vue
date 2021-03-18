@@ -29,6 +29,10 @@
             </v-row>
 
             <v-row class="mt-6 mr-15">
+                <chunkstoreid-component></chunkstoreid-component>
+            </v-row>
+
+            <v-row class="mt-6 mr-15">
                 <!-- multiplexor component -->
                 <multiplexor-component></multiplexor-component>
 
@@ -72,6 +76,7 @@ import SourceComponent from "./Multicast/_sourceComponent";
 import BackupComponent from "./Multicast/_backupComponent";
 import CalendarComponent from "./Multicast/_calendarComponent";
 import NoteComponent from "./Multicast/_noteComponent";
+import ChunkStoreIdComponent from "./Multicast/_chunkStoreIdComponent";
 import ContactComponent from "../Contacts/ContactComponent";
 import TestDohledComponent from "./Dohled/TestDohledComponent";
 export default {
@@ -88,6 +93,7 @@ export default {
         "backup-component": BackupComponent,
         "calendar-component": CalendarComponent,
         "note-component": NoteComponent,
+        "chunkstoreid-component": ChunkStoreIdComponent,
         "contact-component": ContactComponent,
         "dohled-component": TestDohledComponent
     },

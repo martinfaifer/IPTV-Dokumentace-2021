@@ -18,6 +18,7 @@ class Event extends Model
         'multicastId',
         'h264Id',
         'h265Id',
-        'note'
+        'note',
+        'when_to_notify'
     ];
 }

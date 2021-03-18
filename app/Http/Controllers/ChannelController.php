@@ -12,6 +12,7 @@ use App\Models\H264;
 use App\Models\H265;
 use App\Models\Multicast;
 use App\Models\MulticastSource;
+use App\Models\UnicastChunkStoreId;
 use App\Models\UnicastKvalitaChannelOutput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,13 +73,8 @@ class ChannelController extends Controller
     {
         // kontrola exiustence channelId
         if (!Channel::where('id', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se nalézt kanál"
-                )
-            ];
+
+            return NotificationController::notify("error", "error", "Nepodařilo se nalézt kanál");
         }
 
         return MulticastController::check_channel($request);
@@ -174,35 +170,17 @@ class ChannelController extends Controller
     public static function edit_multiplexor(Request $request): array
     {
         if (!Multicast::where('channelId', $request->channelId)->where('isBackup', null)->first()) {
-            return [
-                'status' => "error",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Nastala neočekávaná chyba"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nastala neočekávaná chyba");
         }
 
 
         if (is_null($request->deviceName) || empty($request->deviceName)) {
-            return [
-                'status' => "warning",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Zařízení musí být vyplněno"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Zařízení musí být vyplněno");
         } else {
             //  overení zda existuje device
             $deviceData = DeviceController::return_deviceId_by_name($request);
             if ($deviceData['status'] === 'error') {
-                return [
-                    'status' => "error",
-                    'alert' =>  array(
-                        'status' => "warning",
-                        'msg' => "Nepodařilo se najít zařízení"
-                    )
-                ];
+                return NotificationController::notify("error", "warning", "Nepodařilo se najít zařízení");
             }
         }
 
@@ -218,34 +196,16 @@ class ChannelController extends Controller
     public static function edit_prijem(Request $request): array
     {
         if (!Multicast::where('channelId', $request->channelId)->where('isBackup', null)->first()) {
-            return [
-                'status' => "error",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Nastala neočekávaná chyba"
-                )
-            ];
+            return NotificationController::notify("error", "warning", "Nastala neočekávaná chyba");
         }
 
         if (is_null($request->deviceName) || empty($request->deviceName)) {
-            return [
-                'status' => "warning",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Zařízení musí být vyplněno"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Zařízení musí být vyplněno");
         } else {
             //  overení zda existuje device
             $deviceData = DeviceController::return_deviceId_by_name($request);
             if ($deviceData['status'] === 'error') {
-                return [
-                    'status' => "error",
-                    'alert' =>  array(
-                        'status' => "warning",
-                        'msg' => "Nepodařilo se najít zařízení"
-                    )
-                ];
+                return NotificationController::notify("error", "warning", "Nepodařilo se najít zařízení");
             }
         }
 
@@ -295,34 +255,16 @@ class ChannelController extends Controller
     public static function edit_backup(Request $request): array
     {
         if (!Multicast::where('channelId', $request->channelId)->where('isBackup', "!=", null)->first()) {
-            return [
-                'status' => "error",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Nastala neočekávaná chyba"
-                )
-            ];
+            return NotificationController::notify("error", "warning", "Nastala neočekávaná chyba");
         }
 
         if (is_null($request->deviceName) || empty($request->deviceName)) {
-            return [
-                'status' => "warning",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Zařízení musí být vyplněno"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Zařízení musí být vyplněno");
         } else {
             //  overení zda existuje device
             $deviceData = DeviceController::return_deviceId_by_name($request);
             if ($deviceData['status'] === 'error') {
-                return [
-                    'status' => "error",
-                    'alert' =>  array(
-                        'status' => "warning",
-                        'msg' => "Nepodařilo se najít zařízení"
-                    )
-                ];
+                return NotificationController::notify("error", "warning", "Nepodařilo se najít zařízení");
             }
         }
 
@@ -339,13 +281,7 @@ class ChannelController extends Controller
     public static function remove_multiplexor(Request $request): array
     {
         if (!Multicast::where('channelId', $request->channelId)->where('isBackup', null)->first()) {
-            return [
-                'status' => "error",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Nastala neočekávaná chyba"
-                )
-            ];
+            return NotificationController::notify("error", "warning", "Nastala neočekávaná chyba");
         }
 
         return MulticastController::remove_multiplexor($request);
@@ -355,13 +291,7 @@ class ChannelController extends Controller
     public static function remove_prijem(Request $request): array
     {
         if (!Multicast::where('channelId', $request->channelId)->where('isBackup', null)->first()) {
-            return [
-                'status' => "error",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Nastala neočekávaná chyba"
-                )
-            ];
+            return NotificationController::notify("error", "warning", "Nastala neočekávaná chyba");
         }
 
         return MulticastController::remove_prijem($request);
@@ -371,13 +301,7 @@ class ChannelController extends Controller
     public static function remove_backup(Request $request): array
     {
         if (!Multicast::where('channelId', $request->channelId)->where('isBackup', "!=", null)->first()) {
-            return [
-                'status' => "error",
-                'alert' =>  array(
-                    'status' => "warning",
-                    'msg' => "Nastala neočekávaná chyba"
-                )
-            ];
+            return NotificationController::notify("error", "warning", "Nastala neočekávaná chyba");
         }
 
         return MulticastController::remove_backup($request);
@@ -393,16 +317,19 @@ class ChannelController extends Controller
     public static function create(Request $request): array
     {
 
+        if (is_null($request->chunkStoreId) || empty($request->chunkStoreId)) {
+            return NotificationController::notify("error", "error", "Chunk store Id musá existovat!");
+        }
+
+        if (UnicastChunkStoreId::where('chunkStoreId', $request->chunkStoreId)->first()) {
+            return NotificationController::notify("warning", "warning", "Chunk store Id již existuje u jiného kanálu");
+        }
+
+
         // overení zda neexistuje kanál se stejným názvem nebo neexistuji již stb_ip
         if (Channel::where('nazev', $request->channelName)->first() || Multicast::where('stb_ip', $request->stb_ip)->first()) {
             // exist 
-            return [
-                'status' => "warning",
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Kanál s tímto názvem nebo STB IP již existuje"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Kanál s tímto názvem nebo STB IP již existuje");
         }
 
         if (
@@ -410,24 +337,13 @@ class ChannelController extends Controller
             is_null($request->stb_ip) || empty($request->stb_ip) ||
             is_null($request->multicast_ip) || empty($request->multicast_ip)
         ) {
-            return [
-                'status' => "warning",
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Neplatný formát IP"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Neplatný formát IP");
         }
 
         if (is_null($request->channelName) || empty($request->channelName)) {
-            return [
-                'status' => "warning",
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Název musí existovat"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Název musí existovat");
         }
+
 
         // založení kanálu
         $channel = Channel::create(
@@ -441,6 +357,7 @@ class ChannelController extends Controller
         if ($request->zalozitDoDohledu === true) {
             ApiController::create_channel_to_dohled($request->channelName, $request->stb_ip . ":1234", $request->dohledovat, $request->vytvaretNahled, Channel::where('nazev', $request->channelName)->first()->id);
         }
+        UnicastChunkStoreIdController::create($request, $channel->id);
         // vyhledání id založeného kanálu pro insert + založení multicastových dat
         return MulticastController::create_new($request, Channel::where('nazev', $request->channelName)->first()->id);
     }
@@ -454,38 +371,24 @@ class ChannelController extends Controller
      */
     public function change_channel_name(Request $request): array
     {
+
+        if (is_null($request->channelName) || empty($request->channelName)) {
+            return NotificationController::notify("error", "error", "Musí být vyplněn název!");
+        }
+
         // overeni existence channelId
         if (!Channel::where('id', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje kanál"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje kanál");
         }
 
         // ověření, že název kanálu není již nikde evidován
         $channelName = Channel::where('id', $request->channelId)->first()->nazev;
         if ($channelName === $request->channelName) {
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "info",
-                    'msg' => "Název kanálu se nezměnil"
-                ),
-                'channelId' => $request->channelId
-            ];
+            return NotificationController::notify("success", "info", "Název kanálu se nezměnil!", $request->channelId);
         }
 
         if (Channel::where('nazev',  $request->channelName)->where('id', "!=", $request->channelId)->first()) {
-            return [
-                'status' => "warning",
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Název již existuje u jiného kanálu"
-                )
-            ];
+            return NotificationController::notify("warning", "warning", "Název již existuje u jiného kanálu!");
         }
 
 
@@ -495,15 +398,7 @@ class ChannelController extends Controller
             ]
         );
 
-
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Kanál byl editován"
-            ),
-            'channelId' => $request->channelId
-        ];
+        return NotificationController::notify("success", "success", "Kanál byl editován!", $request->channelId);
     }
 
 
@@ -521,13 +416,7 @@ class ChannelController extends Controller
     {
 
         if (!Channel::where('id', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se vyhledat kanál"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nepodařilo se vyhledat kanál!");
         }
 
         MulticastController::remove_all_by_channelId($request->channelId);
@@ -542,13 +431,7 @@ class ChannelController extends Controller
 
         dispatch(new SendNotificationJob(Auth::user()->name, "kanál " . $channel->nazev, "smazal"));
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Kanál byl úspěšně odebrán"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Kanál byl úspěšně odebrán!");
     }
 
 
@@ -557,23 +440,11 @@ class ChannelController extends Controller
     {
 
         if (!$channel = Channel::find($request->channelId)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se přidat logo"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nepodařilo se přidat logo!");
         }
 
         if (empty($request->image) || is_null($request->image)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nic nebylo vybráno"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nic nebylo vybráno!");
         }
 
 
@@ -588,13 +459,7 @@ class ChannelController extends Controller
             ]
         );
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Logo uloženo"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Logo uloženo!");
     }
 
 

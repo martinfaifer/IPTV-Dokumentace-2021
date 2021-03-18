@@ -32,7 +32,18 @@
                     ></deviceinterfaces-component>
 
                     <channellogos-component
-                    v-if="this.$route.params.name === 'channelLogos'"></channellogos-component>
+                        v-if="this.$route.params.name === 'channelLogos'"
+                    ></channellogos-component>
+
+                    <nangustreamers-component
+                        v-if="this.$route.params.name === 'streamers'"
+                    ></nangustreamers-component>
+
+                    <nangastreamports-component
+                        v-if="this.$route.params.name === 'stream_ports'"
+                    ></nangastreamports-component>
+
+                    <nangustreamerport-component v-if="this.$route.params.name === 'streamer_and_ports_bound'"></nangustreamerport-component>
                 </v-col>
             </v-row>
         </v-container>
@@ -52,8 +63,13 @@ import DeviceInterfacesComponent from "./Devices/_DeviceInterfacesComponent";
 
 // storage
 import ChannelLogosComponent from "./Storage/StorageImageComponent";
-export default {
 
+// nangu
+import NanguStreamersComponent from "./nangu/_streamers";
+import NanguStreamPortsComponent from "./nangu/_streamPortComponent";
+import NanguStreamerPortComponent from "./nangu/_streamerAndPortComponent";
+
+export default {
     computed: {
         user() {
             return this.$store.state.user;
@@ -72,17 +88,19 @@ export default {
         "category-component": CategoryComponent,
         "multicastsources-component": MulticastSourcesComponent,
         "deviceinterfaces-component": DeviceInterfacesComponent,
-        "channellogos-component": ChannelLogosComponent
+        "channellogos-component": ChannelLogosComponent,
+        "nangustreamers-component": NanguStreamersComponent,
+        "nangastreamports-component": NanguStreamPortsComponent,
+        "nangustreamerport-component": NanguStreamerPortComponent
     },
     created() {
         this.redirectToTags();
         this.checkIfIsAdmin();
     },
     methods: {
-
         checkIfIsAdmin() {
-            if(this.user.user_role != 'admin') {
-                 this.$router.push("/channel");
+            if (this.user.user_role != "admin") {
+                this.$router.push("/channel");
             }
         },
 

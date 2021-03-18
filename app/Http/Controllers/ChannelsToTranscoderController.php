@@ -79,7 +79,7 @@ class ChannelsToTranscoderController extends Controller
 
         // získání dat z ChannelsToTranscoder
         if (ChannelsToTranscoder::first()) {
-            // 
+
             foreach (ChannelsToTranscoder::get() as $channelOnTranscoder) {
 
                 // $channelOnTranscoder->transcoderId => id streamu na transcoderu
@@ -88,8 +88,6 @@ class ChannelsToTranscoderController extends Controller
                 $responseFromTranscoder = ApiController::find_transcoder($channelOnTranscoder->transcoderId);
 
                 if ($responseFromTranscoder["status"] === 'success') {
-
-                    // echo $responseFromTranscoder["msg"] . PHP_EOL;
 
                     // Vyhledání transcoderu dle názvu v odpovedi
                     if ($transcoder = Device::where('name', $responseFromTranscoder["msg"])->first()) {

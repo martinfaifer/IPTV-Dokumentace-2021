@@ -16,7 +16,6 @@
             </v-card-title>
             <v-data-table :headers="headers" :items="users" :search="search">
                 <template v-slot:item.akce="{ item }">
-                    <!-- mdi-play -->
                     <v-icon
                         @click="
                             openEditDialog(
@@ -30,8 +29,6 @@
                         color="info"
                         >mdi-pencil</v-icon
                     >
-
-                    <!-- mdi-stop -->
                     <v-icon @click="deleteUser(item.id)" small color="red"
                         >mdi-delete</v-icon
                     >

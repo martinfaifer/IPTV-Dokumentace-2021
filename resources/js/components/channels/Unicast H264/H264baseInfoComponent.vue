@@ -95,13 +95,6 @@
                                 <v-container>
                                     <v-row>
                                         <v-col cols="12" sm="12" md="6">
-                                            <v-text-field
-                                                label="Chunk Store ID"
-                                                v-model="chunkStoreId"
-                                            ></v-text-field>
-                                        </v-col>
-
-                                        <v-col cols="12" sm="12" md="6">
                                             <v-combobox
                                                 v-model="transcoder"
                                                 label="Výber transcodéru"
@@ -249,7 +242,6 @@ export default {
                 .post("h264/create", {
                     channelId: this.$route.params.id,
                     addToTranscoder: this.addToTranscoder,
-                    chunkStoreId: this.chunkStoreId,
                     transcoder: this.transcoder,
                     output1080: this.output1080,
                     output720: this.output720,

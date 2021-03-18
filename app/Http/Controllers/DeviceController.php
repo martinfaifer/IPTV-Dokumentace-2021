@@ -704,6 +704,7 @@ class DeviceController extends Controller
             ];
         } catch (\Throwable $th) {
 
+
             return [
                 'status' => "error",
                 'msg' => "Selhala editace! ERROR 500"
@@ -787,7 +788,13 @@ class DeviceController extends Controller
             $deviceId = Device::where('name', $request->deviceName)->first()->id;
             VendorController::check_if_vendor_is_know($vendor, $deviceId, "create");
 
+            // vytvorení transcoderu na strane kontrolleru
+            if ($request->addToTranscoderController === true) {
+                ApiController::create_new_transcoder($request->deviceName, $request->transcoderIp);
+            }
             dispatch(new SendNotificationJob(Auth::user()->name, $request->deviceName, "vytvořil"));
+
+
 
             return [
                 'alert' => array(
@@ -799,14 +806,7 @@ class DeviceController extends Controller
             ];
         } catch (\Throwable $th) {
 
-
-            return [
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Selhala editace! ERROR 500"
-                ),
-
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -844,21 +844,9 @@ class DeviceController extends Controller
 
                 dispatch(new SendNotificationJob(Auth::user()->name, Device::where('id', $request->deviceId)->first()->name, "editoval"));
 
-                return [
-                    'alert' => array(
-                        'status' => "success",
-                        'msg' => "Zařízení bylo upraveno"
-                    ),
-                    'status' => "success",
-                ];
+                return NotificationController::notify("success", "success", "Zařízeno upraveno!");
             } catch (\Throwable $th) {
-                return [
-                    'alert' => array(
-                        'status' => "error",
-                        'msg' => "Selhala editace! ERROR 500"
-                    ),
-
-                ];
+                return NotificationController::notify();
             }
         }
     }
@@ -872,13 +860,8 @@ class DeviceController extends Controller
             ]
         );
 
-        return [
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Zařízení upraveno"
-            ),
-            'status' => "remove",
-        ];
+
+        return NotificationController::notify("success", "success", "Zařízení upraveno!");
     }
 
 
@@ -948,6 +931,7 @@ class DeviceController extends Controller
 
             dispatch(new SendNotificationJob(Auth::user()->name, $request->name, "vytvořil"));
 
+
             return [
                 'alert' => array(
                     'status' => "success",
@@ -958,14 +942,7 @@ class DeviceController extends Controller
             ];
         } catch (\Throwable $th) {
 
-
-            return [
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Selhala editace! ERROR 500"
-                ),
-
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -980,13 +957,7 @@ class DeviceController extends Controller
     public function delete_device(Request $request): array
     {
         if (!Device::where('id', $request->deviceId)->first()) {
-            return [
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje zařízení"
-                ),
-                'status' => "error",
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje zařízení!");
         }
 
         $device = Device::where('id', $request->deviceId)->first();
@@ -1020,13 +991,8 @@ class DeviceController extends Controller
 
 
         if ($multicast === "fail" || $h264 === "fail" || $h265 === "fail") {
-            return [
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Na zařízení je vytvořena vazba"
-                ),
-                'status' => "error",
-            ];
+
+            return NotificationController::notify("error", "error", "Na zařízení je vytvořena vazba!");
         }
 
         // vyhledání a smazání vazeb
@@ -1036,13 +1002,7 @@ class DeviceController extends Controller
 
         dispatch(new SendNotificationJob(Auth::user()->name, $device->name, "smazal"));
 
-        return [
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Zařízení bylo odstraněno"
-            ),
-            'status' => "success",
-        ];
+        return NotificationController::notify("success", "success", "Zařízení odebráno!");
     }
 
     /**

@@ -444,6 +444,7 @@
                                         v-model="channelName"
                                         required
                                     ></v-text-field>
+                                    <small class="red--text" v-for="error in errors" :key="error">{{ error}}</small>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -570,6 +571,12 @@
                                         v-model="channelName"
                                     ></v-text-field>
                                 </v-col>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Chunk Store ID"
+                                        v-model="chunkStoreId"
+                                    ></v-text-field>
+                                </v-col>
                                 <v-col cols="12" sm="6" md="4">
                                     <v-combobox
                                         dense
@@ -683,6 +690,7 @@
 export default {
     data() {
         return {
+            chunkStoreId: "",
             contactDialog: false,
             fullName: null,
             email: null,
@@ -735,7 +743,8 @@ export default {
             sources: [],
             channelName: null,
             file: "",
-            logoDialog: false
+            logoDialog: false,
+            errors: []
         };
     },
 
@@ -782,6 +791,11 @@ export default {
                             .push("/channel/" + response.data.channelId)
                             .catch(err => {});
                     }
+                })
+                .catch(e => {
+                    if (e.response.status == 422) {
+                        this.errors = e.response.data.errors;
+                    }
                 });
         },
         async editChannelNameDialog() {
@@ -806,6 +820,7 @@ export default {
             await axios
                 .post("channel/create", {
                     channelName: this.channelName,
+                    chunkStoreId: this.chunkStoreId,
                     multicastZdroj: this.multicastZdroj,
                     multicast_ip: this.multicast_ip,
                     stb_ip: this.stb_ip,

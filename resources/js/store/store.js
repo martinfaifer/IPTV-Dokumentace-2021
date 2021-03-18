@@ -8,7 +8,8 @@ export const store = new Vuex.Store({
     state: {
         alerts: null,
         dohledAccess: null,
-        user: []
+        user: [],
+        events: []
     },
     actions: {},
     mutations: {
@@ -22,6 +23,9 @@ export const store = new Vuex.Store({
 
         updateDohledSatatus(state, dohledStatus) {
             state.dohledAccess.push(dohledStatus);
+        },
+        updateEvent(state, events) {
+            state.events.push(events);
         }
     },
     getters: {}

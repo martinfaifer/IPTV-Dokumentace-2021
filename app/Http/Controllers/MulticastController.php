@@ -229,14 +229,7 @@ class MulticastController extends Controller
             );
         }
 
-        return [
-            "status" => "success",
-            "alert" => array(
-                'status' => "success",
-                'msg' => "Kanál byl upraven"
-            ),
-            'channelId' => $request->channelId
-        ];
+        return NotificationController::notify("success", "success", "Kanál byl upraven!", $request->channelId);
     }
 
     public static function update(Request $request): array
@@ -293,13 +286,7 @@ class MulticastController extends Controller
             }
         }
 
-        return [
-            "status" => "success",
-            "alert" => array(
-                'status' => "success",
-                'msg' => "Kanál byl upraven"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Kanál byl upraven!");
     }
 
 
@@ -315,23 +302,9 @@ class MulticastController extends Controller
                 ]
             );
 
-
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Kanál byl upraven"
-                ),
-                'channelId' => $channelId
-            ];
+            return NotificationController::notify("success", "success", "Kanál byl upraven!", $channelId);
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neco selhalo | ERROR 500"
-                )
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -366,23 +339,9 @@ class MulticastController extends Controller
                 ]
             );
 
-
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Kanál byl upraven"
-                ),
-                'channelId' => $channelId
-            ];
+            return NotificationController::notify("success", "success", "Kanál byl upraven!", $channelId);
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neco selhalo | ERROR 500"
-                )
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -410,23 +369,9 @@ class MulticastController extends Controller
                 ]
             );
 
-
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Kanál byl upraven"
-                ),
-                'channelId' => $channelId
-            ];
+            return NotificationController::notify("success", "success", "Kanál byl upraven!", $channelId);
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neco selhalo | ERROR 500"
-                )
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -446,21 +391,9 @@ class MulticastController extends Controller
                 ]
             );
 
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Kanál byl upraven"
-                )
-            ];
+            return NotificationController::notify("success", "success", "Kanál byl upraven!");
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neco selhalo | ERROR 500"
-                )
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -475,21 +408,9 @@ class MulticastController extends Controller
                 ]
             );
 
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Kanál byl upraven"
-                )
-            ];
+            return NotificationController::notify("success", "success", "Kanál byl upraven!");
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neco selhalo | ERROR 500"
-                )
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -504,21 +425,10 @@ class MulticastController extends Controller
                 ]
             );
 
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Kanál byl upraven"
-                )
-            ];
+
+            return NotificationController::notify("success", "success", "Kanál byl upraven!");
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neco selhalo | ERROR 500"
-                )
-            ];
+            return NotificationController::notify();
         }
     }
 
@@ -534,13 +444,7 @@ class MulticastController extends Controller
         if ($request->param === 'multiplexor') {
             if (Multicast::where('channelId', $request->channelId)->where('isBackup', null)->where('multiplexerId', '!=', null)->first()) {
                 // kanál existuje s multiplexore 
-                return [
-                    'status' => "warning",
-                    'alert' => array(
-                        'status' => "warning",
-                        'msg' => "Kanál má již k sobě přiřazeno zařízení"
-                    )
-                ];
+                return NotificationController::notify("warning", "warning", "Kanál má již k sobě přiřazeno zařízení!");
             } else {
                 return [
                     'status' => "success"
@@ -551,14 +455,8 @@ class MulticastController extends Controller
 
         if ($request->param === 'prijem') {
             if (Multicast::where('channelId', $request->channelId)->where('isBackup', null)->where('deviceId', '!=', null)->first()) {
-                // kanál existuje 
-                return [
-                    'status' => "warning",
-                    'alert' => array(
-                        'status' => "warning",
-                        'msg' => "Kanál má již k sobě přiřazeno zařízení"
-                    )
-                ];
+
+                return NotificationController::notify("warning", "warning", "Kanál má již k sobě přiřazeno zařízení!");
             } else {
                 return [
                     'status' => "success"
@@ -570,24 +468,14 @@ class MulticastController extends Controller
         if ($request->param === 'backup') {
             // vyhledání zda existuje backup ke kterému se dá pripojit zařízení
             if (!Multicast::where('channelId', $request->channelId)->where('isBackup', "!=", null)->first()) {
-                return [
-                    'status' => "warning",
-                    'alert' => array(
-                        'status' => "warning",
-                        'msg' => "Kanál nemá vytvořené žádné backup adresy"
-                    )
-                ];
+
+                return NotificationController::notify("warning", "warning", "Kanál nemá vytvořené žádné backup adresy!");
             }
 
             if (Multicast::where('channelId', $request->channelId)->where('isBackup', "!=", null)->where('deviceId', '!=', null)->first()) {
                 // kanál existuje 
-                return [
-                    'status' => "warning",
-                    'alert' => array(
-                        'status' => "warning",
-                        'msg' => "Kanál má již k sobě přiřazeno zařízení"
-                    )
-                ];
+
+                return NotificationController::notify("warning", "warning", "Kanál má již k sobě přiřazeno zařízení!");
             } else {
                 return [
                     'status' => "success"

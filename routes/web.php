@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlankomInterfaceController;
+use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DeviceCategoryController;
@@ -15,7 +16,6 @@ use App\Http\Controllers\FteInterfaceController;
 use App\Http\Controllers\H264Controller;
 use App\Http\Controllers\H265Controller;
 use App\Http\Controllers\IptvPackageController;
-use App\Http\Controllers\M3u8Controller;
 use App\Http\Controllers\MulticastController;
 use App\Http\Controllers\MulticastSourceController;
 use App\Http\Controllers\NoteController;
@@ -23,6 +23,9 @@ use App\Http\Controllers\PowerVuInterfaceController;
 use App\Http\Controllers\SatelitCardController;
 use App\Http\Controllers\SatelitController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\StreamerAndPortBoundController;
+use App\Http\Controllers\StreamerController;
+use App\Http\Controllers\StreamPortController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnicastChunkStoreIdController;
 use App\Http\Controllers\UnicastKvalitaChannelOutputController;
@@ -30,14 +33,7 @@ use App\Http\Controllers\UnicastOutputForDeviceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WikiController;
-use App\Models\StreamerAndPortBound;
-use App\Models\UnicastOutputForDevice;
 use Illuminate\Support\Facades\Route;
-
-use Illuminate\Support\Arr;
-
-
-// patch = update
 
 
 Route::get('/', function () {
@@ -74,6 +70,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [SearchController::class, 'search']);
         Route::post('/realtime', [SearchController::class, 'realtime_search']);
         Route::get('/filter/{filter}/{item}', [SearchController::class, 'filter']);
+        Route::get('/filter/{filter}', function () {
+            return [];
+        });
         Route::post('/filterData', [SearchController::class, 'filterData']);
     });
 
@@ -98,6 +97,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/multiplexer/edit', [ChannelController::class, 'edit_multiplexor']);
         Route::delete('/multiplexer/remove', [ChannelController::class, 'remove_multiplexor']);
         Route::post('/analyze', [ChannelController::class, 'channel_analyze']);
+        Route::group(['prefix' => 'chunkStoreId'], function () {
+            Route::post('/show', [UnicastChunkStoreIdController::class, 'return_chunkStoreId']);
+            Route::post('/update', [UnicastChunkStoreIdController::class, 'edit']);
+            Route::post('/create', [UnicastChunkStoreIdController::class, 'create']);
+        });
     });
 
     // získání multicastových infomrací
@@ -153,8 +157,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('/check', [H265Controller::class, 'check_if_exist']);
         Route::post('/create', [H265Controller::class, 'create']);
-        Route::post('/channel/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h265_output_for_edit']);
-        Route::post('/channel/kvality/update', [H265Controller::class, 'edit']);
         Route::post('/delete', [H265Controller::class, 'delete_from_web']);
 
         Route::group(['prefix' => 'transcoder'], function () {
@@ -162,6 +164,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/status', [H265Controller::class, 'try_to_get_stream_status']);
             Route::patch('/update', [H265Controller::class, 'update_transcoder']);
             Route::post('/manageStream', [H265Controller::class, 'manage_stream']);
+        });
+        Route::group(['prefix' => 'channel'], function () {
+            Route::post('/kvalityForEdit', [UnicastKvalitaChannelOutputController::class, 'return_h265_output_for_edit']);
+            Route::post('/kvality/update', [H265Controller::class, 'edit']);
+            Route::post('/m3u8', [UnicastOutputForDeviceController::class, 'show']);
         });
     });
 
@@ -185,8 +192,6 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    //  získání chunk store id dle id kanálu
-    Route::post('unicast/chunkStoreId', [UnicastChunkStoreIdController::class, 'return_chunkStoreId']);
 
 
     // polarizace 
@@ -254,9 +259,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('events/today', [EventController::class, 'return_today_event']);
     Route::group(['prefix' => 'event'], function () {
         Route::post('/create', [EventController::class, 'create']);
+        Route::post('/update', [EventController::class, 'update']);
         Route::post('/channel', [EventController::class, 'search_events_by_channelId']);
         Route::delete('/delete', [EventController::class, 'delete']);
         Route::get('/', [EventController::class, 'index']);
+        Route::get('notify', [EventController::class, 'notify']);
     });
 
 
@@ -290,12 +297,27 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/', [ContactController::class, 'update']);
         Route::delete('/', [ContactController::class, 'destroy']);
     });
+
+    Route::group(['prefix' => 'streamer'], function () {
+        Route::get('streamers', [StreamerController::class, "index"]);
+        Route::get('/streamer/{streamerId}', [StreamerController::class, 'show']);
+        Route::get('ports', [StreamerAndPortBoundController::class, "index"]);
+        Route::post('port', [StreamerAndPortBoundController::class, 'store']);
+        Route::delete('port', [StreamerAndPortBoundController::class, 'destroy']);
+        Route::post('create', [StreamerController::class, 'create']);
+        Route::delete('/', [StreamerController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'stream'], function () {
+        Route::get('ports', [StreamPortController::class, "index"]);
+        Route::group(['prefix' => 'port'], function () {
+            Route::delete('/', [StreamPortController::class, "destroy"]);
+            Route::post('/', [StreamPortController::class, "create"]);
+            Route::get('{portId}', [StreamPortController::class, "show"]);
+            Route::post('generate', [UnicastOutputForDeviceController::class, 'run_command']);
+        });
+    });
 });
 
 
-// Route::get('test',  [UnicastOutputForDeviceController::class, '_test']);
-// Route::get('test/show', function () {
-//     foreach (UnicastOutputForDevice::all() as $output) {
-//         return json_decode($output->output);
-//     }
-// });
+Route::get('/test', [BroadcastController::class, 'broadcast_alerts']);

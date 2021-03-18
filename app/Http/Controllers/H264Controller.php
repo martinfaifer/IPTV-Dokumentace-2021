@@ -102,24 +102,10 @@ class H264Controller extends Controller
             $h264->delete();
 
 
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Odebráno"
-                ),
-                'channelId' => $channelId
-            ];
+            return NotificationController::notify("success", "success", "Odebráno!", $channelId);
         } else {
 
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se odebrat"
-                ),
-                'channelId' => $channelId
-            ];
+            return NotificationController::notify("error", "error", "Nepodařilo se odebrat!", $channelId);
         }
     }
 
@@ -133,33 +119,7 @@ class H264Controller extends Controller
     {
 
         if (is_null($request->transcoder) || empty($request->transcoder)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Není vyplněno zařízení"
-                )
-            ];
-        }
-
-        // overení existence 
-        if (H264::where('channelId', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Kanál má již H264 výstup"
-                )
-            ];
-        }
-
-        if (UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
-            // nic nedelat
-        } else {
-            UnicastChunkStoreId::create([
-                'channelId' => $request->channelId,
-                'chunkStoreId' => $request->chunkStoreId
-            ]);
+            return NotificationController::notify("error", "warning", "Není vyplněno zařízení");
         }
 
         H264::create(
@@ -171,7 +131,7 @@ class H264Controller extends Controller
 
         $h264Id = H264::where('channelId', $request->channelId)->first()->id;
 
-        UnicastOutputForDeviceController::generate($request);
+        UnicastOutputForDeviceController::generate_h264($request);
 
         // 1 = 1080 , 2 = 720 , 3 = 576
         if (
@@ -211,14 +171,7 @@ class H264Controller extends Controller
             );
         }
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Výstup vytvořen"
-            ),
-            'channelId' => $request->channelId
-        ];
+        return NotificationController::notify("success", "success", "Výstup vytvořen!", $request->channelId);
     }
 
 
@@ -231,22 +184,9 @@ class H264Controller extends Controller
                 ]
             );
 
-
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Změněno"
-                )
-            ];
+            return NotificationController::notify("success", "success", "Změněno");
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se změnit"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nepodařilo se změnit");
         }
     }
 
@@ -261,26 +201,13 @@ class H264Controller extends Controller
         try {
             UnicastKvalitaChannelOutputController::h264_update($request);
 
-            UnicastOutputForDeviceController::generate($request);
+            UnicastOutputForDeviceController::generate_h264($request);
 
-            // chunk store Id 
-            UnicastChunkStoreIdController::edit($request);
 
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Změněno"
-                )
-            ];
+            return NotificationController::notify("success", "success", "Změněno!");
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Error 500"
-                )
-            ];
+
+            return NotificationController::notify("error", "error", "Error 500!");
         }
     }
 

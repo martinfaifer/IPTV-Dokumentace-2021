@@ -212,20 +212,16 @@ export default {
                 });
         },
         findByFilter() {
-            try {
-                axios
-                    .get(
-                        "search/filter/" +
-                            this.filter +
-                            "/" +
-                            btoa(this.filterByFilter)
-                    )
-                    .then(response => {
-                        this.filteredResult = response.data;
-                    });
-            } catch (error) {
-                this.filteredResult = [];
-            }
+            axios
+                .get(
+                    "search/filter/" +
+                        this.filter +
+                        "/" +
+                        btoa(this.filterByFilter)
+                )
+                .then(response => {
+                    this.filteredResult = response.data;
+                });
         }
     },
     mounted() {

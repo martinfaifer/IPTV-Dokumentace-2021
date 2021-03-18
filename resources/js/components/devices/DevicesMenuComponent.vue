@@ -12,7 +12,7 @@
                     <v-list-item-icon>
                         <v-icon small>{{ device.category_icon }}</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>{{
+                    <v-list-item-title @contextmenu="showCreateMenu($event)">{{
                         device.category
                     }}</v-list-item-title>
                 </template>
@@ -65,6 +65,26 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         Odebrat zařízení
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
+
+        <v-menu
+            dense
+            v-model="showMenuCreateMenu"
+            :position-x="x"
+            :position-y="y"
+            absolute
+            offset-y
+        >
+            <v-list dense>
+                <v-list-item @click="createDeviceDialog()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-plus</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat nové zařízení
                     </v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -252,17 +272,33 @@
                                         clearable
                                     ></v-combobox>
                                 </v-col>
+                                <v-col
+                                    cols="12"
+                                    v-if="
+                                        vendor.vendor === 'nVidia' &&
+                                            category.name === 'Transcoder'
+                                    "
+                                >
+                                    <v-checkbox
+                                        v-model="addToTranscoderController"
+                                        label="Přidat zařízení do kontroleru"
+                                    ></v-checkbox>
+                                </v-col>
+
+                                <v-col cols="12" v-if="addToTranscoderController === true">
+                                    <v-text-field
+                                        label="IP transcoderu"
+                                        v-model="transcoderIp"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
                             </v-row>
                         </v-container>
                         <small>položky označeny * jsou povinné</small>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="deviceDialog = false"
-                        >
+                        <v-btn color="blue darken-1" text @click="close()">
                             Zavřít
                         </v-btn>
                         <v-btn
@@ -283,9 +319,11 @@
 export default {
     data() {
         return {
+            addToTranscoderController: false,
             editDeviceData: null,
             editDeviceDialog: false,
             interfaces: null,
+            transcoderIp: null,
             allInterfaces: [],
             categories: [],
             vendors: [],
@@ -293,6 +331,7 @@ export default {
             devices: null,
             deviceId: null,
             showMenu: false,
+            showMenuCreateMenu: false,
             deviceName: "",
             deviceUser: "",
             category: "",
@@ -423,11 +462,13 @@ export default {
                     vendor: this.vendor,
                     category: this.category,
                     deviceIp: this.deviceIp,
-                    interfaces: this.interfaces
+                    interfaces: this.interfaces,
+                    addToTranscoderController: this.addToTranscoderController,
+                    transcoderIp: this.transcoderIp
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
-                    this.deviceDialog = false;
+                    this.close();
 
                     if (response.data.status === "success") {
                         this.loadDevices();
@@ -435,14 +476,38 @@ export default {
                     }
                 });
         },
+        close() {
+
+            this.deviceName = "";
+            this.deviceUser = "";
+            this.devicePassword = "";
+            this.vendor = "";
+            this.category = "";
+            this.deviceIp = "";
+            this.interfaces = null;
+            this.addToTranscoderController = false;
+            this.transcoderIp = null;
+            this.deviceDialog = false;
+        },
         show(e, deviceId) {
             this.deviceId = deviceId;
             e.preventDefault();
             this.showMenu = false;
+            this.showMenuCreateMenu = false;
             this.x = e.clientX;
             this.y = e.clientY;
             this.$nextTick(() => {
                 this.showMenu = true;
+            });
+        },
+        showCreateMenu(e) {
+            e.preventDefault();
+            this.showMenu = false;
+            this.showMenuCreateMenu = true;
+            this.x = e.clientX;
+            this.y = e.clientY;
+            this.$nextTick(() => {
+                this.showMenuCreateMenu = true;
             });
         }
     }

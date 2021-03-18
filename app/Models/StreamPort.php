@@ -11,6 +11,7 @@ class StreamPort extends Model
 
     protected $fillable = [
         'port_nuber',
-        'port_output'
+        'port_output',
+        'port_desc'
     ];
 }

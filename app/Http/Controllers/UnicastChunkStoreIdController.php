@@ -7,6 +7,22 @@ use Illuminate\Http\Request;
 
 class UnicastChunkStoreIdController extends Controller
 {
+
+
+
+    public static function create(Request $request, $channelId)
+    {
+
+        if (UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
+            // nic nedelat
+        } else {
+            UnicastChunkStoreId::create([
+                'channelId' => $channelId,
+                'chunkStoreId' => $request->chunkStoreId
+            ]);
+        }
+    }
+
     /**
      * Undocumented function
      *
@@ -27,13 +43,7 @@ class UnicastChunkStoreIdController extends Controller
     public static function edit(Request $request): array
     {
         if (!UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje kanál s vazbou na chunk store ID "
-                )
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje kanál s vazbou na chunk store ID!");
         }
 
         UnicastChunkStoreId::where('channelId', $request->channelId)->update(
@@ -42,13 +52,10 @@ class UnicastChunkStoreIdController extends Controller
             ]
         );
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Kanál byl upraven"
-            )
-        ];
+        // update h264 a h265 výstupy 
+        UnicastOutputForDeviceController::check_if_exest_before_generate($request);
+
+        return NotificationController::notify("success", "success", "Kanál byl upraven!");
     }
 
 

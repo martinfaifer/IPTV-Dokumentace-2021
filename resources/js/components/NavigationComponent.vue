@@ -17,6 +17,7 @@
                 ><v-spacer></v-spacer>
                 <v-spacer></v-spacer>
                 <v-spacer></v-spacer>
+                <eventtodayplannedalert-component></eventtodayplannedalert-component>
                 <v-badge
                     :content="alertCount"
                     :value="alertCount"
@@ -281,7 +282,7 @@
                     <v-alert
                         v-if="alertCount != '0'"
                         dense
-                        border="left"
+                        elevation="2"
                         :type="alert.status"
                         class="body-2 mt-2"
                     >
@@ -307,6 +308,7 @@
                 <div class="pl-2 pr-2">
                     <v-alert
                         transition="slide-x-transition"
+                        elevation="2"
                         dense
                         border="left"
                         type="success"
@@ -337,10 +339,28 @@
             </strong>
         </v-snackbar>
 
+        <v-snackbar
+            transition="slide-x-transition"
+            v-model="websocketSnackBar"
+            :timeout="4000"
+            top
+            right
+            color="info"
+            class="text--center"
+        >
+            <v-list
+                v-for="notification in websocketNotifications"
+                :key="notification"
+                color="transparent"
+            >
+                <v-list-item>
+                    {{ notification.name }}
+                </v-list-item>
+            </v-list>
+        </v-snackbar>
+
         <!-- alerting v cele app-->
         <alert-component></alert-component>
-
-        <!--  -->
     </v-app>
 </template>
 
@@ -351,20 +371,21 @@ import DevicesMenuComponent from "./devices/DevicesMenuComponent";
 import SearchCompoennt from "../components/SearchBar/SearchComponent";
 import CardsMenuComponent from "./Cards/CardMenuComponent";
 import EventComponent from "./Alerts/EventComponent";
+import EventTodayPlannedAlertComponent from "./Alerts/EventTodayPlannedAlertComponent";
 import WikiMenuComponent from "./Wiki/WikiMenuCompoennt";
 
 import SettingsMenuComponent from "./Settings/SettingsMenuComponent";
 
 import UserMenuComponent from "./UserMenuComponent";
 
-// import TutorialComponent from "./TutorialComponent";
-
 export default {
     data() {
         return {
+            websocketNotifications: [],
             alerts: [],
             alertCount: "0",
             snackbar: false,
+            websocketSnackBar: false,
             text: "Prosím reloadněte si stránku!",
             vertical: true,
             searchDialogInput: false,
@@ -418,13 +439,14 @@ export default {
         "event-component": EventComponent,
         "settingsmenu-component": SettingsMenuComponent,
         "usermenu-component": UserMenuComponent,
-        // "tutorial-component": TutorialComponent
+        "eventtodayplannedalert-component": EventTodayPlannedAlertComponent
     },
 
     created() {
         this.getUser();
         this.loadWriteDataByUri();
         this.getAlertsFromDohled();
+        this.websocketData();
     },
     methods: {
         getAlertsFromDohled() {
@@ -503,6 +525,23 @@ export default {
             if (this.$route.path.match("/calendar.*")) {
                 this.componentType = "calendar";
             }
+        },
+
+        websocketData() {
+            Echo.channel("transcoderAlerts").listen(
+                "Broadcast_external_alerts",
+                alerts => {
+                    this.websocketNotifications = alerts;
+                    this.websocketSnackBar = true;
+                    setTimeout(
+                        function() {
+                            this.websocketSnackBar = false;
+                            this.websocketNotifications = [];
+                        }.bind(this),
+                        5000
+                    );
+                }
+            );
         }
     },
 

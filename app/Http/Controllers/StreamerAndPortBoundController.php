@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StreamerAndPortBound;
+use App\Models\StreamPort;
 use Illuminate\Http\Request;
 
 class StreamerAndPortBoundController extends Controller
@@ -14,7 +15,22 @@ class StreamerAndPortBoundController extends Controller
      */
     public function index()
     {
-        //
+        if (!StreamerAndPortBound::first()) {
+            return [];
+        }
+
+        foreach (StreamerAndPortBound::all() as $streamerData) {
+            $outputData[] = array(
+                'id' => $streamerData->id,
+                'streamer_id' => $streamerData->streamer->id,
+                'streamer_name' => $streamerData->streamer->streamer_name,
+                'streamer_ip' => $streamerData->streamer->streamer_ip,
+                'port_id' => $streamerData->stream_port->id,
+                'port_nuber' => $streamerData->stream_port->port_nuber,
+                'port_output' => $streamerData->stream_port->port_output,
+            );
+        }
+        return $outputData;
     }
 
     /**
@@ -35,7 +51,20 @@ class StreamerAndPortBoundController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (is_null($request->portId) || empty($request->portId) || is_null($request->streamerId) || empty($request->streamerId)) {
+            return NotificationController::notify("error", "error", "Nebylo vše vybráno!");
+        }
+
+        if (StreamerAndPortBound::where('streamer_id', $request->streamerId)->where('stream_port_id', $request->portId)->first()) {
+            return NotificationController::notify("error", "error", "Tato vazba již existuje!");
+        }
+
+        StreamerAndPortBound::create([
+            'streamer_id' => $request->streamerId,
+            'stream_port_id' => $request->portId
+        ]);
+
+        return NotificationController::notify("success", "success", "Vazba vytvořena!");
     }
 
     /**
@@ -78,8 +107,11 @@ class StreamerAndPortBoundController extends Controller
      * @param  \App\Models\StreamerAndPortBound  $streamerAndPortBound
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StreamerAndPortBound $streamerAndPortBound)
+    public function destroy(Request $request)
     {
-        //
+
+        StreamerAndPortBound::find($request->id)->delete();
+
+        return NotificationController::notify("success", "success", "Odebráno!");
     }
 }

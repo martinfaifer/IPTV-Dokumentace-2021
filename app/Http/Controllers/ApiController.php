@@ -698,4 +698,56 @@ class ApiController extends Controller
             ];
         }
     }
+
+
+    public static function create_new_transcoder($deviceName, $deviceIp): void
+    {
+        try {
+            if (!Api::where('type', "transcoder_create")->first()) {
+                exit();
+            }
+
+            $apiData = Api::where('type', "transcoder_create")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'name' => $deviceName,
+                    'ip' => $deviceIp
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            exit();
+        }
+    }
+
+
+    public static function get_alerts(): array
+    {
+        try {
+            if (!Api::where('type', "transcoder_alerts")->first()) {
+                return ["status" => 'no response'];
+            }
+
+            $apiData = Api::where('type', "transcoder_alerts")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                ]
+            ]);
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                return $transcoderData;
+            }
+        } catch (\Throwable $th) {
+            return [
+                "status" => 'no response'
+            ];
+        }
+    }
 }

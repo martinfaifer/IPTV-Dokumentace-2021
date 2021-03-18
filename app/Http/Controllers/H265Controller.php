@@ -84,49 +84,23 @@ class H265Controller extends Controller
             ParedTagController::delete_tags('h264Id', $h265->id);
             $h265->delete();
 
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Odebráno"
-                )
-            ];
+            return NotificationController::notify("success", "success", "Odebráno!");
         } else {
 
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se odebrat"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nepodařilo se odebrat!");
         }
     }
 
 
     public static function create(Request $request): array
     {
-        // $request->channelId , addToTranscoder , transcoder, output1080 , output720
-
         if (is_null($request->transcoder) || empty($request->transcoder)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Není vyplněno zařízení"
-                )
-            ];
+            return NotificationController::notify("error", "warning", "Není vyplněno zařízení!");
         }
 
 
         if (H265::where('channelId', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Kanál má již H265 výstup"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Kanál má již H265 výstup");
         }
 
         // zalození
@@ -190,30 +164,14 @@ class H265Controller extends Controller
                 ]
             );
 
-
-            return [
-                'status' => "success",
-                'alert' => array(
-                    'status' => "success",
-                    'msg' => "Změněno"
-                )
-            ];
+            return NotificationController::notify("success", "success", "Změněno!");
         } catch (\Throwable $th) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se změnit"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Nepodařilo se změnit!");
         }
     }
 
     public function edit(Request $request): array
     {
-        // channelId
-        // p1080
-        // p720
 
         if (is_null($request->p1080) && is_null($request->p720)) {
             return NotificationController::notify("error", "error", "Musí být vyplněn alespoň jeden output!");
@@ -256,6 +214,7 @@ class H265Controller extends Controller
             ]);
         }
 
+        UnicastOutputForDeviceController::generate_h265($request);
         return NotificationController::notify("success", "success", "Upraveno");
     }
 
@@ -280,24 +239,12 @@ class H265Controller extends Controller
     public static function manage_stream(Request $request): array
     {
         if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje stream"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje stream!");
         }
 
         // overení existence id v ChannelsToDohled
         if (!$channelOnTranscoder = ChannelsToTranscoder::where('H265Id', $h265->id)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje stream s vazbou na transcoder"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje stream s vazbou na transcoder!");
         }
 
 

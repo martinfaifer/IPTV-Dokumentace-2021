@@ -18,15 +18,11 @@ class UnicastKvalitaChannelOutputController extends Controller
         if (
             is_null($request->p1080) &&
             is_null($request->p720) &&
-            is_null($request->p576)
+            is_null($request->p576) &&
+            is_null($request->p404)
         ) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Musí být vyplněna aspoň jedna kvalita"
-                )
-            ];
+
+            return NotificationController::notify("error", "error", "Musí být vyplněna aspoň jedna kvalita!");
         }
 
         $h264 = H264::where('channelId', $request->channelId)->first();
@@ -104,6 +100,30 @@ class UnicastKvalitaChannelOutputController extends Controller
         }
 
         // ---------------------------------------------------------------------------
+
+        if ($p404 = UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "6")->first()) {
+            if (is_null($request->p404)) {
+
+                $p404->delete();
+            } else {
+                UnicastKvalitaChannelOutput::where('h264Id', $h264->id)
+                    ->where('kvalitaId', "6")->update(
+                        ['output' => $request->p404]
+                    );
+            }
+        } else {
+            if (!is_null($request->p404)) {
+                UnicastKvalitaChannelOutput::create(
+                    [
+                        'h264Id' => $h264->id,
+                        'kvalitaId' => "6",
+                        'output' => $request->p404
+                    ]
+                );
+            }
+        }
+
+        // ---------------------------------------------------------------------------
         return [
             'status' => "success",
             'alert' => array(
@@ -122,7 +142,8 @@ class UnicastKvalitaChannelOutputController extends Controller
         return [
             'p1080' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "1")->first()->output ?? null,
             'p720' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "2")->first()->output ?? null,
-            'p576' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "3")->first()->output ?? null
+            'p576' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "3")->first()->output ?? null,
+            'p404' => UnicastKvalitaChannelOutput::where('h264Id', $h264->id)->where('kvalitaId', "6")->first()->output ?? null
         ];
     }
 

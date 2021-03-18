@@ -95,7 +95,6 @@ class SearchController extends Controller
             case 'zařízení':
                 // vyhledání kanálů na daném zařízení
                 return DeviceController::show_channels_on_device($item);
-                # code...
                 break;
 
             default:

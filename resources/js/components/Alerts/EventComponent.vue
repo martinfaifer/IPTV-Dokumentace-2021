@@ -2,10 +2,10 @@
     <v-main>
         <div v-if="events != null">
             <v-row justify="center">
-                <v-dialog v-model="dialog" persistent max-width="600">
+                <v-dialog v-model="dialog" persistent max-width="800">
                     <v-card>
                         <v-card-title class="headline">
-                            Na dnešní jsou události u těchto kanálů
+                            Na dnešní den jsou plánované události
                         </v-card-title>
                         <v-container class="body-1">
                             <v-list>
@@ -16,6 +16,11 @@
                                     :key="event.id"
                                     :to="'/channel/' + event.channelId"
                                 >
+                                    <v-list-item-icon>
+                                        <v-icon color="red" large
+                                            >mdi-alert</v-icon
+                                        >
+                                    </v-list-item-icon>
                                     <v-list-item-content>
                                         <v-list-item-title
                                             v-html="event.channel"

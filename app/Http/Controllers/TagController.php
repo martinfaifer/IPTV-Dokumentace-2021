@@ -13,6 +13,7 @@ use App\Models\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
@@ -94,13 +95,7 @@ class TagController extends Controller
     public function create(Request $request): array
     {
         if (is_null($request->tagName) || empty($request->tagName) || is_null($request->tagColor) || empty($request->tagColor)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Mesí být vše vyplněné"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Musí být vše vyplněné!");
         }
 
 
@@ -111,38 +106,20 @@ class TagController extends Controller
             ]
         );
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Štítek byl vytvořen"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Štítek byl vytvořen!");
     }
 
 
     public function update(Request $request): array
     {
         if (!Tag::find($request->tagId)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje štítek"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje štítek!");
         }
 
         $tag = Tag::find($request->tagId);
 
         if (!is_null($tag->system)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Systémové štítky nelze editovat"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Systémové štítky nelze editovat!");
         }
 
         if (isset($request->tagColor["hex"])) {
@@ -158,13 +135,7 @@ class TagController extends Controller
             ]
         );
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Štítek byl vytvořen"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Štítek byl vytvořen!");
     }
 
 
@@ -172,25 +143,14 @@ class TagController extends Controller
     {
         // vyhledání existence,
         if (!Tag::find($request->tagId)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje štítek"
-                )
-            ];
+            return NotificationController::notify("error", "error", "Neexistuje štítek!");
         }
 
         $tag = Tag::find($request->tagId);
 
         if (!is_null($tag->system)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Systémové štítky nelze mazat"
-                )
-            ];
+
+            return NotificationController::notify("error", "error", "Systémové štítky nelze mazat!");
         }
 
 
@@ -206,27 +166,15 @@ class TagController extends Controller
 
         $tag->delete();
 
-        // notifikace
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Odstraněno"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Odstraněno!");
     }
 
 
     public function add_tag(Request $request): array
     {
         if (!Tag::find($request->tagId)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje štítek"
-                )
-            ];
+
+            return NotificationController::notify("error", "error", "Neexistuje štítek!");
         }
 
         switch ($request->type) {
@@ -267,36 +215,19 @@ class TagController extends Controller
             $column => $request->id
         ]);
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Štítek byl přidán"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Štítek byl přidán!");
     }
 
 
     public function remove_tag_from(Request $request): array
     {
-        if (!$tag = ParedTag::find($request->tagId)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistuje štítek"
-                )
-            ];
-        }
 
-        if (!is_null(Tag::find($tag->tagId)->system)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Systémové štítky nelze mazat"
-                )
-            ];
+        if (!$tag = ParedTag::find($request->tagId)) {
+            return NotificationController::notify("error", "error", "Neexistuje štítek!");
+        }
+        // admin může mazat systémové stitky
+        if (!is_null(Tag::find($tag->tagId)->system) && Auth::user()->user_role != "admin") {
+            return NotificationController::notify("error", "error", "Systémové štítky nelze mazat!");
         }
 
         if ($tag->tagId === '18') {
@@ -311,13 +242,7 @@ class TagController extends Controller
 
         $tag->delete();
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Oderáno"
-            )
-        ];
+        return NotificationController::notify("success", "success", "Oderáno!");
     }
 
 
