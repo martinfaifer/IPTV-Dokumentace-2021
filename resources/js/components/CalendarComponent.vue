@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-container fluid class="ml-3">
-            <v-row class="mt-4 mr-15">
-                <v-col cols="12" class="ml-15"
-                    ><v-row class="ml-15">
-                        <v-col class="ml-15">
+        <v-container fluid class="pl-16">
+            <v-row class="pt-4">
+                <v-col cols="12" class="pl-15"
+                    ><v-row class="pl-15">
+                        <v-col class="pl-15">
                             <v-row class="fill-height">
                                 <v-col>
                                     <div>
@@ -173,12 +173,33 @@
                                                             }}
                                                         </span>
                                                     </v-container>
+
+                                                    <v-sheet
+                                                        color="F1F5F9"
+                                                        rounded="lg"
+                                                    >
+                                                        <v-container>
+                                                            <v-row
+                                                                class="ml-1 mt-1 mb-1"
+                                                            >
+                                                                <span
+                                                                    v-html="
+                                                                        selectedEvent.event_note
+                                                                    "
+                                                                >
+                                                                </span>
+                                                            </v-row>
+                                                        </v-container>
+                                                    </v-sheet>
                                                 </v-card-text>
                                                 <v-card-actions>
                                                     <v-spacer></v-spacer>
                                                     <v-btn
                                                         color="red darken-1"
                                                         text
+                                                        :loading="
+                                                            loading_delete
+                                                        "
                                                         @click="
                                                             deleteEvent(
                                                                 selectedEvent.id
@@ -228,6 +249,7 @@
                                             label="Den začátku události"
                                             type="date"
                                             v-model="start_day"
+                                            placeholder="dd-mm-rrrr"
                                             required
                                         ></v-text-field>
                                     </v-col>
@@ -235,6 +257,7 @@
                                         <v-text-field
                                             label="Čas začátku události"
                                             type="time"
+                                            placeholder="--:--"
                                             required
                                             v-model="start_time"
                                         ></v-text-field>
@@ -244,6 +267,7 @@
                                             label="Den konce události"
                                             type="date"
                                             v-model="end_day"
+                                            placeholder="dd-mm-rrrr"
                                             required
                                         ></v-text-field>
                                     </v-col>
@@ -252,16 +276,38 @@
                                             label="Čas konce události"
                                             type="time"
                                             v-model="end_time"
+                                            placeholder="--:--"
                                             required
                                         ></v-text-field>
                                     </v-col>
 
                                     <v-col cols="12">
                                         <v-text-field
-                                            label="Popis události"
-                                            v-model="event_note"
+                                            label="Název události"
+                                            v-model="event_title"
+                                            placeholder="například: Kanál bude ve výpadku"
                                             required
                                         ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <ckeditor
+                                            :editor="editor"
+                                            v-model="event_note"
+                                            placeholder="Popis události"
+                                            :config="editorConfig"
+                                        ></ckeditor>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-color-picker
+                                            v-model="event_color"
+                                            dot-size="18"
+                                            hide-inputs
+                                            hide-sliders
+                                            hide-canvas
+                                            mode="rgba"
+                                            show-swatches
+                                            swatches-max-height="200"
+                                        ></v-color-picker>
                                     </v-col>
 
                                     <v-col cols="12">
@@ -271,17 +317,23 @@
                                         ></v-checkbox>
                                     </v-col>
 
-                                    <v-col
-                                        cols="12"
-                                        v-if="early_notify === true"
-                                    >
+                                    <v-col cols="12">
                                         <v-text-field
+                                            :disabled="!early_notify"
+                                            :readonly="!early_notify"
                                             label="Kdy si přejete zaslat upozornění"
                                             type="date"
                                             v-model="when_to_notify"
                                             required
                                         ></v-text-field>
                                     </v-col>
+
+                                      <!-- <v-col cols="12">
+                                        <v-checkbox
+                                            v-model="send_email_to_partners"
+                                            label="Odeslat upozornění pro isp-partners?"
+                                        ></v-checkbox>
+                                    </v-col> -->
                                 </v-row>
                             </v-container>
                         </v-card-text>
@@ -352,13 +404,31 @@
                                             required
                                         ></v-text-field>
                                     </v-col>
-
                                     <v-col cols="12">
                                         <v-text-field
-                                            label="Popis události"
-                                            v-model="selectedEvent.event_note"
+                                            label="Předmět události"
+                                            v-model="selectedEvent.title"
                                             required
                                         ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <ckeditor
+                                            :editor="editor"
+                                            v-model="selectedEvent.event_note"
+                                            placeholder="Popis události"
+                                            :config="editorConfig"
+                                        ></ckeditor>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-color-picker
+                                            v-model="selectedEvent.color"
+                                            dot-size="18"
+                                            hide-inputs
+                                            hide-sliders
+                                            mode="rgba"
+                                            show-swatches
+                                            swatches-max-height="200"
+                                        ></v-color-picker>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -387,15 +457,35 @@
     </v-main>
 </template>
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
     data: () => ({
+        editor: ClassicEditor,
+        editorConfig: {
+            toolbar: {
+                items: [
+                    "heading",
+                    "bold",
+                    "italic",
+                    "alignment",
+                    "bulletedList",
+                    "numberedList"
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            language: "cs",
+            heading: {}
+        },
+        loading_delete: false,
         early_notify: false,
+        send_email_to_partners: false,
         when_to_notify: null,
         start_day: null,
         start_time: null,
         end_day: null,
         end_time: null,
-        event_note: null,
+        event_note: "",
+        event_title: "",
         newEvent: false,
         focus: "",
         type: "month",
@@ -408,7 +498,8 @@ export default {
         selectedElement: null,
         selectedOpen: false,
         editEventDialog: false,
-        events: []
+        events: [],
+        event_color: ""
     }),
     mounted() {
         this.$refs.calendar.checkChange();
@@ -431,7 +522,9 @@ export default {
                     end_day: this.end_day,
                     end_time: this.end_time,
                     event_note: this.event_note,
-                    when_to_notify: this.when_to_notify
+                    event_title: this.event_title,
+                    when_to_notify: this.when_to_notify,
+                    event_color: this.event_color
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
@@ -444,6 +537,7 @@ export default {
                     this.event_note = null;
                     this.when_to_notify = null;
                     this.early_notify = false;
+                    this.send_email_to_partners = false;
                 });
         },
 
@@ -487,6 +581,7 @@ export default {
             nativeEvent.stopPropagation();
         },
         deleteEvent(eventId) {
+            this.loading_delete = true;
             axios
                 .delete("event/delete", {
                     data: {
@@ -496,6 +591,7 @@ export default {
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
                     this.selectedOpen = false;
+                    this.loading_delete = false;
                     this.getEvents();
                 });
         },
@@ -507,7 +603,9 @@ export default {
                     start_time: this.selectedEvent.start_time,
                     end_day: this.selectedEvent.end_day,
                     end_time: this.selectedEvent.end_time,
-                    event_note: this.selectedEvent.event_note
+                    event_note: this.selectedEvent.event_note,
+                    event_title: this.selectedEvent.title,
+                    event_color: this.selectedEvent.color
                 })
                 .then(response => {
                     this.editEventDialog = false;

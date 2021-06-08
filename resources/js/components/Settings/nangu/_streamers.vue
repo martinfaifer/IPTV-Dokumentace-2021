@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-card flat class="mr-15">
+        <v-card flat class="pr-5">
             <v-card-title>
                 <v-text-field
                     v-model="search"
-                    append-icon="mdi-magnify"
+                    prepend-inner-icon="mdi-magnify"
                     label="Vyhledat streamer"
                     single-line
                     hide-details
@@ -41,17 +41,25 @@
                     <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="4">
                                     <v-text-field
                                         label="Název streameru"
                                         v-model="streamer_name"
                                     ></v-text-field>
                                 </v-col>
 
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="4">
                                     <v-text-field
-                                        label="IP streameru"
+                                        label="Public IP streameru"
                                         v-model="streamer_ip"
+                                    ></v-text-field>
+                                </v-col>
+
+
+                                <v-col cols="12" sm="12" md="4">
+                                    <v-text-field
+                                        label="Local IP streameru"
+                                        v-model="local_ip"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -77,6 +85,7 @@ export default {
         return {
             streamer_name: "",
             streamer_ip: "",
+            local_ip: "",
             newStreamer: false,
             search: "",
             headers: [
@@ -85,7 +94,8 @@ export default {
                     align: "start",
                     value: "streamer_name"
                 },
-                { text: "IP", value: "streamer_ip" },
+                { text: "Public IP", value: "streamer_ip" },
+                { text: "Local IP", value: "local_ip" },
                 { text: "Akce", value: "akce" }
             ],
             streamers: []
@@ -104,13 +114,15 @@ export default {
         close() {
             this.streamer_name = "";
             this.streamer_ip = "";
+            this.local_ip = "";
             this.newStreamer = false;
         },
         async create() {
             await axios
                 .post("streamer/create", {
                     streamer_name: this.streamer_name,
-                    streamer_ip: this.streamer_ip
+                    streamer_ip: this.streamer_ip,
+                    local_ip: this.local_ip
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

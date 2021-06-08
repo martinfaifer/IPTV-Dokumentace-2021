@@ -179,9 +179,7 @@ class ApiController extends Controller
                 return json_decode($body, true);
             }
         } catch (\Throwable $th) {
-            return [
-                'no response'
-            ];
+            return [];
         }
     }
 
@@ -218,19 +216,14 @@ class ApiController extends Controller
                 return json_decode($body, true);
             }
         } catch (\Throwable $th) {
-            return [
-                'no response'
-            ];
+            return [];
         }
     }
 
 
-    public static function fill_doku_from_dohled()
+    public static function fill_doku_from_dohled(): void
     {
-
         try {
-            //code...
-
             foreach (Multicast::where('stb_ip', "!=", null)->get(['channelId', 'stb_ip']) as $multicast) {
 
                 $client = new Client;
@@ -333,9 +326,6 @@ class ApiController extends Controller
                 }
             }
         } catch (\Throwable $th) {
-            return [
-                'no response'
-            ];
         }
     }
 
@@ -347,10 +337,11 @@ class ApiController extends Controller
      * @param string $streamUrl
      * @param boolean $dohledovano
      * @param boolean $vytvaretNahled
-     * @param string $status
+     * @param string $channelId
+     * @param string $column
      * @return void
      */
-    public static function create_channel_to_dohled(string $nazev, string $streamUrl, bool $dohledovano, bool $vytvaretNahled, $channelId)
+    public static function create_channel_to_dohled(string $nazev, string $streamUrl, bool $dohledovano, bool $vytvaretNahled, string $channelId, string $column)
     {
         try {
 
@@ -359,8 +350,6 @@ class ApiController extends Controller
             }
 
             $apiData = Api::where('type', "iptv_stream_create")->first();
-
-
 
             $client = new Client;
 
@@ -378,20 +367,37 @@ class ApiController extends Controller
             if ($body = $response->getBody()->getContents()) {
                 $odpovedZeServeru = json_decode($body, true);
                 if ($odpovedZeServeru["status"] === "success") {
-                    if (!ChannelToDohled::where('channelId', $channelId)->first()) {
+                    if (!ChannelToDohled::where([[$column, $channelId], ['channel_uri', $streamUrl]])->first()) {
                         ChannelToDohled::create(
                             [
-                                'channelId' => $channelId,
-                                'dohledId' => $odpovedZeServeru["channelId"]
+                                $column => $channelId,
+                                'dohledId' => $odpovedZeServeru["channelId"],
+                                'channel_uri' => $streamUrl
                             ]
                         );
                     }
                 }
             }
         } catch (\Throwable $th) {
-            return [
-                'no response'
-            ];
+            return [];
+        }
+    }
+
+    public static function deletechannel_from_dohled(string $channelId): void
+    {
+        try {
+            if ($apiData = Api::where('type', "iptv_stream_create")->first()) {
+
+                $client = new Client;
+
+                $client->post($apiData->uri, [
+                    'form_params' => [
+                        'hello' => $apiData->token,
+                        'streamId' => $channelId,
+                    ]
+                ]);
+            }
+        } catch (\Throwable $th) {
         }
     }
 
@@ -419,14 +425,12 @@ class ApiController extends Controller
                 return json_decode($body, true);
             }
         } catch (\Throwable $th) {
-            return [
-                'no response'
-            ];
+            return [];
         }
     }
 
 
-    public static function cerate_new_event($request, $streamId)
+    public static function cerate_new_event($request, $streamId): array
     {
         try {
             if (!Api::where('type', "iptv_event_create")->first()) {
@@ -454,9 +458,7 @@ class ApiController extends Controller
                 return json_decode($body, true);
             }
         } catch (\Throwable $th) {
-            return [
-                'no response'
-            ];
+            return [];
         }
     }
 
@@ -505,7 +507,7 @@ class ApiController extends Controller
      */
 
 
-    public static function return_transcoder_ip($transcoderName)
+    public static function return_transcoder_ip($transcoderName): mixed
     {
         try {
 
@@ -537,8 +539,34 @@ class ApiController extends Controller
         }
     }
 
+    public static function try_to_find_stream_in_iptvdohled($address)
+    {
+        try {
+            if (!Api::where('type', "iptv_stream_search")->first()) {
+                return null;
+            }
 
-    public static function try_to_find_streamId($address)
+            $apiData = Api::where('type', "iptv_stream_search")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'hello' => $apiData->token,
+                    'stream_url' => $address,
+                ]
+            ]);
+            // echo $response->getStatusCode();
+            if ($body = $response->getBody()->getContents()) {
+                $dohledData = json_decode($body, true);
+                return $dohledData;
+            }
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public static function try_to_find_streamId($address): mixed
     {
         try {
             if (!Api::where('type', "transcoder_find_stream")->first()) {
@@ -571,7 +599,7 @@ class ApiController extends Controller
         }
     }
 
-    public static function get_streamStatus_from_transcoder($streamId)
+    public static function get_streamStatus_from_transcoder($streamId): mixed
     {
         try {
             if (!Api::where('type', "transcoder_stream_status")->first()) {
@@ -748,6 +776,53 @@ class ApiController extends Controller
             return [
                 "status" => 'no response'
             ];
+        }
+    }
+
+
+    public static function transcoder_streams_log(): array
+    {
+        try {
+            if (!Api::where('type', "transcoder_streams_log")->first()) {
+                return [];
+            }
+
+            $apiData = Api::where('type', "transcoder_streams_log")->first();
+
+            $client = new Client;
+
+            $response = $client->get($apiData->uri);
+            if ($body = $response->getBody()->getContents()) {
+                $transcoderData = json_decode($body, true);
+                return $transcoderData;
+            }
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
+
+    public static function transcoder_stream_log($stream_id): mixed
+    {
+        try {
+            if (!Api::where('type', "transcoder_stream_log")->first()) {
+                return [];
+            }
+
+            $apiData = Api::where('type', "transcoder_stream_log")->first();
+
+            $client = new Client;
+
+            $response = $client->post($apiData->uri, [
+                'form_params' => [
+                    'stream_id' => $stream_id,
+                ]
+            ]);
+            if ($body = $response->getBody()->getContents()) {
+                $logs = json_decode($body, true);
+                return $logs;
+            }
+        } catch (\Throwable $th) {
+            return [];
         }
     }
 }

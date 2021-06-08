@@ -10,8 +10,6 @@ class StreamPort extends Model
     use HasFactory;
 
     protected $fillable = [
-        'port_nuber',
-        'port_output',
-        'port_desc'
+        'port_nuber', 'port_output', 'port_desc', 'device'
     ];
 }

@@ -1,18 +1,18 @@
 <template>
-    <v-main>
-        <div v-if="!this.$route.params.id" class="ml-12">
+    <v-main style="background-color: #F1F5F9">
+        <div v-if="!this.$route.params.id" class="pl-16">
             <!-- default komponent -->
             <default-component></default-component>
         </div>
 
         <div v-else>
-            <v-container fluid class=" ml-10">
+            <v-container fluid class=" pl-16">
                 <!-- štítky component -->
-                <tag-component class="mr-15"></tag-component>
+                <tag-component class="pr-5"></tag-component>
                 <!-- konec štítků -->
 
-                <v-card flat class="ml-16">
-                    <v-container fluid class="ml-16 mt-6">
+                <v-card flat class="pl-16">
+                    <v-container fluid class="pl-16 mt-6" style="background-color: #F1F5F9">
                         <!-- INCLUDE KOMPONENTŮ -->
 
                         <!-- Device information component -->

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendError500Mail;
 use App\Mail\SendFileNotification;
 use App\Mail\SendNotification;
 use App\Mail\SendRebootStreamNotification;
@@ -34,5 +35,10 @@ class SendNotificationController extends Controller
     public static function send_file_notification($mail, $text): void
     {
         Mail::to($mail)->queue(new SendFileNotification($mail, $text));
+    }
+
+    public static function send_email_with_error_500($payload): void
+    {
+        Mail::to(env("MAIL_ADMIN"))->queue(new SendError500Mail($payload));
     }
 }

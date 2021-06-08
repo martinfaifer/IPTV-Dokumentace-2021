@@ -12,6 +12,7 @@ class Wiki extends Model
     protected $fillable = [
         'main_kategorie',
         'sub_kategorie',
-        'id_main_kategorie'
+        'id_main_kategorie',
+        'icon'
     ];
 }

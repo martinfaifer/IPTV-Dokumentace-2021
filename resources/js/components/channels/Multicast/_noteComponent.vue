@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card flat color="#F5F5F7" height="250">
+        <v-card flat color="white" height="250">
             <v-card-subtitle @contextmenu="showCreate($event)">
                 <v-row class="ml-1 mt-1 mr-1">
                     <strong>
@@ -20,52 +20,81 @@
                     <v-row v-else>
                         <v-virtual-scroll
                             :items="notes"
-                            :item-height="60"
-                            height="150"
+                            :item-height="120"
+                            height="170"
                         >
                             <template v-slot:default="{ item }">
                                 <v-list-item dense>
-                                    <v-list-item-content class="pt-1">
-                                        <v-list-item-title>
-                                            <v-textarea
-                                                dense
-                                                @contextmenu="
-                                                    show($event, item.id)
-                                                "
-                                                readonly
-                                                filled
-                                                prepend-icon="mdi-comment"
-                                                auto-grow
-                                                rows="1"
-                                                :value="item.poznamka"
-                                            ></v-textarea>
-
-                                            <v-menu
-                                                dense
-                                                v-model="showMenu"
-                                                :position-x="x"
-                                                :position-y="y"
-                                                absolute
-                                                offset-y
-                                            >
-                                                <v-list dense>
-                                                    <v-list-item
-                                                        @click="deleteNote()"
+                                    <v-list-item-icon class="mt-6">
+                                        <v-icon>mdi-email</v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content>
+                                        <v-sheet
+                                            color="grey lighten-5"
+                                            rounded="xl"
+                                            @contextmenu="show($event, item.id)"
+                                        >
+                                            <v-container>
+                                                <v-row class="ml-1 mt-1 mb-1">
+                                                    <span
+                                                        v-html="item.poznamka"
                                                     >
-                                                        <v-list-item-icon>
-                                                            <v-icon
-                                                                x-small
-                                                                color="red"
-                                                                >mdi-delete</v-icon
-                                                            >
-                                                        </v-list-item-icon>
-                                                        <v-list-item-title>
-                                                            Odebrat
-                                                        </v-list-item-title>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-menu>
-                                        </v-list-item-title>
+                                                    </span>
+                                                </v-row>
+                                                <span
+                                                    justify-end
+                                                    class="grey--text"
+                                                >
+                                                    <small>
+                                                        Napsal:
+
+                                                        {{ item.creator }}
+                                                    </small>
+                                                    <v-divider
+                                                        inset
+                                                        vertical
+                                                    ></v-divider>
+                                                    <small
+                                                        v-text="
+                                                            new Date(
+                                                                item.created_at
+                                                            )
+                                                        "
+                                                    >
+                                                    </small>
+                                                </span>
+                                                <v-divider
+                                                    dark
+                                                    class="mt-3"
+                                                ></v-divider>
+                                            </v-container>
+                                        </v-sheet>
+
+                                        <v-menu
+                                            dense
+                                            v-model="showMenu"
+                                            :position-x="x"
+                                            :position-y="y"
+                                            absolute
+                                            offset-y
+                                        >
+                                            <v-list dense>
+                                                <v-list-item
+                                                    @click="deleteNote()"
+                                                >
+                                                    <v-list-item-icon>
+                                                        <v-icon
+                                                            x-small
+                                                            color="red"
+                                                            >mdi-delete</v-icon
+                                                        >
+                                                    </v-list-item-icon>
+                                                    <v-list-item-title>
+                                                        Odebrat
+                                                    </v-list-item-title>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-menu>
                                     </v-list-item-content>
                                 </v-list-item>
                             </template>
@@ -95,19 +124,18 @@
             </v-menu>
         </v-card>
 
-        <v-dialog v-model="newNoteDialog" persistent max-width="1000px">
+        <v-dialog v-model="newNoteDialog" persistent max-width="800px">
             <v-card>
                 <v-card-title>
                     <span class="headline">Nová poznámka</span>
                 </v-card-title>
                 <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="12">
-                                <v-textarea v-model="noteText"></v-textarea>
-                            </v-col>
-                        </v-row>
-                    </v-container>
+                    <!-- <v-textarea v-model="noteText"></v-textarea> -->
+                    <ckeditor
+                        :editor="editor"
+                        v-model="noteText"
+                        :config="editorConfig"
+                    ></ckeditor>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -123,11 +151,23 @@
     </v-main>
 </template>
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 export default {
     data() {
         return {
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: {
+                    items: ["bold", "italic", "alignment"],
+                    shouldNotGroupWhenFull: true
+                },
+                language: "cs",
+                heading: {}
+                // The configuration of the editor.
+            },
             newNoteDialog: false,
-            noteText: null,
+            noteText: "",
             noteId: null,
             notes: [],
             showMenu: false,
@@ -170,13 +210,15 @@ export default {
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
                     this.newNoteDialog = false;
-                    this.noteText = null;
+                    this.noteText = "";
                     this.loadNotes();
+                }).catch( err => {
+                    console.log(err);
                 });
         },
         closeDialog() {
             this.newNoteDialog = false;
-            this.noteText = null;
+            this.noteText = "";
         },
         deleteNote() {
             axios
@@ -208,6 +250,13 @@ export default {
 
         checkUri() {
             if (this.$route.path === "/channel/" + this.$route.params.id) {
+                return "channelId";
+            }
+
+            if (
+                this.$route.path ===
+                "/channel/" + this.$route.params.id + "/multicast"
+            ) {
                 return "channelId";
             }
 

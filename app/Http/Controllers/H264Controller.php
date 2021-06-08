@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\ChannelsToTranscoder;
 use App\Models\ChannelToDohled;
 use App\Models\Device;
@@ -11,9 +12,13 @@ use App\Models\UnicastChunkStoreId;
 use App\Models\UnicastKvalitaChannelOutput;
 use App\Models\UnicastOutputForDevice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class H264Controller extends Controller
 {
+    use NotificationTrait;
 
     /**
      * fn pro overení zda existuje kanál
@@ -46,16 +51,14 @@ class H264Controller extends Controller
 
     public static function try_to_get_stream_status(Request $request): array
     {
-        if (!H264::where('channelId', $request->channelId)->first()) {
+
+        if (!$h264 = H264::where('channelId', $request->channelId)->first()) {
             return [
                 'status' => "empty"
             ];
         }
 
-        if ($streamId = ChannelsToTranscoder::where(
-            'H264Id',
-            H264::where('channelId', $request->channelId)->first()->id
-        )->first()) {
+        if ($streamId = ChannelsToTranscoder::where('H264Id', $h264->id)->first()) {
             return [
                 'status' => "success",
                 'streamStatus' => ApiController::get_streamStatus_from_transcoder($streamId->transcoderId)
@@ -98,14 +101,16 @@ class H264Controller extends Controller
                 UnicastKvalitaChannelOutput::where('id', $kvalita->id)->first()->delete();
             }
 
-            ParedTagController::delete_tags('h264Id', $h264->id);
+            // ParedTagController::delete_tags('h264Id', $h264->id);
             $h264->delete();
 
 
-            return NotificationController::notify("success", "success", "Odebráno!", $channelId);
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral H264 u ", Channel::find($channelId)->nazev);
+
+            return self::frontend_notification("success", "success", "Odebráno!", $channelId);
         } else {
 
-            return NotificationController::notify("error", "error", "Nepodařilo se odebrat!", $channelId);
+            return self::frontend_notification("error", "error", "Nepodařilo se odebrat!", $channelId);
         }
     }
 
@@ -117,9 +122,13 @@ class H264Controller extends Controller
      */
     public function create(Request $request): array
     {
+        $validation = Validator::make($request->all(), [
+            'transcoder' => 'required',
+            'channelId' => 'required'
+        ]);
 
-        if (is_null($request->transcoder) || empty($request->transcoder)) {
-            return NotificationController::notify("error", "warning", "Není vyplněno zařízení");
+        if ($validation->fails()) {
+            return $this->frontend_notification("error" . "error", "Není vše vyplněno!");
         }
 
         H264::create(
@@ -171,7 +180,9 @@ class H264Controller extends Controller
             );
         }
 
-        return NotificationController::notify("success", "success", "Výstup vytvořen!", $request->channelId);
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "vytvořil H264 u ", Channel::find($request->channelId)->nazev);
+
+        return $this->frontend_notification("success", "success", "Vytvořeno!", $request->channelId);
     }
 
 
@@ -184,9 +195,11 @@ class H264Controller extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Změněno");
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "změnil transcodér", Channel::find($request->channelId)->nazev);
+
+            return $this->frontend_notification("success", "success", "Upraveno");
         } catch (\Throwable $th) {
-            return NotificationController::notify("error", "error", "Nepodařilo se změnit");
+            return $this->frontend_notification("error", "error", "Nepodařilo se změnit");
         }
     }
 
@@ -203,11 +216,11 @@ class H264Controller extends Controller
 
             UnicastOutputForDeviceController::generate_h264($request);
 
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil H264", Channel::find($request->channelId)->nazev);
 
-            return NotificationController::notify("success", "success", "Změněno!");
+            return self::frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-
-            return NotificationController::notify("error", "error", "Error 500!");
+            return self::frontend_notification("error", "error", "Error 500!");
         }
     }
 
@@ -215,17 +228,22 @@ class H264Controller extends Controller
     public static function return_dohled_data(Request $request): array
     {
         // vyhledání H264
-        if (!H264::where('channelId', $request->channelId)->first()) {
+        if (!$channel = H264::where('channelId', $request->channelId)->first()) {
             return [];
         }
 
         // overení existence id v ChannelsToDohled
-        if (!ChannelToDohled::where('H264Id', H264::where('channelId', $request->channelId)->first()->id)->first()) {
+        if (!ChannelToDohled::where('H264Id', $channel->id)->first()) {
             return [];
         }
 
-        return ApiController::return_information_about_channel(
-            ChannelToDohled::where('H264Id', H264::where('channelId', $request->channelId)->first()->id)->first()->dohledId
-        );
+        foreach (ChannelToDohled::where('H264Id', $channel->id)->get() as $channelOnDohled) {
+            $output[] = ApiController::return_information_about_channel($channelOnDohled->dohledId);
+        }
+
+        return [
+            'status' => "success",
+            'dohledData' => $output
+        ];
     }
 }

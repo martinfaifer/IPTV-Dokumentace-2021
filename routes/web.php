@@ -1,11 +1,15 @@
 <?php
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlankomInterfaceController;
-use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\ChannelsToTranscoderController;
+use App\Http\Controllers\ChannelToDohledController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CtypeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceCategoryController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceInterfaceController;
@@ -15,9 +19,12 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FteInterfaceController;
 use App\Http\Controllers\H264Controller;
 use App\Http\Controllers\H265Controller;
+use App\Http\Controllers\IconController;
 use App\Http\Controllers\IptvPackageController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\MulticastController;
 use App\Http\Controllers\MulticastSourceController;
+use App\Http\Controllers\NanguChannelController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PowerVuInterfaceController;
 use App\Http\Controllers\SatelitCardController;
@@ -40,7 +47,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/user', [UserController::class, 'get_user']);
-
 Route::post('login', [AuthController::class, 'logIn']);
 Route::get('login', function () {
     return [
@@ -68,14 +74,13 @@ Route::group(['middleware' => 'auth'], function () {
     // searchs => vyhledání v celé aplikaci, pripaveny json s url a popisem pro rychlejší vyhledání
     Route::prefix('search')->group(function () {
         Route::get('/', [SearchController::class, 'search']);
-        Route::post('/realtime', [SearchController::class, 'realtime_search']);
+        Route::post('/', [SearchController::class, 'realtime_search']);
         Route::get('/filter/{filter}/{item}', [SearchController::class, 'filter']);
         Route::get('/filter/{filter}', function () {
             return [];
         });
         Route::post('/filterData', [SearchController::class, 'filterData']);
     });
-
 
     // Sekce  kanály
     Route::get('channels', [ChannelController::class, 'get_channels']);
@@ -92,17 +97,25 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/dohled', [ChannelController::class, 'return_dohled_data']);
         Route::post('/h264/dohled', [H264Controller::class, 'return_dohled_data']);
         Route::post('/h265/dohled', [H265Controller::class, 'return_dohled_data']);
+        Route::post('nangu', [NanguChannelController::class, 'show']);
+        Route::post('nangu/show_channel_code', [NanguChannelController::class, 'show_channel_code']);
+        Route::post('nangu/update', [NanguChannelController::class, 'update']);
+        Route::post('nangu/sources', [NanguChannelController::class, 'show_sources']);
         Route::post('/multicast', [ChannelController::class, 'return_multicast_informations']);
+        Route::get('/multicast/history/{channelId}', [LogController::class, 'show_multicast_history']);
         Route::patch('/multicast/edit', [MulticastController::class, 'update']);
         Route::patch('/multiplexer/edit', [ChannelController::class, 'edit_multiplexor']);
         Route::delete('/multiplexer/remove', [ChannelController::class, 'remove_multiplexor']);
         Route::post('/analyze', [ChannelController::class, 'channel_analyze']);
+        Route::get('/channels/rebooted', [ChannelController::class, 'get_rebooted_channels']);
         Route::group(['prefix' => 'chunkStoreId'], function () {
             Route::post('/show', [UnicastChunkStoreIdController::class, 'return_chunkStoreId']);
             Route::post('/update', [UnicastChunkStoreIdController::class, 'edit']);
             Route::post('/create', [UnicastChunkStoreIdController::class, 'create']);
         });
     });
+
+    Route::post('dohled/createOrDelete', [ChannelToDohledController::class, 'createOrDelete']);
 
     // získání multicastových infomrací
     Route::post('multicast', [MulticastController::class, 'return_multicast_data_for_current_chanel']);
@@ -189,6 +202,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/', [H264Controller::class, 'return_transcoder_information']);
             Route::post('/status', [H264Controller::class, 'try_to_get_stream_status']);
             Route::patch('/update', [H264Controller::class, 'update_transcoder']);
+            Route::post('/chart', [ChannelsToTranscoderController::class, 'get_stream_history_from_transcoder_controller']);
         });
     });
 
@@ -252,6 +266,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('/sessions', [UserController::class, 'sessions']);
         Route::patch('/changePassword', [UserController::class, 'change_password']);
+        Route::post('photo', [UserController::class, 'store_photo']);
+        Route::get('photo', [UserController::class, 'show_foto']);
+        Route::delete('photo', [UserController::class, 'delete_photo']);
     });
 
 
@@ -277,10 +294,20 @@ Route::group(['middleware' => 'auth'], function () {
     // endpoint to external system
     Route::get('external_endpoints', [ApiController::class, 'return_endpoints']);
 
+    // wiki
     Route::group(['prefix' => 'wiki'], function () {
-        Route::get('/', [WikiController::class, 'get']);
-        Route::post('/topic', [WikiController::class, 'get_topic']);
-        Route::post('/topic/save', [WikiController::class, 'update_topic']);
+        Route::get('/', [WikiController::class, 'index']);
+        Route::post('', [WikiController::class, 'show_category']);
+        Route::post('create', [WikiController::class, 'create_category']);
+        Route::post('update', [WikiController::class, 'update_category']);
+        Route::post('delete', [WikiController::class, 'delete_category']);
+
+        Route::group(['prefix' => 'topic'], function () {
+            Route::post('', [WikiController::class, 'show_topic']);
+            Route::post('update', [WikiController::class, 'update_topic']);
+            Route::post('create', [WikiController::class, 'create_topic']);
+            Route::post('delete', [WikiController::class, 'delete_topic']);
+        });
     });
 
     Route::group(['prefix' => 'storage'], function () {
@@ -317,7 +344,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('generate', [UnicastOutputForDeviceController::class, 'run_command']);
         });
     });
+
+    Route::prefix('ctype')->group(function () {
+        Route::get('', [CtypeController::class, 'index']);
+        Route::get('{ctypeId}', [CtypeController::class, 'show']);
+        Route::delete('', [CtypeController::class, 'destroy']);
+        Route::post('', [CtypeController::class, 'create']);
+    });
+
+    Route::get('icons', [IconController::class, 'index']);
+    Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::post('nangu', [NanguChannelController::class, 'show']);
 });
-
-
-Route::get('/test', [BroadcastController::class, 'broadcast_alerts']);

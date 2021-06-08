@@ -11,7 +11,7 @@ class BackgroundProcessController extends Controller
      *
      * @return array
      */
-    public static function get_alerts_from_dohled(): array
+    public static function get_alerts_from_dohled(): void
     {
 
         $loop = Factory::create();

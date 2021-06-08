@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-card flat class="mr-15">
+        <v-card flat class="pl-6 pr-15">
             <v-card-title>
                 <v-text-field
                     v-model="search"
-                    append-icon="mdi-magnify"
+                    prepend-inner-icon="mdi-magnify"
                     label="Vyhledat štítek"
                     single-line
                     hide-details
@@ -73,6 +73,7 @@
                                         hide-inputs
                                         hide-sliders
                                         mode="rgba"
+                                        hide-canvas
                                         show-swatches
                                         swatches-max-height="200"
                                     ></v-color-picker>

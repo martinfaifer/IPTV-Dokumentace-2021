@@ -12,6 +12,10 @@ class Topics extends Model
     protected $fillable = [
         'kategorieId',
         'text',
-        'creator'
+        'creator',
+        'icon',
+        'topic_title',
+        'wiki_id',
+        'icon'
     ];
 }

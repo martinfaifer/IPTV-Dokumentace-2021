@@ -1,15 +1,17 @@
 <template>
-    <v-main>
-        <div>
-            <v-container fluid class="ml-16 ">
-                <v-card flat class="ml-16">
-                    <v-container fluid class="ml-16 mt-6 mr-15">
-                        <!-- INCLUDE KOMPONENTŮ -->
-                        <default-component></default-component>
-                    </v-container>
-                </v-card>
-            </v-container>
-        </div>
+    <v-main style="background-color: #F1F5F9">
+        <v-container fluid class="pl-16" style="background-color: #F1F5F9">
+            <v-card flat class="pl-16" color="#F1F5F9">
+                <v-container
+                    fluid
+                    class="pl-16 pt-6 pr-5"
+                    style="background-color: #F1F5F9"
+                >
+                    <!-- INCLUDE KOMPONENTŮ -->
+                    <default-component></default-component>
+                </v-container>
+            </v-card>
+        </v-container>
     </v-main>
 </template>
 <script>

@@ -1,27 +1,43 @@
 <template>
-    <v-main>
-        <div v-if="!this.$route.params.id" class="ml-12">
+    <v-main style="background-color: #F1F5F9">
+        <div
+            v-if="!this.$route.params.id"
+            class="pl-12"
+            style="background-color: #F1F5F9"
+        >
             <!-- default komponent -->
             <default-component></default-component>
         </div>
 
-        <div v-else>
-            <v-container fluid class="ml-16">
+        <div v-else style="background-color: #F1F5F9">
+            <v-container fluid class="pl-16" style="background-color: #F1F5F9">
                 <!-- štítky component -->
-                <tag-component class="mr-15"></tag-component>
+                <tag-component class="pr-5"></tag-component>
                 <!-- konec štítků -->
 
                 <!-- navigace na přepnutí detailů karnálu ( multicast, h264, h265 , informace z dohledu) -->
-                <v-card flat class="ml-16 mt-3">
-                    <v-tabs centered v-model="channelTab">
+                <v-card flat class="pl-16 mt-3" color="#F1F5F9">
+                    <v-tabs
+                        centered
+                        dense
+                        v-model="channelTab"
+                        background-color="#F1F5F9"
+                    >
                         <v-tabs-slider></v-tabs-slider>
                         <v-tab
+                            class="body-2"
+                            dense
                             link
-                            v-bind:to="'/channel/' + this.$route.params.id"
+                            v-bind:to="
+                                '/channel/' +
+                                    this.$route.params.id +
+                                    '/multicast'
+                            "
                             href="multicast"
                             >Multicast</v-tab
                         >
                         <v-tab
+                            class="body-2"
                             link
                             v-bind:to="
                                 '/channel/' + this.$route.params.id + '/h264'
@@ -30,6 +46,7 @@
                             >H264</v-tab
                         >
                         <v-tab
+                            class="body-2"
                             link
                             v-bind:to="
                                 '/channel/' + this.$route.params.id + '/h265'
@@ -37,31 +54,46 @@
                             href="#tab-3"
                             >H265</v-tab
                         >
+                        <!-- nangu nebo jine externi api -->
+                        <v-tab
+                            class="body-2"
+                            link
+                            v-bind:to="
+                                '/channel/' + this.$route.params.id + '/nangu'
+                            "
+                            href="#tab-3"
+                            >Nangu</v-tab
+                        >
 
                         <v-tab
+                            class="body-2"
                             link
                             v-bind:to="
                                 '/channel/' + this.$route.params.id + '/storage'
                             "
-                            href="#tab-3"
+                            href="#tab-4"
                             >Soubory</v-tab
                         >
 
-                        <v-tab-item v-model="channelTab" class="ml-16 mt-6">
+                        <v-tab-item v-model="channelTab" class="pl-16">
                             <!-- INCLUDE KOMPONENTŮ -->
 
                             <!-- multicast komponent -->
                             <multicast-component
-                                class="mr-15"
+                                class="pr-5"
                                 v-if="
                                     this.$route.path ===
-                                        '/channel/' + this.$route.params.id
+                                        '/channel/' +
+                                            this.$route.params.id +
+                                            '/multicast' ||
+                                        this.$route.path ===
+                                            '/channel/' + this.$route.params.id
                                 "
                             ></multicast-component>
 
                             <!-- h264 komponent -->
                             <h264baseinfo-component
-                                class="mr-15"
+                                class="pr-5"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +
@@ -72,7 +104,7 @@
 
                             <!-- h265 komponent -->
                             <h265baseinfo-component
-                                class="mr-15"
+                                class="pr-5"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +
@@ -81,7 +113,17 @@
                                 "
                             ></h265baseinfo-component>
                             <!-- dohled API komponent -->
+                            <nanguchannel-component
+                                class="pr-5"
+                                v-if="
+                                    this.$route.path ===
+                                        '/channel/' +
+                                            this.$route.params.id +
+                                            '/nangu'
+                                "
+                            ></nanguchannel-component>
                             <channelstorage-component
+                                class="pr-5"
                                 v-if="
                                     this.$route.path ===
                                         '/channel/' +
@@ -103,6 +145,7 @@ import MulticastComponent from "./MulticastComponent.vue";
 import H264baseInfoComponent from "./Unicast H264/H264baseInfoComponent";
 import H265baseInfoComponent from "./Unicast H265/H265baseInfoComponent";
 import ChannelStorageComponent from "./Storage/ChannelStorageComponent";
+import NanguChannelComponent from "./Nangu/ChannelNanguComponent";
 export default {
     data() {
         return {
@@ -118,7 +161,8 @@ export default {
         "h265baseinfo-component": H265baseInfoComponent,
         "channelstorage-component": ChannelStorageComponent,
         "default-component": DefaultComponent,
-        "tag-component": TagComponent
+        "tag-component": TagComponent,
+        "nanguchannel-component": NanguChannelComponent
     },
     created() {},
     methods: {

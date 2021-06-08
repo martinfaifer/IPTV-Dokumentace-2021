@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Http\Controllers\CrashedChannelsController;
 use Illuminate\Console\Command;
 
-class getStreamStatusesFromDohled extends Command
+class getStatuses_andTryToReboot extends Command
 {
     /**
      * The name and signature of the console command.

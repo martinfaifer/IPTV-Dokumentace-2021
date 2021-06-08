@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-list dense nav class="ml-12" color="#F5F5F7">
+        <v-list dense nav class="ml-12" color="transparent">
             <v-list-item
                 class="ml-3"
                 link

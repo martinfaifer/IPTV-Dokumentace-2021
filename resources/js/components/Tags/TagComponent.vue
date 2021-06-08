@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-toolbar fixed dense flat>
+        <v-toolbar fixed dense flat class="mt-6" color="#F1F5F9">
             <v-spacer></v-spacer>
             <div class="text-center" v-for="tag in tags" :key="tag.id">
                 <v-chip
@@ -16,7 +16,7 @@
             <div>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                        <v-icon v-on="on" @click="OpenDialogForNewTag()">
+                        <v-icon small v-on="on" @click="OpenDialogForNewTag()">
                             mdi-plus
                         </v-icon>
                     </template>
@@ -26,7 +26,7 @@
         </v-toolbar>
 
         <v-row justify="center">
-            <v-dialog v-model="NewTagsDialog" persistent max-width="1000px">
+            <v-dialog v-model="NewTagsDialog" persistent max-width="600">
                 <v-card>
                     <v-card-title>
                         <span class="headline">Přidat štítek</span>
@@ -118,9 +118,9 @@ export default {
                 this.showMenu = true;
             });
         },
-        async loadTags() {
+        loadTags() {
             // obecná fn , kdy se bude hlídat uri a dle toho se bude hledat tag pro daný source
-            await axios
+            axios
                 .post("tags", {
                     id: this.$route.params.id,
                     datatype: this.checkUri()
@@ -132,6 +132,11 @@ export default {
 
         checkUri() {
             if (this.$route.path === "/channel/" + this.$route.params.id) {
+                this.type = "multicast";
+                return "multicastId";
+            }
+
+             if (this.$route.path === "/channel/" + this.$route.params.id + '/multicast') {
                 this.type = "multicast";
                 return "multicastId";
             }

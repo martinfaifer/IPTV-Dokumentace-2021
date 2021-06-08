@@ -10,9 +10,11 @@ use App\Models\H265;
 use App\Models\ParedTag;
 use Illuminate\Http\Request;
 
+use App\Traits\NotificationTrait;
+
 class ChannelAutoRebootController extends Controller
 {
-
+    use NotificationTrait;
 
     public function index(): array
     {
@@ -57,11 +59,11 @@ class ChannelAutoRebootController extends Controller
                                 'H264Id' => $request->id
                             ]
                         );
-                        return NotificationController::notify("success", "success", "Událost uložena");
+                        return self::frontend_notification("success", "success", "Uloženo");
                     }
-                    return NotificationController::notify("error", "error", "Kanál má již nastaven automatický restart");
+                    return self::frontend_notification("error", "error", "Kanál má již nastaven automatický restart");
                 }
-                return NotificationController::notify("error", "error", "Zařízení nepodporuje automatický restart");
+                return self::frontend_notification("error", "error", "Zařízení nepodporuje automatický restart");
                 break;
 
             case 'h265':
@@ -74,16 +76,16 @@ class ChannelAutoRebootController extends Controller
                             ]
                         );
 
-                        return NotificationController::notify("success", "success", "Událost uložena");
+                        return self::frontend_notification("success", "success", "Uloženo");
                     }
 
-                    return NotificationController::notify("error", "error", "Kanál má již nastaven automatický restart");
+                    return self::frontend_notification("error", "error", "Kanál má již nastaven automatický restart");
                 }
-                return NotificationController::notify("error", "error", "Zařízení nepodporuje automatický restart");
+                return self::frontend_notification("error", "error", "Zařízení nepodporuje automatický restart");
                 break;
 
             default:
-                return NotificationController::notify("error", "error", "Kanál nepodporuje automatcký restart");
+                return self::frontend_notification("error", "error", "Kanál nepodporuje automatcký restart");
                 break;
         }
     }
@@ -95,7 +97,7 @@ class ChannelAutoRebootController extends Controller
             case 'h264':
                 if ($toDeystroy = ChannelAutoReboot::where('H264Id', $id)->first()) {
                     $toDeystroy->delete();
-                    return NotificationController::notify("success", "success", "Událost smazana");
+                    return self::frontend_notification("success", "success", "Odebráno!");
                 }
                 break;
 
@@ -103,13 +105,13 @@ class ChannelAutoRebootController extends Controller
                 if ($toDeystroy = ChannelAutoReboot::where('H265Id', $id)->first()) {
                     $toDeystroy->delete();
 
-                    return NotificationController::notify("success", "success", "Událost smazana");
+                    return self::frontend_notification("success", "success", "Odebráno!");
                 }
 
                 break;
 
             default:
-                return NotificationController::notify();
+                return self::frontend_notification();
                 break;
         }
     }

@@ -11,6 +11,7 @@ class Note extends Model
     protected $fillable = [
         'poznamka',
         'channelId',
-        'deviceId'
+        'deviceId',
+        'creator'
     ];
 }

@@ -11,7 +11,6 @@ class VendorController extends Controller
 
     public function return_vendors(): array
     {
-
         if (!Vendor::first()) {
             return [
                 'status' => "empty"
@@ -42,11 +41,9 @@ class VendorController extends Controller
      */
     public static function return_vendor_by_id(string $vendorId): string
     {
-
         if (!Vendor::where('id', $vendorId)->first()) {
             return "Nezmáný výrobce";
         }
-
 
         return Vendor::where('id', $vendorId)->first()->vendor;
     }
@@ -54,9 +51,6 @@ class VendorController extends Controller
 
     public static function check_if_vendor_is_know(string $vendorId, string $deviceId, string $action): void
     {
-        // zjistení dza se jedná o Blankom , FTE nebo PowerVu ( dalsí budou príbývat casem ) id 1, 2, 5
-
-
         switch ($vendorId) {
             case "Blankom":
 

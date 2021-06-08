@@ -2,7 +2,7 @@
     <v-main>
         <v-card
             flat
-            color="#F5F5F7"
+            color="white"
             v-if="multicasts != null"
             @contextmenu="show($event)"
         >
@@ -11,9 +11,8 @@
                     Zdrojové informace o kanálů
                 </strong>
             </v-card-subtitle>
-
-            <v-card-text class="ml-12 text--center">
-                <v-container>
+            <v-card-text class="text--center">
+                <v-container fluid>
                     <v-row v-for="multicast in multicasts" :key="multicast.id">
                         <v-col cols="12" sm="12" md="3" lg="3">
                             <strong>Zdroj: </strong>
@@ -56,14 +55,23 @@
             <v-list dense>
                 <v-list-item @click="openMulticastEditDialog()">
                     <v-list-item-icon>
-                        <v-icon x-small>mdi-pencil</v-icon>
+                        <v-icon color="info" x-small>mdi-pencil</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
                         Upravit
                     </v-list-item-title>
                 </v-list-item>
 
-                 <v-list-item v-if="dohled != null" @click="AnalyzeChannel()" >
+                  <!-- <v-list-item @click="addtoDohled()">
+                    <v-list-item-icon>
+                        <v-icon color="success" x-small>mdi-plus</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat do dohledu
+                    </v-list-item-title>
+                </v-list-item> -->
+
+                 <v-list-item @click="AnalyzeChannel()" >
                     <v-list-item-icon>
                         <v-icon x-small>mdi-magnify</v-icon>
                     </v-list-item-icon>
@@ -106,6 +114,7 @@
                                         dense
                                         v-model="editData.multicast_ip"
                                         label="Multicastová IP"
+                                        placeholder="například 239.250.1.1"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -136,7 +145,8 @@
                                     <v-text-field
                                         dense
                                         v-model="editData.backup_multicast_ip"
-                                        label="Multicastová IP"
+                                        label="Záložní multicastová IP"
+                                        placeholder="například 239.250.1.1"
                                         required
                                     ></v-text-field>
                                 </v-col>

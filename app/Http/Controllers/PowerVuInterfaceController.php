@@ -7,9 +7,13 @@ use App\Models\Device;
 use App\Models\PowerVuInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class PowerVuInterfaceController extends Controller
 {
+    use NotificationTrait;
+
     public static function return_fte_interfaces_with_data($powerVuId): array
     {
         // neexistuje zarízení s pripárovanými interfacy
@@ -28,29 +32,24 @@ class PowerVuInterfaceController extends Controller
 
     public function edit_interface(Request $request): array
     {
+        $validation = Validator::make($request->all(), [
+            'sat' => 'required',
+            'dvb' => 'required',
+            'freq' => 'required',
+            'polarizace' => 'required',
+            'symbolrate' => 'required',
+            'asi' => 'required',
+            'fec' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->frontend_notification("error", "error", "Není vše vyplněno!");
+        }
+
         // overení ze existuje zarizení napárovaný na interfacy 
         if (!PowerVuInterface::where('deviceId', $request->deviceId)->first()) {
-            return [
-                'status' => "error",
-                'msg' => "Nepodařilo se vyhledat zařízení"
-            ];
+            return $this->frontend_notification("error", "error", "Nepodařilo se vyhledat zařízení");
         }
-
-        if (
-            empty($request->sat) || is_null($request->sat) ||
-            empty($request->dvb) || is_null($request->dvb) ||
-            empty($request->freq) || is_null($request->freq) ||
-            empty($request->polarizace) || is_null($request->polarizace) ||
-            empty($request->symbolrate) || is_null($request->symbolrate) ||
-            empty($request->asi) || is_null($request->asi) ||
-            empty($request->fec) || is_null($request->fec)
-        ) {
-            return [
-                'status' => "warning",
-                'msg' => "Není vše řádně vyplněno"
-            ];
-        }
-
 
         try {
             // editace interfacu , dle $reques->interfaceId
@@ -96,17 +95,9 @@ class PowerVuInterfaceController extends Controller
                 "editoval"
             ));
 
-            return [
-                'status' => "success",
-                'msg' => "Editováno"
-            ];
+            return $this->frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-            //nepodarilo se provest editaci, bude vyvolána chyba 
-
-            return [
-                'status' => "error",
-                'msg' => "Selhala editace! ERROR 500"
-            ];
+            return $this->frontend_notification();
         }
     }
 

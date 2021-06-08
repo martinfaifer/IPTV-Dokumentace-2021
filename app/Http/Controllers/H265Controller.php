@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\ChannelsToTranscoder;
 use App\Models\ChannelToDohled;
 use App\Models\Device;
 use App\Models\H265;
 use App\Models\UnicastKvalitaChannelOutput;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class H265Controller extends Controller
 {
+    use NotificationTrait;
     /**
      * fn pro overení zda existuje kanál
      *
@@ -81,26 +86,31 @@ class H265Controller extends Controller
     public static function delete(string $channelId): array
     {
         if ($h265 = H265::where('channelId', $channelId)->first()) {
-            ParedTagController::delete_tags('h264Id', $h265->id);
+            // ParedTagController::delete_tags('h264Id', $h265->id);
             $h265->delete();
 
-            return NotificationController::notify("success", "success", "Odebráno!");
+
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral H265 u ", Channel::find($channelId)->nazev);
+            return self::frontend_notification("success", "success", "Odebráno!");
         } else {
 
-            return NotificationController::notify("error", "error", "Nepodařilo se odebrat!");
+            return self::frontend_notification("error", "error", "Nepodařilo se odebrat!");
         }
     }
 
 
     public static function create(Request $request): array
     {
-        if (is_null($request->transcoder) || empty($request->transcoder)) {
-            return NotificationController::notify("error", "warning", "Není vyplněno zařízení!");
+
+        $validation = Validator::make($request->all(), [
+            'transcoder' => 'required'
+        ]);
+        if ($validation->fails()) {
+            return self::frontend_notification("error", "warning", "Není vyplněno zařízení!");
         }
 
-
         if (H265::where('channelId', $request->channelId)->first()) {
-            return NotificationController::notify("error", "error", "Kanál má již H265 výstup");
+            return self::frontend_notification("error", "error", "Kanál má již H265 výstup");
         }
 
         // zalození
@@ -110,10 +120,6 @@ class H265Controller extends Controller
                 'deviceId' => Device::where('name', $request->transcoder)->first()->id
             ]
         );
-
-
-
-        // zallzení kvalit
 
         if (
             !is_null($request->output1080) || !empty($request->output1080) ||
@@ -143,15 +149,9 @@ class H265Controller extends Controller
             }
         }
 
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "vytvořil H265 u ", Channel::find($request->channelId)->nazev);
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Výstup vytvořen"
-            ),
-            'channelId' => $request->channelId
-        ];
+        return self::frontend_notification("success", "success", "Výstup vytvořen!", $request->channelId);
     }
 
 
@@ -164,9 +164,11 @@ class H265Controller extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Změněno!");
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "změnil transcodér u ", Channel::find($request->channelId)->nazev);
+
+            return $this->frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-            return NotificationController::notify("error", "error", "Nepodařilo se změnit!");
+            return $this->frontend_notification("error", "error", "Nepodařilo se změnit!");
         }
     }
 
@@ -174,11 +176,11 @@ class H265Controller extends Controller
     {
 
         if (is_null($request->p1080) && is_null($request->p720)) {
-            return NotificationController::notify("error", "error", "Musí být vyplněn alespoň jeden output!");
+            return $this->frontend_notification("error", "error", "Musí být vyplněn alespoň jeden output!");
         }
 
         if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
-            return NotificationController::notify("error", "error", "Nebyl nalezen kanál");
+            return $this->frontend_notification("error", "error", "Nebyl nalezen kanál");
         }
         // 4  = 1080 , 5 = 720
 
@@ -215,36 +217,44 @@ class H265Controller extends Controller
         }
 
         UnicastOutputForDeviceController::generate_h265($request);
-        return NotificationController::notify("success", "success", "Upraveno");
+
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil H265 u ", Channel::find($request->channelId)->nazev);
+        return $this->frontend_notification("success", "success", "Upraveno!");
     }
 
     public static function return_dohled_data(Request $request): array
     {
         // vyhledání H264
-        if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
+        if (!$channel = H265::where('channelId', $request->channelId)->first()) {
             return [];
         }
 
         // overení existence id v ChannelsToDohled
-        if (!$channelOnDohled = ChannelToDohled::where('H265Id', $h265->id)->first()) {
+        if (!ChannelToDohled::where('H265Id', $channel->id)->first()) {
             return [];
         }
 
-        return ApiController::return_information_about_channel(
-            $channelOnDohled->dohledId
-        );
+
+        foreach (ChannelToDohled::where('H265Id', $channel->id)->get() as $channelOnDohled) {
+            $output[] = ApiController::return_information_about_channel($channelOnDohled->dohledId);
+        }
+
+        return [
+            'status' => "success",
+            'dohledData' => $output
+        ];
     }
 
 
     public static function manage_stream(Request $request): array
     {
         if (!$h265 = H265::where('channelId', $request->channelId)->first()) {
-            return NotificationController::notify("error", "error", "Neexistuje stream!");
+            return self::frontend_notification("error", "error", "Neexistuje stream!");
         }
 
         // overení existence id v ChannelsToDohled
         if (!$channelOnTranscoder = ChannelsToTranscoder::where('H265Id', $h265->id)->first()) {
-            return NotificationController::notify("error", "error", "Neexistuje stream s vazbou na transcoder!");
+            return self::frontend_notification("error", "error", "Neexistuje stream s vazbou na transcoder!");
         }
 
 

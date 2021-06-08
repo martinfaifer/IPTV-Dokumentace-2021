@@ -1,7 +1,7 @@
 <template>
-    <v-main>
-        <v-container fluid class="ml-3">
-            <div class="mr-15">
+    <v-main style="background-color: #F1F5F9">
+        <v-container fluid class="pl-3" style="background-color: #F1F5F9">
+            <div class="pr-5" style="background-color: #F1F5F9">
                 <v-row>
                     <v-col cols="12" sm="1" md="1" lg="1" v-if="logo != null">
                         <v-img
@@ -12,50 +12,35 @@
                         ></v-img>
                     </v-col>
                     <v-col cols="12" sm="11" md="11" lg="11">
-                        <h2 class="mt-6">
-                            {{ channelName }} - H265
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-icon
-                                        class="ml-3"
-                                        v-on="on"
-                                        @click="removeH265()"
-                                        small
-                                        color="red"
-                                        >mdi-delete</v-icon
-                                    >
-                                </template>
-                                <span>Odebrání H265</span>
-                            </v-tooltip>
-                        </h2>
+                        <h2 class="mt-6">{{ channelName }} - H265</h2>
                     </v-col>
                 </v-row>
                 <v-divider inline> </v-divider>
             </div>
 
             <div v-if="exist === 'exist'">
-                <v-row class="mt-4 mr-15">
+                <v-row class="pt-4 pr-5">
                     <v-col>
                         <!-- component pro získání chunk store id -->
                         <h265info-component></h265info-component>
                     </v-col>
                 </v-row>
 
-                <v-row class="mt-4 mr-15">
+                <v-row class="pt-4 pr-5">
                     <v-col>
                         <!-- transcoder component -->
                         <transcoder-component></transcoder-component>
                     </v-col>
-                </v-row>
 
-                <v-row class="mt-4 mr-15">
                     <v-col>
-                        <!-- transcoder component -->
-                        <dohled-component></dohled-component>
+                        <!-- transcoder chart component -->
+                        <transcoderchart-component></transcoderchart-component>
                     </v-col>
                 </v-row>
+
+                <dohled-component></dohled-component>
             </div>
-            <div v-else-if="exist === 'notexist'" class="mt-4 mr-15">
+            <div v-else-if="exist === 'notexist'" class="pt-4 pr-5">
                 <v-alert type="warning" @contextmenu="show($event)">
                     Tento formát není nastaven
                 </v-alert>
@@ -159,6 +144,7 @@
 import H265InfoComponent from "./H265InfoCoomponent";
 import TranscoderComponent from "./_unicastDeviceController";
 import DohledComponent from "../Dohled/DohledH265Component";
+import TranscoderChart from "../TranscoderChart/TranscoderChartComponent";
 
 export default {
     data() {
@@ -179,7 +165,8 @@ export default {
     components: {
         "h265info-component": H265InfoComponent,
         "transcoder-component": TranscoderComponent,
-        "dohled-component": DohledComponent
+        "dohled-component": DohledComponent,
+        "transcoderchart-component": TranscoderChart
     },
     created() {
         this.loadChannelNameById();
@@ -252,21 +239,21 @@ export default {
                 .then(response => {
                     this.exist = response.data;
                 });
-        },
-        async removeH265() {
-            await axios
-                .post("h265/delete", {
-                    channelId: this.$route.params.id
-                })
-                .then(response => {
-                    this.$store.state.alerts = response.data.alert;
-                    if (response.data.status === "success") {
-                        this.$router
-                            .push("/channel/" + response.data.channelId)
-                            .catch(err => {});
-                    }
-                });
         }
+        // async removeH265() {
+        //     await axios
+        //         .post("h265/delete", {
+        //             channelId: this.$route.params.id
+        //         })
+        //         .then(response => {
+        //             this.$store.state.alerts = response.data.alert;
+        //             if (response.data.status === "success") {
+        //                 this.$router
+        //                     .push("/channel/" + response.data.channelId)
+        //                     .catch(err => {});
+        //             }
+        //         });
+        // }
     },
     watch: {
         $route(to, from) {

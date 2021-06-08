@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-card flat class="mr-15">
+        <v-card flat class="pr-5">
             <v-card-title>
                 <v-text-field
                     v-model="search"
-                    append-icon="mdi-magnify"
+                    prepend-inner-icon="mdi-magnify"
                     label="Vyhledat uživatele"
                     single-line
                     hide-details
@@ -15,6 +15,24 @@
                 </v-btn>
             </v-card-title>
             <v-data-table :headers="headers" :items="users" :search="search">
+                <template v-slot:item.photo="{ item }">
+                    <v-avatar v-if="item.photo === null" color="indigo">
+                        <v-icon dark>
+                            mdi-account-circle
+                        </v-icon>
+                    </v-avatar>
+                    <v-avatar v-if="item.photo != null">
+                        <v-img :src="item.photo"> </v-img>
+                    </v-avatar>
+                </template>
+                <template v-slot:item.status="{ item }">
+                    <v-icon v-if="item.status === true" color="green">
+                        mdi-check
+                    </v-icon>
+                    <v-icon v-else color="red">
+                        mdi-close
+                    </v-icon>
+                </template>
                 <template v-slot:item.akce="{ item }">
                     <v-icon
                         @click="
@@ -22,7 +40,8 @@
                                 item.id,
                                 item.name,
                                 item.email,
-                                item.user_role
+                                item.user_role,
+                                item.status
                             )
                         "
                         small
@@ -103,7 +122,7 @@
             <v-dialog v-model="editDialog" persistent max-width="1000px">
                 <v-card>
                     <v-card-title>
-                        <span class="headline">Editace uživatele</span>
+                        <span class="headline">Editace uživatele </span>
                     </v-card-title>
                     <v-card-text>
                         <v-container>
@@ -128,6 +147,13 @@
                                         :items="roles"
                                         label="Uživatelská role"
                                     ></v-combobox>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12" lg="12">
+                                    <v-checkbox
+                                        color="green"
+                                        v-model="status"
+                                        label="Povolit přístup uživateli"
+                                    ></v-checkbox>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -166,17 +192,19 @@ export default {
             name: null,
             email: null,
             password: null,
+            status: null,
+            photo: null,
             editDialog: false,
             NewUserDialog: false,
             search: "",
             headers: [
-                {
-                    text: "Název",
-                    align: "start",
-                    value: "name"
-                },
+                { text: "Avatar", value: "photo" },
+                { text: "Název", value: "name" },
                 { text: "Email", value: "email" },
                 { text: "Role", value: "user_role" },
+                { text: "Přístup do systému", value: "status" },
+                { text: "Vytvořeno", value: "created" },
+                { text: "Aktualizováno", value: "updated" },
                 { text: "Akce", value: "akce" }
             ],
             users: []
@@ -226,11 +254,13 @@ export default {
                     this.userRole = null;
                 });
         },
-        openEditDialog(userId, name, email, role) {
+        openEditDialog(userId, name, email, role, status, photo) {
             this.userId = userId;
             this.name = name;
             this.email = email;
             this.userRole = role;
+            this.status = status;
+            this.photo = photo;
             this.editDialog = true;
         },
 
@@ -240,7 +270,8 @@ export default {
                     userId: this.userId,
                     name: this.name,
                     email: this.email,
-                    role: this.userRole
+                    role: this.userRole,
+                    status: this.status
                 })
                 .then(response => {
                     this.getUsers();
@@ -250,18 +281,21 @@ export default {
                     this.email = null;
                     this.userRole = null;
                     this.userId = null;
+                    this.status = null;
                 });
         },
 
         async deleteUser(userId) {
-            await axios.delete('user/delete', {
-                data: {
-                    userId: userId
-                }
-            }).then(response => {
-                this.getUsers();
-                this.$store.state.alerts = response.data.alert;
-            })
+            await axios
+                .delete("user/delete", {
+                    data: {
+                        userId: userId
+                    }
+                })
+                .then(response => {
+                    this.getUsers();
+                    this.$store.state.alerts = response.data.alert;
+                });
         }
     },
     watch: {

@@ -1,5 +1,5 @@
 <template>
-    <v-main>
+    <v-main style="background-color: #F1F5F9">
         <v-list dense nav>
             <v-list-item
                 v-for="item in items"
@@ -91,6 +91,7 @@ export default {
     data() {
         return {
             items: [
+                { title: "Dashboard", icon: "mdi-view-dashboard", route: "dashboard" },
                 { title: "Štítky", icon: "mdi-tag", route: "tag" },
                 {
                     title: "Uživatelé",
@@ -114,7 +115,8 @@ export default {
             nangu: [
                 ["Streamery", "mdi-view-stream", "streamers"],
                 ["Porty streamů", "mdi-export", "stream_ports"],
-                ["Vazby streamer / port", "mdi-dropbox", "streamer_and_ports_bound"]
+                ["Ctype", "mdi-book-variant", "ctypes"],
+                ["Propojení", "mdi-dropbox", "streamer_and_ports_bound"]
             ]
         };
     },

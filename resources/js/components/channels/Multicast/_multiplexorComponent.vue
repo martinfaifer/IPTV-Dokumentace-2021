@@ -1,9 +1,9 @@
 <template>
     <v-main>
-        <v-col>
+
             <v-card
                 flat
-                color="#F5F5F7"
+                color="white"
                 v-if="multiplexor != null"
                 @contextmenu="show($event)"
             >
@@ -12,8 +12,8 @@
                         Multiplexer
                     </strong>
                 </v-card-subtitle>
-                <v-card-text class="ml-12 text--center">
-                    <v-container>
+                <v-card-text class="text--center">
+                    <v-container fluid>
                         <v-row v-if="multiplexor != null">
                             <v-col cols="12">
                                 <span
@@ -144,7 +144,7 @@
 
                     <v-list-item @click="removeMultiplexor()">
                         <v-list-item-icon>
-                            <v-icon x-small>mdi-delete</v-icon>
+                            <v-icon color="red" x-small>mdi-delete</v-icon>
                         </v-list-item-icon>
                         <v-list-item-title>
                             Odebrat
@@ -189,6 +189,7 @@
                                 Zavřít
                             </v-btn>
                             <v-btn
+                                :loading="loading"
                                 color="green darken-1"
                                 text
                                 @click="savedata()"
@@ -199,13 +200,14 @@
                     </v-card>
                 </v-dialog>
             </v-row>
-        </v-col>
+
     </v-main>
 </template>
 <script>
 export default {
     data() {
         return {
+            loading: false,
             items: [],
             editMultiplexor: false,
             multiplexor: null,
@@ -256,12 +258,14 @@ export default {
         },
 
         savedata() {
+            this.loading = true;
             axios
                 .patch("channel/multiplexer/edit", {
                     channelId: this.$route.params.id,
                     deviceName: this.multiplexor.name
                 })
                 .then(response => {
+                    this.loading = false;
                     this.$store.state.alerts = response.data.alert;
                     if (response.data.status === "success") {
                         this.editMultiplexor = false;

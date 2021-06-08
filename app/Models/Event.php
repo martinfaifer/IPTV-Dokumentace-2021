@@ -19,6 +19,8 @@ class Event extends Model
         'h264Id',
         'h265Id',
         'note',
-        'when_to_notify'
+        'when_to_notify',
+        'title',
+        'color'
     ];
 }

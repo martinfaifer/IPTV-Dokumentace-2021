@@ -22,7 +22,7 @@ class Broadcast_external_alerts implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct(array $transcoder_alerts)
+    public function __construct(string $transcoder_alerts)
     {
         $this->transcoder_alerts = $transcoder_alerts;
     }
@@ -34,13 +34,6 @@ class Broadcast_external_alerts implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        // return new PrivateChannel('channel-name');
         return new Channel('transcoderAlerts');
-    }
-
-
-    public function broadcastWith()
-    {
-        return $this->transcoder_alerts;
     }
 }

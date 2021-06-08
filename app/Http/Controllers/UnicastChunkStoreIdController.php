@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\UnicastChunkStoreId;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class UnicastChunkStoreIdController extends Controller
 {
-
-
+    use NotificationTrait;
 
     public static function create(Request $request, $channelId)
     {
@@ -20,6 +22,8 @@ class UnicastChunkStoreIdController extends Controller
                 'channelId' => $channelId,
                 'chunkStoreId' => $request->chunkStoreId
             ]);
+
+            return self::frontend_notification("success", "success", "Vytvořeno!");
         }
     }
 
@@ -42,11 +46,19 @@ class UnicastChunkStoreIdController extends Controller
 
     public static function edit(Request $request): array
     {
-        if (!UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
-            return NotificationController::notify("error", "error", "Neexistuje kanál s vazbou na chunk store ID!");
+        $validation = Validator::make($request->all(), [
+            'channelId' => 'required',
+            'chunkStoreId' => 'required'
+        ]);
+        if ($validation->fails()) {
+            return self::frontend_notification("error", "error", "Není vše vyplněno!");
         }
 
-        UnicastChunkStoreId::where('channelId', $request->channelId)->update(
+        if (!$editableChunkStoreId = UnicastChunkStoreId::where('channelId', $request->channelId)->first()) {
+            return self::create($request, $request->channelId);
+        }
+
+        $editableChunkStoreId->update(
             [
                 'chunkStoreId' => $request->chunkStoreId
             ]
@@ -55,7 +67,8 @@ class UnicastChunkStoreIdController extends Controller
         // update h264 a h265 výstupy 
         UnicastOutputForDeviceController::check_if_exest_before_generate($request);
 
-        return NotificationController::notify("success", "success", "Kanál byl upraven!");
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil chunk store id", $request->channelName);
+        return self::frontend_notification("success", "success", "Upraveno!");
     }
 
 

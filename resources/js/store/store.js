@@ -9,7 +9,9 @@ export const store = new Vuex.Store({
         alerts: null,
         dohledAccess: null,
         user: [],
-        events: []
+        events: [],
+        categories: [],
+        foto: null
     },
     actions: {},
     mutations: {
@@ -21,11 +23,18 @@ export const store = new Vuex.Store({
             state.user.push(user);
         },
 
+        updateFoto(state, foto) {
+            state.foto.push(foto);
+        },
+
         updateDohledSatatus(state, dohledStatus) {
             state.dohledAccess.push(dohledStatus);
         },
         updateEvent(state, events) {
             state.events.push(events);
+        },
+        updateWiki(state, categories) {
+            state.categories.push(categories);
         }
     },
     getters: {}

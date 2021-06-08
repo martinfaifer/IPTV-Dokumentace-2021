@@ -1,15 +1,15 @@
 <template>
-    <v-main>
-        <v-container fluid class="ml-3">
-            <div class="mr-15">
+    <v-main style="background-color: #F1F5F9">
+        <v-container fluid class="pl-3" style="background-color: #F1F5F9">
+            <div class="pr-5">
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ thisCardNumber }}</h2>
-                <v-divider class="mr-15" inline> </v-divider>
+                <v-divider class="pr-5" inline> </v-divider>
             </div>
 
-            <v-row class=" mt-6 mr-15">
-                <v-col>
-                    <carddevice-component class="mr-10"></carddevice-component>
+            <v-row class="mt-6 pr-5" style="background-color: #F1F5F9">
+                <v-col cols="12" sm="6" md="6" lg="6">
+                    <carddevice-component></carddevice-component>
                 </v-col>
             </v-row>
         </v-container>

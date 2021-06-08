@@ -8,11 +8,16 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
+
 class BlankomInterfaceController extends Controller
 {
+
+    use NotificationTrait;
+
     public static function return_blankom_interfaces_with_data($blankomId): array
     {
-
         // neexistuje zarízení s pripárovanými interfacy
         if (!BlankomInterface::where('deviceId', $blankomId)->first()) {
             return [
@@ -37,30 +42,24 @@ class BlankomInterfaceController extends Controller
      */
     public function edit_interface(Request $request): array
     {
-
         // overení ze existuje zarizení napárovaný na interfacy 
         if (!BlankomInterface::where('deviceId', $request->deviceId)->first()) {
-            return [
-                'status' => "error",
-                'msg' => "Nepodařilo se vyhledat zařízení"
-            ];
+            return $this->frontend_notification("error", "error", 'Nepodařilo se vyhledat zařízení');
         }
 
+        $validation = Validator::make($request->all(), [
+            'interfaceId' => ['required'],
+            'sat' => ['required'],
+            'dvb' => ['required'],
+            'freq' => ['required'],
+            'polarizace' => ['required'],
+            'symbolrate' => ['required']
+        ]);
 
-
-        if (
-            empty($request->interfaceId) || is_null($request->interfaceId) ||
-            empty($request->sat) || is_null($request->sat) ||
-            empty($request->dvb) || is_null($request->dvb) ||
-            empty($request->freq) || is_null($request->freq) ||
-            empty($request->polarizace) || is_null($request->polarizace) ||
-            empty($request->symbolrate) || is_null($request->symbolrate)
-        ) {
-            return [
-                'status' => "warning",
-                'msg' => "Není vše řádně vyplněno"
-            ];
+        if ($validation->fails()) {
+            return $this->frontend_notification("warning", "warning", 'Není vše vyplněno!');
         }
+
         try {
             // editace interfacu , dle $reques->interfaceId
 
@@ -73,7 +72,7 @@ class BlankomInterfaceController extends Controller
 
 
             if (is_string($request->sat)) {
-                $sat = $request->dvb;
+                $sat = $request->sat;
             } else {
                 $sat = $request->sat["satelit"];
             }
@@ -114,10 +113,10 @@ class BlankomInterfaceController extends Controller
                 "editoval"
             ));
 
-            return NotificationController::notify("success", "success", "Editováno");
+            return $this->frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
 
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 

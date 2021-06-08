@@ -1,7 +1,7 @@
 <template>
     <v-main>
         <!-- prostor na notifikace -->
-        <v-container class="fill-height" fluid>
+        <v-container class="fill-height" fluid >
             <v-row align="center" justify="center">
                 <v-col cols="12" sm="8" md="4">
                     <v-form @submit.prevent="login()">
@@ -31,23 +31,11 @@
                                     prepend-icon="mdi-lock"
                                     type="password"
                                 ></v-text-field>
-                                <div class="text-end">
-                                    <small class="blue--text">
-                                        <a
-                                            style="text-decoration: none"
-                                            href="/#/pasword/reset"
-                                        >
-                                            Zapomněli jste heslo?
-                                        </a>
-                                    </small>
-                                </div>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn
-                                    :disabled="
-                                        password === null || email === null
-                                    "
+                                    text
                                     type="submit"
                                     color="success"
                                     >Přihlášení</v-btn

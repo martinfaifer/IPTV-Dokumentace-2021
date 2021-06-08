@@ -2,39 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Broadcast_external_alerts;
-use Illuminate\Http\Request;
+use App\Events\Broadcast_notification;
+use App\Events\Broadcast_every_body;
 
 class BroadcastController extends Controller
 {
-    public static function broadcast_alerts()
+    public static function broadcast_alert()
     {
-        $transcoder_alerts = ApiController::get_alerts();
+        // 
+    }
 
-        // if (array_key_exists("status", $transcoder_alerts)) {
-        //     exit("nothink to broadcast!");
-        // }
 
-        $array_test = array(
-            array(
-                'name' => "TEST notifikace 1"
-            ),
-            array(
-                'name' => "TEST notifikace 2"
-            ),
-            array(
-                'name' => "TEST notifikace 3"
-            ),
-            array(
-                'name' => "TEST notifikace 4"
-            ),
-            array(
-                'name' => "TEST notifikace 5"
-            ),
-            array(
-                'name' => "TEST notifikace 6"
-            )
-        );
-        event(new Broadcast_external_alerts($array_test));
+    public static function broadcast_notification_when_user_change_something($user, $state, $item): void
+    {
+        $notification_text = $user . " " . $state . " " . $item;
+        broadcast(new Broadcast_notification($notification_text))->toOthers();
+    }
+
+
+    public static function broadcast_notification_every_body_include_my_self($text): void
+    {
+        broadcast(new Broadcast_every_body($text));
     }
 }

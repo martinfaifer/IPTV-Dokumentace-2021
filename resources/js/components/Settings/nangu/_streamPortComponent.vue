@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-card flat class="mr-15">
+        <v-card flat class="pr-5">
             <v-card-title>
                 <v-text-field
                     v-model="search"
-                    append-icon="mdi-magnify"
+                    prepend-inner-icon="mdi-magnify"
                     label="Vyhledat výstup"
                     single-line
                     hide-details
@@ -37,7 +37,7 @@
                     <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="4">
                                     <v-text-field
                                         label="Číslo portu"
                                         type="number"
@@ -45,16 +45,26 @@
                                     ></v-text-field>
                                 </v-col>
 
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="4">
                                     <v-text-field
                                         label="Popis portu"
                                         v-model="port_desc"
                                     ></v-text-field>
                                 </v-col>
+
+                                <v-col cols="12" sm="12" md="4">
+                                    <v-autocomplete
+                                        v-model="device"
+                                        :items="devices"
+                                        clearable
+                                    >
+                                    </v-autocomplete>
+                                </v-col>
                                 <v-col cols="12" sm="12" md="12">
                                     <v-text-field
                                         label="Výstup"
                                         v-model="port_output"
+                                        hint="Pro přidání více výsputpů je nutné je oddělit ,"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -81,6 +91,8 @@ export default {
             port_number: "",
             port_desc: "",
             port_output: "",
+            device: "",
+            devices: ["streamer", "reflector"],
             newStreamOutput: false,
             search: "",
             headers: [
@@ -89,8 +101,9 @@ export default {
                     align: "start",
                     value: "port_nuber"
                 },
-                { text: "Výstup", value: "port_output" },
+                { text: "Výstupy", value: "port_output" },
                 { text: "Popis", value: "port_desc" },
+                { text: "Zařízení", value: "device" },
                 { text: "Akce", value: "akce" }
             ],
             ports: []
@@ -101,8 +114,8 @@ export default {
         this.getPorts();
     },
     methods: {
-        async getPorts() {
-            await axios.get("stream/ports").then(response => {
+        getPorts() {
+            axios.get("stream/ports").then(response => {
                 this.ports = response.data;
             });
         },
@@ -123,16 +136,21 @@ export default {
             this.port_number = "";
             this.port_desc = "";
             this.port_output = "";
+            this.device = "";
         },
         async create() {
-            await axios.post("stream/port", {
-                port_nuber: this.port_number,
-                port_desc: this.port_desc,
-                port_output: this.port_output
-            }).then(response => {
-                this.$store.state.alerts = response.data.alert;
-                this.close();
-            });
+            await axios
+                .post("stream/port", {
+                    port_nuber: this.port_number,
+                    port_desc: this.port_desc,
+                    port_output: this.port_output,
+                    device: this.device
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data.alert;
+                    this.getPorts();
+                    this.close();
+                });
         }
     },
     watch: {

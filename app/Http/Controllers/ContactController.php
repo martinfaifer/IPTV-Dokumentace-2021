@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
+use App\Traits\NotificationTrait;
+
 class ContactController extends Controller
 {
 
+    use NotificationTrait;
+
     public function validation(Request $request): bool
     {
+
 
         if (empty($request->email) && empty($request->full_name) && empty($request->telephone)) {
             return false;
@@ -40,7 +45,7 @@ class ContactController extends Controller
     {
 
         if (!$this->validation($request)) {
-            return NotificationController::notify("error", "error", "Neco se nepovedlo");
+            return $this->frontend_notification("error", "error", "Neco se nepovedlo");
         }
 
         if (!empty($request->channelId)) {
@@ -48,20 +53,20 @@ class ContactController extends Controller
 
                 Contact::create($request->all());
 
-                return NotificationController::notify("success", "success", "Kontakt vytvořen");
+                return $this->frontend_notification("success", "success", "KVytvořeno");
             }
 
-            return NotificationController::notify("error", "error", "Kontakt již existuje");
+            return $this->frontend_notification("error", "error", "Kontakt již existuje");
         }
 
         if (!empty($request->cardId)) {
             if (!Contact::where('cardId', $request->cardId)->first()) {
                 Contact::create($request->all());
 
-                return NotificationController::notify("success", "success", "Kontakt vytvořen");
+                return $this->frontend_notification("success", "success", "Vytvořeno");
             }
 
-            return NotificationController::notify("error", "error", "Kontakt již existuje");
+            return $this->frontend_notification("error", "error", "Kontakt již existuje");
         }
     }
 
@@ -106,14 +111,14 @@ class ContactController extends Controller
     public function update(Request $request): array
     {
         if (!$this->validation($request)) {
-            return NotificationController::notify("error", "error", "Neco se nepovedlo");
+            return $this->frontend_notification("error", "error", "Neco se nepovedlo");
         }
 
         Contact::find($request->id)->update(
             $request->all()
         );
 
-        return NotificationController::notify("success", "success", "Upraveno");
+        return $this->frontend_notification("success", "success", "Upraveno");
     }
 
     public function destroy(Request $request): array
@@ -121,9 +126,9 @@ class ContactController extends Controller
 
         try {
             Contact::find($request->id)->delete();
-            return NotificationController::notify("success", "success", "Odebráno");
+            return $this->frontend_notification("success", "success", "Odebráno");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 }

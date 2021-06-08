@@ -1,7 +1,7 @@
 <template>
     <v-main>
         <v-container fluid class="ml-3">
-            <div class="mr-15">
+            <div class="mr-10">
                 <v-row>
                     <v-col cols="12" sm="8" md="11" lg="11"
                         ><h2 class="mt-6">
@@ -15,10 +15,9 @@
             <v-row class="mr-15 mt-6">
                 <v-col cols="12" sm="12" lg="12" md="12">
                     <!-- zobrazení nastavení uzivatele -->
-                    <v-card class="mr-15" flat color="#F5F5F7">
-                        <v-card-title>Přehled o uživateli</v-card-title>
-                        <v-card-text color="#F5F5F7">
-                            <v-list color="#F5F5F7">
+                    <v-card class="mr-10" flat color="white">
+                        <v-card-text color="white">
+                            <v-list color="white">
                                 <v-list-item>
                                     Jméno:
                                     <strong class="ml-3">{{
@@ -42,11 +41,11 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12" sm="12" lg="12" md="12">
-                    <v-card class="mr-15" flat color="#F5F5F7">
+                    <v-card class="mr-10" flat color="white">
                         <v-card-title>Přihlášená zařízení</v-card-title>
-                        <v-card-text color="#F5F5F7">
+                        <v-card-text color="white">
                             <v-list
-                                color="#F5F5F7"
+                                color="white"
                                 v-for="session in sessions"
                                 :key="session.id"
                             >

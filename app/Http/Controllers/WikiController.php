@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Topics;
 use App\Models\Wiki;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class WikiController extends Controller
 {
+    use NotificationTrait;
     /**
      * pole pro výpis všech potomků
      *
@@ -15,88 +19,14 @@ class WikiController extends Controller
      */
     public $children = [];
 
-
-    /**
-     * sestavení stromu
-     *
-     * @return array
-     */
-    public function get(): array
+    public function index(): mixed
     {
-
-        foreach ($this->get_main() as $main) {
-            // $main -> id , main_kategorie
-
-            // vyhledání, zda main má potomka / potomky
-            if (Wiki::where('id_main_kategorie', $main->id)->first()) {
-                $this->children = $this->get_children(Wiki::where('id_main_kategorie', $main->id)->get());
-            }
-
-            $tree[] = array(
-                'id' => $main->id,
-                'to' => $main->id,
-                'name' => $main->main_kategorie,
-                'children' => $this->children
-            );
-        }
-
-        return $tree;
-    }
-
-    /**
-     * výpis hlavních kategorií
-     *
-     * @return object
-     */
-    public function get_main(): object
-    {
-        return Wiki::where('main_kategorie', "!=", null)->get(['id', 'main_kategorie']);
-    }
-
-    /**
-     * vyhledání potomku vázaných na main kategorii
-     *
-     * @param object $childrenArray
-     * @return array
-     */
-    public function get_children(object $childrenArray)
-    {
-        if (empty($childrenArray) || !$childrenArray) {
-            return [];
-        } else {
-
-            foreach ($childrenArray as $children) {
-                $output[] = array(
-                    'id' => $children->id,
-                    'to' => $children->id,
-                    'name' => $children->sub_kategorie,
-                    'children' => $this->find_sub_child_by_id($children->id)
-                );
-            }
-
-            return $output;
-        }
-    }
-
-
-    /**
-     * vyhledá všdchny potomky
-     *
-     * @param string $childId
-     * @return array
-     */
-    public function find_sub_child_by_id(string $childId)
-    {
-        if (!Wiki::where('id_main_kategorie', $childId)->first()) {
-            return [];
-        }
-
-        foreach (Wiki::where('id_main_kategorie', $childId)->get() as $children) {
+        foreach ($this->get_categories() as $category) {
             $output[] = array(
-                'id' => $children->id,
-                'to' => $children->id,
-                'name' => $children->sub_kategorie,
-                'children' => $this->find_sub_child_by_id($children->id)
+                'id' => $category->id,
+                'category' => $category->main_kategorie,
+                'icon' => $category->icon,
+                'topics' => Topics::where('wiki_id', $category->id)->get(['id', 'topic_title', 'icon'])
             );
         }
 
@@ -104,10 +34,9 @@ class WikiController extends Controller
     }
 
 
-    public function get_topic(Request $request): array
+    public function show_topic(Request $request): array
     {
-
-        if (!$topic = Topics::where('kategorieId', $request->topicId)->first()) {
+        if (!$topic = Topics::find($request->topicId)) {
             return [
                 'status' => "error",
                 'text' => ""
@@ -116,35 +45,173 @@ class WikiController extends Controller
 
         return [
             'status' => "success",
-            'text' => $topic->text
+            'text' => $topic->text,
+            'topic_title' => $topic->topic_title,
+            'icon' => $topic->icon
         ];
+    }
+
+    public function show_category(Request $request)
+    {
+        return Wiki::findOrFail($request->id);
+    }
+
+    public function create_category(Request $request): array
+    {
+        $validation = Validator::make($request->all(), [
+            'kategorie' => 'required',
+            'icon' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return $this->frontend_notification('error', 'error', 'Není vše vyplněno!');
+        }
+
+        try {
+            Wiki::create([
+                'main_kategorie' => $request->kategorie,
+                'icon' => $request->icon
+            ]);
+
+            return $this->frontend_notification("success", "success", "vytvořeno");
+        } catch (\Throwable $th) {
+            return $this->frontend_notification();
+        }
+    }
+
+    public function create_topic(Request $request): array
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required',
+            'topic' => ['required'],
+            'topic_title' => ['required'],
+        ]);
+
+        if ($validation->fails()) {
+            return $this->frontend_notification('error', 'error', 'Není vše vyplněno');
+        }
+        // oevrení zda exituje kategorie
+        if (!Wiki::where('id', $request->id)->first()) {
+            return $this->frontend_notification("error", "error", "Neexistuje kategorie");
+        }
+
+        Topics::create([
+            'text' => $request->topic,
+            'kategorieId' => 0,
+            'topic_title' => $request->topic_title,
+            'creator' => Auth::user()->email,
+            'wiki_id' => $request->id,
+            'icon' => $request->new_icon
+        ]);
+
+        return $this->frontend_notification("success", "success", "Vytvořeno");
+    }
+
+    public function update_category(Request $request): array
+    {
+        $validation = Validator::make($request->all(), [
+            'id' => 'required',
+            'kategorie' => ['required'],
+        ]);
+
+        if ($validation->fails()) {
+            return $this->frontend_notification('error', 'error', 'Není vše vyplněno');
+        }
+
+        if (!Wiki::where('id', $request->id)->first()) {
+            return $this->frontend_notification("error", "error", "Neexistuje kategorie");
+        }
+
+        if (is_null($request->new_icon)) {
+            $icon = $request->icon;
+        } else {
+            $icon = $request->new_icon;
+        }
+
+        Wiki::find($request->id)->update([
+            'main_kategorie' => $request->kategorie,
+            'icon' => $icon
+        ]);
+
+        return $this->frontend_notification("success", "success", "Upraveno!");
     }
 
 
     public function update_topic(Request $request): array
     {
-        if (!$topic = Topics::where('kategorieId', $request->topicId)->first()) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Neexistující článek"
-                )
-            ];
+        if (!$topic = Topics::find($request->topicId)) {
+            return $this->frontend_notification("error", "error", "Neexistující článek");
+        }
+
+        if (isset($request->special)) {
+
+            $topic->update(
+                [
+                    'text' => $request->topic,
+                ]
+            );
+
+            return $this->frontend_notification("success", "success", "Článek byl upraven");
+        }
+
+        if ($request->text === '') {
+            return $this->frontend_notification("error", "error", "Obsah musí být vyplněn");
+        }
+
+        if ($request->topic_title === '') {
+            return $this->frontend_notification("error", "error", "Není vyplněn titulek");
+        }
+
+        if (is_null($request->new_icon)) {
+            $icon = $request->icon;
+        } else {
+            $icon = $request->new_icon;
         }
 
         $topic->update(
             [
-                'text' => $request->topic
+                'topic_title' => $request->topic_title,
+                'text' => $request->topic,
+                'icon' => $icon
             ]
         );
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Článek byl upraven"
-            )
-        ];
+        return $this->frontend_notification("success", "success", "Článek byl upraven");
+    }
+
+
+    public function delete_category(Request $request): array
+    {
+        if (!$category = Wiki::where('id', $request->id)->first()) {
+            return $this->frontend_notification("error", "error", "Neexistuje kategorie");
+        }
+
+        if (Topics::where('wiki_id', $request->id)->first()) {
+            return $this->frontend_notification("error", "error", "Existují zde články");
+        }
+
+        $category->delete();
+
+        return $this->frontend_notification("success", "success", "Odebráno");
+    }
+
+    public function delete_topic(Request $request): array
+    {
+        try {
+            Topics::find($request->topicId)->delete();
+            return $this->frontend_notification("success", "success", "Smazáno");
+        } catch (\Throwable $th) {
+            return $this->frontend_notification();
+        }
+    }
+
+    /**
+     * výpis hlavních kategorií
+     *
+     * @return object
+     */
+    protected function get_categories(): object
+    {
+        return Wiki::where('main_kategorie', "!=", null)->get(['id', 'main_kategorie', 'icon']);
     }
 }

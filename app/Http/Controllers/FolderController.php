@@ -6,9 +6,11 @@ use App\Jobs\SendFileNotification;
 use App\Models\Channel;
 use App\Models\Dokumenation;
 use Illuminate\Http\Request;
+use App\Traits\NotificationTrait;
 
 class FolderController extends Controller
 {
+    use NotificationTrait;
 
     public $contentWithFullPath = array();
 
@@ -65,27 +67,24 @@ class FolderController extends Controller
     {
 
         if (is_null($request->path) || empty($request->path)) {
-            return NotificationController::notify("error", "error", "Akce nebyla úspěšná");
+            return $this->frontend_notification("error", "error", "Akce nebyla úspěšná");
         }
 
         if (!file_exists($request->path)) {
-            return NotificationController::notify("error", "error", "Akce nebyla úspěšná");
+            return $this->frontend_notification("error", "error", "Akce nebyla úspěšná");
         }
 
         try {
             unlink($request->path);
-            return NotificationController::notify("success", "success", "Logo odebráno!");
+            return $this->frontend_notification("success", "success", "Odebráno!");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 
 
     public function add_file(Request $request): array
     {
-
-
-
         $file = $request->file('document');
         $name = '/Channel_docu/' . uniqid() . '.' . $file->extension();
         $file->storePubliclyAs('public', $name);
@@ -106,7 +105,7 @@ class FolderController extends Controller
         }
 
 
-        return NotificationController::notify("success", "success", "Dokument uložen");
+        return $this->frontend_notification("success", "success", "Uloženo");
     }
 
 

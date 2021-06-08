@@ -1,268 +1,320 @@
 <template>
-    <v-app>
-        <v-card flat color="transparent">
-            <event-component></event-component>
-            <v-app-bar fixed dense color="white" class="ml-16 elevation-0">
-                <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-                <v-spacer></v-spacer>
-
-                <!-- search -->
-                <search-compoennt class="ml-16"></search-compoennt>
-                <!-- search bar -->
-
-                <v-spacer></v-spacer><v-spacer></v-spacer><v-spacer></v-spacer>
-                <v-spacer></v-spacer>
-                <v-spacer></v-spacer>
-                <v-spacer></v-spacer><v-spacer></v-spacer><v-spacer></v-spacer
-                ><v-spacer></v-spacer>
-                <v-spacer></v-spacer>
-                <v-spacer></v-spacer>
-                <eventtodayplannedalert-component></eventtodayplannedalert-component>
-                <v-badge
-                    :content="alertCount"
-                    :value="alertCount"
-                    color="error"
-                    bottom
-                    overlap
-                >
-                    <v-icon @click="alertMenu = true" color="red">
-                        mdi-bell-ring-outline
-                    </v-icon>
-                </v-badge>
-            </v-app-bar>
-            <!-- konec alertingu -->
-            <v-row>
-                <!--  Navigace -->
-                <v-navigation-drawer v-model="drawer" fixed color="#F5F5F7">
-                    <v-row class="fill-height" no-gutters>
-                        <!-- hlavní navigace, která neměnná -->
-                        <v-navigation-drawer
-                            v-model="drawer"
-                            fixed
-                            color="#253341"
-                            mini-variant
-                            mini-variant-width="56"
-                        >
-                            <v-list dense>
-                                <v-list-item>
-                                    <v-menu transition="scroll-y-transition">
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon color="white" v-on="on">
-                                                mdi-account
-                                            </v-icon>
-                                        </template>
-                                        <v-list
-                                            width="250px"
-                                            class="text-center subtitle-2"
-                                        >
-                                            <v-list-item
-                                                link
-                                                to="/user"
-                                                @click="
-                                                    editPasswordDialog = true
-                                                "
-                                            >
-                                                Editace <v-spacer></v-spacer
-                                                ><v-icon
-                                                    color="grey"
-                                                    right
-                                                    small
-                                                    >mdi-account-cog-outline</v-icon
-                                                >
-                                            </v-list-item>
-                                            <v-list-item
-                                                v-if="
-                                                    user.user_role === 'admin'
-                                                "
-                                                link
-                                                to="/settings"
-                                            >
-                                                Nastavení<v-spacer></v-spacer
-                                                ><v-icon
-                                                    color="grey"
-                                                    right
-                                                    small
-                                                    >mdi-settings</v-icon
-                                                >
-                                            </v-list-item>
-                                            <v-divider></v-divider>
-                                            <v-list-item @click="logOut()">
-                                                Odhlásit se <v-spacer></v-spacer
-                                                ><v-icon
-                                                    color="grey"
-                                                    right
-                                                    small
-                                                    >mdi-lock</v-icon
-                                                >
-                                            </v-list-item>
-
-                                            <v-divider></v-divider>
-                                            <v-list-item
-                                                href="http://iptvdohled.grapesc.cz/#/"
-                                                target="_blink"
-                                            >
-                                                IPTV Dohled<v-spacer></v-spacer
-                                                ><v-icon
-                                                    color="grey"
-                                                    right
-                                                    small
-                                                    >mdi-television</v-icon
-                                                >
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-menu>
-
-                                    <v-btn icon @click.stop="mini = !mini">
-                                        <v-icon>mdi-chevron-left</v-icon>
-                                    </v-btn>
-                                </v-list-item>
-                            </v-list>
-                            <v-divider></v-divider>
-                            <v-list dense nav>
-                                <v-list-item link v-bind:to="'/channel'">
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon
-                                                v-on="on"
-                                                @click="
-                                                    componentType = 'channels'
-                                                "
-                                                :class="{
-                                                    'white--text':
-                                                        componentType ===
-                                                        'channels',
-                                                    'grey--text':
-                                                        componentType !=
-                                                        'channels'
-                                                }"
-                                                >mdi-television-box</v-icon
-                                            >
-                                        </template>
-                                        <span>Přehled kanálů</span>
-                                    </v-tooltip>
-                                </v-list-item>
-                                <v-list-item link v-bind:to="'/device'">
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon
-                                                v-on="on"
-                                                @click="
-                                                    componentType = 'devices'
-                                                "
-                                                :class="{
-                                                    'white--text':
-                                                        componentType ===
-                                                        'devices',
-                                                    'grey--text':
-                                                        componentType !=
-                                                        'devices'
-                                                }"
-                                                >mdi-devices</v-icon
-                                            >
-                                        </template>
-                                        <span>Přehled zařízení</span>
-                                    </v-tooltip>
-                                </v-list-item>
-
-                                <v-list-item link v-bind:to="'/card'">
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon
-                                                v-on="on"
-                                                @click="componentType = 'cards'"
-                                                :class="{
-                                                    'white--text':
-                                                        componentType ===
-                                                        'cards',
-                                                    'grey--text':
-                                                        componentType != 'cards'
-                                                }"
-                                                >mdi-card-text-outline</v-icon
-                                            >
-                                        </template>
-                                        <span>Přehled karet</span>
-                                    </v-tooltip>
-                                </v-list-item>
-
-                                <v-list-item link v-bind:to="'/wiki'">
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon
-                                                v-on="on"
-                                                @click="componentType = 'wiki'"
-                                                :class="{
-                                                    'white--text':
-                                                        componentType ===
-                                                        'wiki',
-                                                    'grey--text':
-                                                        componentType != 'wiki'
-                                                }"
-                                                >mdi-wikipedia</v-icon
-                                            >
-                                        </template>
-                                        <span>Wiki</span>
-                                    </v-tooltip>
-                                </v-list-item>
-
-                                <v-list-item link v-bind:to="'/calendar'">
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon
-                                                v-on="on"
-                                                @click="
-                                                    componentType = 'calendar'
-                                                "
-                                                :class="{
-                                                    'white--text':
-                                                        componentType ===
-                                                        'calendar',
-                                                    'grey--text':
-                                                        componentType !=
-                                                        'calendar'
-                                                }"
-                                                >mdi-calendar-text</v-icon
-                                            >
-                                        </template>
-                                        <span>Náhled na události</span>
-                                    </v-tooltip>
-                                </v-list-item>
-                            </v-list>
-                        </v-navigation-drawer>
-                        <!-- zde bude dynamicka cast obsahu pro side menu  sekce channels / devices -> ??? wiki ??? -->
-                        <channelssidemenu-component
-                            v-show="componentType === 'channels'"
-                        ></channelssidemenu-component>
-                        <!-- konec dynamicke casti obsahu -->
-
-                        <devicessidemenu-component
-                            v-show="componentType === 'devices'"
-                        ></devicessidemenu-component>
-
-                        <cardsmenu-component
-                            v-show="componentType === 'cards'"
-                        ></cardsmenu-component>
-
-                        <wikimenu-component
-                            v-show="componentType === 'wiki'"
-                        ></wikimenu-component>
-
-                        <settingsmenu-component
-                            v-if="componentType === 'settings'"
-                        ></settingsmenu-component>
-
-                        <usermenu-component
-                            v-if="componentType === 'user'"
-                        ></usermenu-component>
-                    </v-row>
-                </v-navigation-drawer>
-                <!-- konec navigace -->
+    <v-app style="background-color: #F1F5F9">
+        <div v-if="pageLoading === true">
+            <v-row class="justify-center">
+                <span class="mt-12">
+                    <i
+                        style="color:#596776"
+                        class="fas fa-spinner fa-pulse fa-5x"
+                    ></i>
+                </span>
             </v-row>
-            <transition name="fade" mode="out-in">
-                <v-col cols="12" sm="12" md="12" lg="12">
-                    <router-view class="ml-16 mt-10"> </router-view>
-                </v-col>
-            </transition>
-        </v-card>
+        </div>
+        <div v-else>
+            <v-card flat color="#F1F5F9">
+                <event-component></event-component>
+                <v-app-bar fixed dense color="white" class="pl-16 elevation-1">
+                    <v-app-bar-nav-icon
+                        @click="drawer = true"
+                    ></v-app-bar-nav-icon>
+                    <v-spacer></v-spacer>
+
+                    <!-- search -->
+                    <search-compoennt class="pl-16"></search-compoennt>
+                    <!-- search bar -->
+                    <v-spacer></v-spacer><v-spacer></v-spacer
+                    ><v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer><v-spacer></v-spacer
+                    ><v-spacer></v-spacer><v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <eventtodayplannedalert-component></eventtodayplannedalert-component>
+                    <v-badge
+                        :content="alertCount"
+                        :value="alertCount"
+                        color="error"
+                        bottom
+                        overlap
+                    >
+                        <v-icon @click="alertMenu = true" color="red">
+                            mdi-bell-ring-outline
+                        </v-icon>
+                    </v-badge>
+                </v-app-bar>
+                <!-- konec alertingu -->
+                <v-row no-gutters style="background-color: #F1F5F9">
+                    <!--  Navigace -->
+                    <v-navigation-drawer v-model="drawer" fixed color="#F1F5F9">
+                        <v-row
+                            class="fill-height"
+                            no-gutters
+                            style="background-color: #F1F5F9"
+                        >
+                            <!-- hlavní navigace, která neměnná -->
+                            <v-navigation-drawer
+                                v-model="drawer"
+                                fixed
+                                color="#253341"
+                                mini-variant
+                                mini-variant-width="56"
+                            >
+                                <v-list dense>
+                                    <v-list-item class="px-2">
+                                        <v-menu
+                                            transition="scroll-y-transition"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-list-item-avatar>
+                                                    <v-icon
+                                                        style="cursor: pointer"
+                                                        class="ml-2"
+                                                        v-if="foto == null"
+                                                        color="white"
+                                                        v-on="on"
+                                                    >
+                                                        mdi-account
+                                                    </v-icon>
+                                                    <v-img
+                                                        style="cursor: pointer"
+                                                        v-if="foto != null"
+                                                        :src="foto"
+                                                        v-on="on"
+                                                        alt="photo"
+                                                    ></v-img>
+                                                </v-list-item-avatar>
+                                            </template>
+                                            <v-list
+                                                width="250px"
+                                                class="text-center subtitle-2"
+                                            >
+                                                <v-list-item
+                                                    link
+                                                    to="/user"
+                                                    @click="
+                                                        editPasswordDialog = true
+                                                    "
+                                                >
+                                                    Editace <v-spacer></v-spacer
+                                                    ><v-icon
+                                                        color="blue"
+                                                        right
+                                                        small
+                                                        >mdi-account-cog-outline</v-icon
+                                                    >
+                                                </v-list-item>
+                                                <v-list-item
+                                                    v-if="
+                                                        user.user_role ===
+                                                            'admin'
+                                                    "
+                                                    link
+                                                    to="/settings"
+                                                >
+                                                    Nastavení<v-spacer
+                                                    ></v-spacer
+                                                    ><v-icon
+                                                        color="green"
+                                                        right
+                                                        small
+                                                        >mdi-settings</v-icon
+                                                    >
+                                                </v-list-item>
+                                                <v-divider></v-divider>
+                                                <v-list-item @click="logOut()">
+                                                    Odhlásit se
+                                                    <v-spacer></v-spacer
+                                                    ><v-icon
+                                                        color="red"
+                                                        right
+                                                        small
+                                                        >mdi-lock</v-icon
+                                                    >
+                                                </v-list-item>
+
+                                                <v-divider></v-divider>
+                                                <v-list-item
+                                                    href="http://iptvdohled.grapesc.cz/#/"
+                                                    target="_blink"
+                                                >
+                                                    IPTV Dohled<v-spacer
+                                                    ></v-spacer
+                                                    ><v-icon
+                                                        color="black"
+                                                        right
+                                                        small
+                                                        >mdi-television</v-icon
+                                                    >
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-menu>
+
+                                        <v-btn icon @click.stop="mini = !mini">
+                                            <v-icon>mdi-chevron-left</v-icon>
+                                        </v-btn>
+                                    </v-list-item>
+                                </v-list>
+                                <v-divider></v-divider>
+                                <v-list dense nav>
+                                    <v-list-item link v-bind:to="'/channel'">
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    @click="
+                                                        componentType =
+                                                            'channels'
+                                                    "
+                                                    :class="{
+                                                        'white--text':
+                                                            componentType ===
+                                                            'channels',
+                                                        'grey--text':
+                                                            componentType !=
+                                                            'channels'
+                                                    }"
+                                                    >mdi-television-box</v-icon
+                                                >
+                                            </template>
+                                            <span>Přehled kanálů</span>
+                                        </v-tooltip>
+                                    </v-list-item>
+                                    <v-list-item link v-bind:to="'/device'">
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    @click="
+                                                        componentType =
+                                                            'devices'
+                                                    "
+                                                    :class="{
+                                                        'white--text':
+                                                            componentType ===
+                                                            'devices',
+                                                        'grey--text':
+                                                            componentType !=
+                                                            'devices'
+                                                    }"
+                                                    >mdi-devices</v-icon
+                                                >
+                                            </template>
+                                            <span>Přehled zařízení</span>
+                                        </v-tooltip>
+                                    </v-list-item>
+
+                                    <v-list-item link v-bind:to="'/card'">
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    @click="
+                                                        componentType = 'cards'
+                                                    "
+                                                    :class="{
+                                                        'white--text':
+                                                            componentType ===
+                                                            'cards',
+                                                        'grey--text':
+                                                            componentType !=
+                                                            'cards'
+                                                    }"
+                                                    >mdi-card-text-outline</v-icon
+                                                >
+                                            </template>
+                                            <span>Přehled karet</span>
+                                        </v-tooltip>
+                                    </v-list-item>
+
+                                    <v-list-item link v-bind:to="'/wiki'">
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    @click="
+                                                        componentType = 'wiki'
+                                                    "
+                                                    :class="{
+                                                        'white--text':
+                                                            componentType ===
+                                                            'wiki',
+                                                        'grey--text':
+                                                            componentType !=
+                                                            'wiki'
+                                                    }"
+                                                    >mdi-wikipedia</v-icon
+                                                >
+                                            </template>
+                                            <span>Wiki</span>
+                                        </v-tooltip>
+                                    </v-list-item>
+
+                                    <v-list-item link v-bind:to="'/calendar'">
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    @click="
+                                                        componentType =
+                                                            'calendar'
+                                                    "
+                                                    :class="{
+                                                        'white--text':
+                                                            componentType ===
+                                                            'calendar',
+                                                        'grey--text':
+                                                            componentType !=
+                                                            'calendar'
+                                                    }"
+                                                    >mdi-calendar-text</v-icon
+                                                >
+                                            </template>
+                                            <span>Náhled na události</span>
+                                        </v-tooltip>
+                                    </v-list-item>
+                                </v-list>
+                            </v-navigation-drawer>
+                            <!-- zde bude dynamicka cast obsahu pro side menu  sekce channels / devices -> ??? wiki ??? -->
+                            <channelssidemenu-component
+                                v-show="componentType === 'channels'"
+                            ></channelssidemenu-component>
+                            <!-- konec dynamicke casti obsahu -->
+
+                            <devicessidemenu-component
+                                v-show="componentType === 'devices'"
+                            ></devicessidemenu-component>
+
+                            <cardsmenu-component
+                                v-show="componentType === 'cards'"
+                            ></cardsmenu-component>
+
+                            <wikimenu-component
+                                v-show="componentType === 'wiki'"
+                            ></wikimenu-component>
+
+                            <settingsmenu-component
+                                v-if="componentType === 'settings'"
+                            ></settingsmenu-component>
+
+                            <usermenu-component
+                                v-if="componentType === 'user'"
+                            ></usermenu-component>
+                        </v-row>
+                    </v-navigation-drawer>
+                    <!-- konec navigace -->
+                </v-row>
+                <transition name="fade" mode="out-in">
+                    <!-- <v-col cols="12" sm="12" md="12" lg="12"> -->
+                    <router-view
+                        class="pl-16 pt-10"
+                        style="background-color: #F1F5F9"
+                    >
+                    </router-view>
+                    <!-- </v-col> -->
+                </transition>
+            </v-card>
+        </div>
 
         <!-- alerting side menu -->
         <v-navigation-drawer
@@ -282,7 +334,7 @@
                     <v-alert
                         v-if="alertCount != '0'"
                         dense
-                        elevation="2"
+                        elevation="0"
                         :type="alert.status"
                         class="body-2 mt-2"
                     >
@@ -325,7 +377,7 @@
 
         <!-- snackaber pro upozornění na problém s csrf -->
 
-        <v-snackbar
+        <!-- <v-snackbar
             v-model="snackbar"
             :vertical="vertical"
             bottom
@@ -337,27 +389,7 @@
             <strong>
                 {{ text }}
             </strong>
-        </v-snackbar>
-
-        <v-snackbar
-            transition="slide-x-transition"
-            v-model="websocketSnackBar"
-            :timeout="4000"
-            top
-            right
-            color="info"
-            class="text--center"
-        >
-            <v-list
-                v-for="notification in websocketNotifications"
-                :key="notification"
-                color="transparent"
-            >
-                <v-list-item>
-                    {{ notification.name }}
-                </v-list-item>
-            </v-list>
-        </v-snackbar>
+        </v-snackbar> -->
 
         <!-- alerting v cele app-->
         <alert-component></alert-component>
@@ -381,11 +413,9 @@ import UserMenuComponent from "./UserMenuComponent";
 export default {
     data() {
         return {
-            websocketNotifications: [],
             alerts: [],
             alertCount: "0",
             snackbar: false,
-            websocketSnackBar: false,
             text: "Prosím reloadněte si stránku!",
             vertical: true,
             searchDialogInput: false,
@@ -398,15 +428,22 @@ export default {
             menu: false,
             message: false,
             hints: true,
-            user: [],
+            // user: [],
             isLoading: false,
             model: null,
             search: null,
-            entries: []
+            entries: [],
+            pageLoading: true
         };
     },
 
     computed: {
+        foto() {
+            return this.$store.state.foto;
+        },
+        user() {
+            return this.$store.state.user;
+        },
         fields() {
             if (!this.model) return [];
 
@@ -446,7 +483,6 @@ export default {
         this.getUser();
         this.loadWriteDataByUri();
         this.getAlertsFromDohled();
-        this.websocketData();
     },
     methods: {
         getAlertsFromDohled() {
@@ -485,8 +521,10 @@ export default {
                     if (response.data.status == "error") {
                         this.$router.push("/login");
                     } else {
+                        this.pageLoading = false;
                         this.$store.state.user = response.data.data;
-                        this.user = response.data.data;
+                        // this.user = response.data.data;
+                        this.$store.state.foto = this.$store.state.user.photo;
                     }
                 }
             });
@@ -525,23 +563,6 @@ export default {
             if (this.$route.path.match("/calendar.*")) {
                 this.componentType = "calendar";
             }
-        },
-
-        websocketData() {
-            Echo.channel("transcoderAlerts").listen(
-                "Broadcast_external_alerts",
-                alerts => {
-                    this.websocketNotifications = alerts;
-                    this.websocketSnackBar = true;
-                    setTimeout(
-                        function() {
-                            this.websocketSnackBar = false;
-                            this.websocketNotifications = [];
-                        }.bind(this),
-                        5000
-                    );
-                }
-            );
         }
     },
 

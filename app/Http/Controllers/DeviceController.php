@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
+
 class DeviceController extends Controller
 {
-
+    use NotificationTrait;
 
     static array $result = [
         'status' => "empty"
@@ -80,7 +83,6 @@ class DeviceController extends Controller
 
     public function return_devices_by_categories(): array
     {
-
         if (!DeviceCategory::first()) {
             return [];
         }
@@ -102,7 +104,7 @@ class DeviceController extends Controller
      * @param string $deviceId
      * @return array
      */
-    public static function try_to_find_device_belongsTochannel(string $deviceId, $channelId): array
+    public static function try_to_find_device_belongsTochannel(string $deviceId, int $channelId): array
     {
         $path = null;
 
@@ -153,7 +155,7 @@ class DeviceController extends Controller
         ];
     }
 
-    public static function try_to_find_backup_device_belongsTochannel(string $deviceId, $channelId): array
+    public static function try_to_find_backup_device_belongsTochannel(string $deviceId, int $channelId): array
     {
         if (!Device::where('id', $deviceId)->first()) {
             return self::$result;
@@ -181,15 +183,13 @@ class DeviceController extends Controller
      * @param [type] $transcoderId
      * @return array
      */
-    public static function return_transcoder($transcoderId): array
+    public static function return_transcoder(int $transcoderId): array
     {
-        if (!Device::where('id', $transcoderId)->first()) {
+        if (!$transcoder = Device::where('id', $transcoderId)->first()) {
             return [
                 'status' => "empty"
             ];
         }
-
-        $transcoder = Device::where('id', $transcoderId)->first();
 
         return [
             'status' => "success",
@@ -382,7 +382,6 @@ class DeviceController extends Controller
 
 
     /**
-     * fn pro 
      *
      * @param string|null $deviceId
      * @return void
@@ -394,7 +393,6 @@ class DeviceController extends Controller
         }
 
         return [
-
             'id' =>  intval($deviceId),
             'name' => Device::where('id', $deviceId)->first()->name
 
@@ -422,12 +420,19 @@ class DeviceController extends Controller
 
         $device = Device::where('id', $request->deviceId)->first();
 
+        if (empty($device->controller_ip) || is_null($device->controller_ip)) {
+            $kontrolerIp = null;
+        } else {
+            $kontrolerIp = $device->controller_ip;
+        }
+
         return [
             'status' => "success",
             'data' => array(
                 'id' => $device->id,
                 'name' => $device->name,
                 'ip' => $device->ip ?? null,
+                'controller_ip' => $kontrolerIp,
                 'login_user' => $device->login_user ?? null,
                 'login_password' => $device->login_password ?? null,
                 'category' => DeviceCategory::where('id', $device->category)->first()->name,
@@ -585,7 +590,6 @@ class DeviceController extends Controller
 
     public function return_device_interfaces(Request $request): array
     {
-
         if (!Device::where('id', $request->deviceId)->first()) {
             return [
                 'status' => "empty"
@@ -629,6 +633,7 @@ class DeviceController extends Controller
                 'ip' => $device->ip,
                 'login_user' => $device->login_user,
                 'login_password' => $device->login_password,
+                'controller_ip' => $device->controller_ip,
                 // vyhledání dat
                 'haveInterface' => DeviceInterfaceController::return_interfaces_belongsToDevice(Device::where('id', $request->deviceId)->first()->haveInterface),
                 'vendor' => VendorController::return_vendor_by_id($device->vendor),
@@ -657,40 +662,30 @@ class DeviceController extends Controller
      */
     public static function device_edit(Request $request): array
     {
-
-        // editace zarizení dle deviceId
-
-        // overení existunce deviceId 
         if (!Device::where('id', $request->deviceId)->first()) {
-            return [
-                'status' => "error",
-                'msg' => "Neexistuje zařízení"
-            ];
+            return self::frontend_notification("error", "error", "Neexistuje zařízení");
         }
 
-        // validace vstupů
-        if (
-            empty($request->name) || is_null($request->name) ||
-            empty($request->category) || is_null($request->category) ||
-            empty($request->vendor) || is_null($request->vendor)
-        ) {
-            return [
-                'status' => "warning",
-                'msg' => "Není vše řádně vyplněno"
-            ];
-        }
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'category' => 'required',
+            'vendor' => 'required',
+        ]);
 
+        if ($validation->fails()) {
+            return self::frontend_notification("error", "error", "Není vše vyplněno!");
+        }
 
 
         // samotná editace zařízení , vyhledání category a vendora dle názvů id
         try {
-
             Device::where('id', $request->deviceId)->update(
                 [
                     'name' => $request->name,
                     'category' => DeviceCategory::where('name', $request->category)->first()->id,
                     'vendor' => Vendor::where('vendor', $request->vendor)->first()->id,
                     'ip' => $request->ip,
+                    'controller_ip' => $request->controller_ip,
                     'login_user' => $request->login_user,
                     'login_password' => $request->login_password
                 ]
@@ -698,17 +693,11 @@ class DeviceController extends Controller
 
             dispatch(new SendNotificationJob(Auth::user()->name, $request->name, "editoval"));
 
-            return [
-                'status' => "success",
-                'msg' => "Editováno"
-            ];
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil zařízení", $request->name);
+
+            return self::frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-
-
-            return [
-                'status' => "error",
-                'msg' => "Selhala editace! ERROR 500"
-            ];
+            return self::frontend_notification();
         }
     }
 
@@ -721,32 +710,20 @@ class DeviceController extends Controller
     public function device_create(Request $request): array
     {
 
+        $validation = Validator::make($request->all(), [
+            'deviceName' => 'required',
+            'vendor' => 'required',
+            'category' => 'required',
+        ]);
 
-        // overení, že existuji nutné proměnné
-        if (
-            is_null($request->deviceName) || empty($request->deviceName) ||
-            is_null($request->vendor) || empty($request->vendor) ||
-            is_null($request->category) || empty($request->category)
-        ) {
-            return [
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Nejsou vyplněny všechny hodnoty!"
-                ),
-
-            ];
+        if ($validation->fails()) {
+            return $this->frontend_notification("warning", "warning", "Není vše vyplněno");
         }
 
 
         // overení že názve zařízení jiz neexistuje
         if (Device::where('name', $request->deviceName)->first()) {
-            return [
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Zařízení s tímto názvem již existuje"
-                ),
-
-            ];
+            return $this->frontend_notification("warning", "warning", "Zařízení s tímto názvem již existuje");
         }
 
         if (is_null($request->interfaces) || empty($request->interfaces)) {
@@ -782,7 +759,8 @@ class DeviceController extends Controller
                     'ip' => $request->deviceIp,
                     'login_user' => $request->deviceUser,
                     'login_password' => $request->devicePassword,
-                    'haveInterface' => $interfaces
+                    'haveInterface' => $interfaces,
+                    'controller_ip' => $request->controller_ip
                 ]
             );
             $deviceId = Device::where('name', $request->deviceName)->first()->id;
@@ -795,6 +773,7 @@ class DeviceController extends Controller
             dispatch(new SendNotificationJob(Auth::user()->name, $request->deviceName, "vytvořil"));
 
 
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "vytvořil zařízení", $request->deviceName);
 
             return [
                 'alert' => array(
@@ -805,8 +784,7 @@ class DeviceController extends Controller
                 'deviceId' => $deviceId
             ];
         } catch (\Throwable $th) {
-
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 
@@ -844,9 +822,11 @@ class DeviceController extends Controller
 
                 dispatch(new SendNotificationJob(Auth::user()->name, Device::where('id', $request->deviceId)->first()->name, "editoval"));
 
-                return NotificationController::notify("success", "success", "Zařízeno upraveno!");
+                BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil zařízení", Device::find($request->deviceId)->name);
+
+                return self::frontend_notification("success", "success", "Upraveno!");
             } catch (\Throwable $th) {
-                return NotificationController::notify();
+                return self::frontend_notification();
             }
         }
     }
@@ -854,14 +834,16 @@ class DeviceController extends Controller
 
     public function remove_interfaces(Request $request): array
     {
-        Device::where('id', $request->deviceId)->update(
-            [
-                'haveInterface' => null
-            ]
-        );
-
-
-        return NotificationController::notify("success", "success", "Zařízení upraveno!");
+        try {
+            Device::where('id', $request->deviceId)->update(
+                [
+                    'haveInterface' => null
+                ]
+            );
+            return $this->frontend_notification("success", "success", "Upraveno!");
+        } catch (\Throwable $th) {
+            return $this->frontend_notification();
+        }
     }
 
 
@@ -874,21 +856,15 @@ class DeviceController extends Controller
      */
     public function edit_device(Request $request): array
     {
-        // overení, že existuji nutné proměnné
-        if (
-            is_null($request->name) || empty($request->name) ||
-            is_null($request->vendor) || empty($request->vendor) ||
-            is_null($request->category) || empty($request->category)
-        ) {
-            return [
-                'alert' => array(
-                    'status' => "warning",
-                    'msg' => "Nejsou vyplněny všechny hodnoty!"
-                ),
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'vendor' => 'required',
+            'category' => 'required'
+        ]);
 
-            ];
+        if ($validation->fails()) {
+            return $this->frontend_notification("warning", "warning", "Není vše vyplněno!");
         }
-
 
         if (is_null($request->haveInterface) || empty($request->haveInterface)) {
             $interfaces = null;
@@ -925,12 +901,14 @@ class DeviceController extends Controller
                     'ip' => $request->ip,
                     'login_user' => $request->login_user,
                     'login_password' => $request->login_password,
-                    'haveInterface' => $interfaces
+                    'haveInterface' => $interfaces,
+                    'controller_ip' => $request->controller_ip
                 ]
             );
 
-            dispatch(new SendNotificationJob(Auth::user()->name, $request->name, "vytvořil"));
+            dispatch(new SendNotificationJob(Auth::user()->name, $request->name, "upravil"));
 
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil zařízení", $request->name);
 
             return [
                 'alert' => array(
@@ -942,7 +920,7 @@ class DeviceController extends Controller
             ];
         } catch (\Throwable $th) {
 
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 
@@ -957,7 +935,7 @@ class DeviceController extends Controller
     public function delete_device(Request $request): array
     {
         if (!Device::where('id', $request->deviceId)->first()) {
-            return NotificationController::notify("error", "error", "Neexistuje zařízení!");
+            return $this->frontend_notification("error", "error", "Neexistuje zařízení!");
         }
 
         $device = Device::where('id', $request->deviceId)->first();
@@ -992,7 +970,7 @@ class DeviceController extends Controller
 
         if ($multicast === "fail" || $h264 === "fail" || $h265 === "fail") {
 
-            return NotificationController::notify("error", "error", "Na zařízení je vytvořena vazba!");
+            return $this->frontend_notification("error", "error", "Na zařízení je vytvořena vazba!");
         }
 
         // vyhledání a smazání vazeb
@@ -1002,7 +980,9 @@ class DeviceController extends Controller
 
         dispatch(new SendNotificationJob(Auth::user()->name, $device->name, "smazal"));
 
-        return NotificationController::notify("success", "success", "Zařízení odebráno!");
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral zařízení", $device->name);
+
+        return $this->frontend_notification("success", "success", "Odebráno!");
     }
 
     /**
@@ -1013,18 +993,21 @@ class DeviceController extends Controller
      */
     public function return_transcoder_usage(Request $request)
     {
-        // $request->deviceId
-        if ($device = Device::where('id', $request->deviceId)->first()) {
+        try {
+            if ($device = Device::where('id', $request->deviceId)->first()) {
 
-            if ($device->vendor === 4) {
-                $transcoderIp = ApiController::return_transcoder_ip($device->name);
-                if (!is_null($transcoderIp)) {
-                    return Http::get('http://' . $transcoderIp . '/tcontrol.php?CMD=NVSTATS');
+                if ($device->vendor === 4) {
+                    $transcoderIp = ApiController::return_transcoder_ip($device->name);
+                    if (!is_null($transcoderIp)) {
+                        return Http::timeout(3)->get('http://' . $transcoderIp . '/tcontrol.php?CMD=NVSTATS');
+                    }
+                } else {
+                    return null;
                 }
             } else {
                 return null;
             }
-        } else {
+        } catch (\Throwable $th) {
             return null;
         }
     }
@@ -1033,7 +1016,6 @@ class DeviceController extends Controller
 
     public static function get_device_result($device)
     {
-
         $outputArr = array();
 
         $thisDevice = Device::where('name', $device)->first();

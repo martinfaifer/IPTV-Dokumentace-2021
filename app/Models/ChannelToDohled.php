@@ -9,11 +9,5 @@ class ChannelToDohled extends Model
 {
     use HasFactory;
 
-
-    protected $fillable = [
-        'channelId',
-        'H264Id',
-        'H265Id',
-        'dohledId'
-    ];
+    protected $guarded = [];
 }

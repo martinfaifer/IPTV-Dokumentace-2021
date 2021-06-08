@@ -6,9 +6,14 @@ use App\Models\Channel;
 use App\Models\ChannelToDohled;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
+    use NotificationTrait;
 
     public function index()
     {
@@ -18,9 +23,9 @@ class EventController extends Controller
 
         foreach (Event::all() as $event) {
             if (is_null($event->multicastId)) {
-                $name = $event->note;
+                $name = $event->title;
             } else {
-                $name = Channel::find($event['multicastId'])->nazev . " - " . $event->note;
+                $name = Channel::find($event['multicastId'])->nazev . " - " . $event->title;
             }
             $events[] = array(
                 'id' => $event->id,
@@ -32,7 +37,8 @@ class EventController extends Controller
                 'end_time' => $event->end_time,
                 'end' => $event->end_day . " " . $event->end_time,
                 'event_note' => $event->note,
-                'color' => "info"
+                'title' => $event->title ?? '',
+                'color' => $event->color ?? "info"
             );
         }
 
@@ -42,9 +48,24 @@ class EventController extends Controller
 
     public function update(Request $request): array
     {
+
+        $validation = Validator::make($request->all(), [
+            'start_day' => 'required',
+            'start_time' => 'required',
+            'end_day' => 'required',
+            'end_time' => 'required',
+            'event_note' => 'required',
+            'event_title' => 'required',
+            'event_color' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->frontend_notification("warning", "warning", "Není vše vyplněno");
+        }
+
         // $request->eventId , start_day, start_time, end_day, end_time, event_note
         if (!$event = Event::find($request->eventId)) {
-            return NotificationController::notify("error", "error", "Neexistuje událost s tímto Id!");
+            return $this->frontend_notification("error", "error", "Neexistuje událost s tímto Id!");
         }
 
         $event->update([
@@ -53,9 +74,14 @@ class EventController extends Controller
             'end_day' => $request->end_day,
             'end_time' => $request->end_time,
             'note' => $request->event_note,
+            'title' => $request->event_title,
+            'color' => $request->event_color
         ]);
 
-        return NotificationController::notify("success", "success", "Událost upravena!");
+
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil událost s popisem", $request->event_note);
+
+        return $this->frontend_notification("success", "success", "Upraveno!");
     }
 
     public function return_today_event(): array
@@ -66,23 +92,21 @@ class EventController extends Controller
             ];
         }
 
-
         foreach (Event::where('start_day', date("Y-m-d"))->get() as $todayEvent) {
             // vyhledání kanálu / kanálu co mají na dnešní den naplánovanou událost
 
             if (is_null($todayEvent->multicastId)) {
-                $name = $todayEvent->note;
+                $title = $todayEvent->title;
             } else {
-                $name = Channel::find($todayEvent['multicastId'])->nazev;
+                $title = $todayEvent->title . " " . Channel::find($todayEvent['multicastId'])->nazev;
             }
 
             $output[] = array(
                 'channelId' => $todayEvent->multicastId,
-                'channel' => $name,
+                'title' => $title,
                 'note' => $todayEvent->note . ' od ' . $todayEvent->start_day . ' ' . $todayEvent->start_time . ' do ' . $todayEvent->end_day . ' ' . $todayEvent->end_time
             );
         }
-
 
         return [
             'status' => "success",
@@ -93,16 +117,30 @@ class EventController extends Controller
 
     public static function create(Request $request): array
     {
+        $validation = Validator::make($request->all(), [
+            'start_day' => 'required',
+            'start_time' => 'required',
+            'end_day' => 'required',
+            'end_time' => 'required',
+            'event_note' => 'required',
+            'event_title' => 'required',
+            'event_color' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return self::frontend_notification("warning", "warning", "Není vše vyplněno");
+        }
+
         if (isset($request->channelId)) {
             // overení existence channel ID 
             if (!Channel::where('id', $request->channelId)->first()) {
-                return NotificationController::notify("error", "error", "Neexituje kanál s tímto ID!");
+                return self::frontend_notification("error", "error", "Neexituje kanál s tímto ID!");
             }
         }
 
         // overení, že hodnoty nejsou stejné
         if ($request->start_day . $request->start_time === $request->end_day . $request->end_time) {
-            return NotificationController::notify("error", "error", "Začátek a konec nemohou být stejné!");
+            return self::frontend_notification("error", "error", "Začátek a konec nemohou být stejné!");
         }
 
         // založení 
@@ -115,7 +153,9 @@ class EventController extends Controller
                 'repeat_every_day' => "no",
                 'multicastId' => $request->channelId ?? null,
                 'note' => $request->event_note,
-                'when_to_notify' => $request->when_to_notify ?? null
+                'title' => $request->event_title,
+                'when_to_notify' => $request->when_to_notify ?? null,
+                'color' => $request->event_color
             ]
         );
 
@@ -128,19 +168,24 @@ class EventController extends Controller
             }
         }
 
-        return NotificationController::notify("success", "success", "Událost vytvořena!", $request->channelId);
+
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "vytvořil událost", $request->event_note);
+
+        return self::frontend_notification("success", "success", "Vytvořeno!", $request->channelId);
     }
 
 
     public static function delete(Request $request): array
     {
         if (!$event = Event::find($request->eventId)) {
-            return NotificationController::notify("error", "error", "Událost neexistuje!");
+            return self::frontend_notification("error", "error", "Událost neexistuje!");
         }
 
         $event->delete();
 
-        return NotificationController::notify("success", "success", "Událost smazána!");
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral událost", $request->event_note);
+
+        return self::frontend_notification("success", "success", "Odebráno!");
     }
 
     public static function search_events_by_channelId(Request $request)
@@ -155,7 +200,7 @@ class EventController extends Controller
         return [
             'status' => "success",
             'data' => Event::where('multicastId', $request->channelId)->get([
-                'id', 'start_day', 'start_time', 'end_day', 'end_time', 'note'
+                'id', 'start_day', 'start_time', 'end_day', 'end_time', 'title'
             ])->toArray()
         ];
     }

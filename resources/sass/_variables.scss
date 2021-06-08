@@ -1,11 +1,27 @@
 // Body
-$body-bg: #f8fafc;
+$body-bg: #F1F5F9;
 
 // Typography
 $font-family-sans-serif: 'Roboto',
 sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+
+.theme--light.v-data-table {
+    background-color: transparent
+}
+
+.theme--light.v-tabs {
+    background-color: transparent
+}
+
+.theme--light.v-main {
+    background-color: #F1F5F9;
+}
+
+.theme--light.v-application {
+    background: #F1F5F9
+}
 
 // Colors
 $blue: #3490dc;

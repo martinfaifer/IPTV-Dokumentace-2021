@@ -12,7 +12,7 @@ class convert_outputs_to_uniciast_output_for_device extends Command
      *
      * @var string
      */
-    protected $signature = 'command:convert';
+    protected $signature = 'command:generate';
 
     /**
      * The console command description.
@@ -38,6 +38,6 @@ class convert_outputs_to_uniciast_output_for_device extends Command
      */
     public function handle()
     {
-        UnicastOutputForDeviceController::collect();
+        UnicastOutputForDeviceController::generate();
     }
 }

@@ -1,13 +1,12 @@
 <template>
     <v-main>
-        <div v-if="interfaces != null">
+        <div v-if="interfaces != null" class="pt-1">
             <v-row>
                 <!-- PRVNÍ INPUT RF1 class="mr-10" -->
-                <v-col>
+                <v-col cols="12" sm="12" md="3" lg="3">
                     <v-card
                         flat
-                        color="#F5F5F7"
-                        width="330"
+                        color="white"
                         @contextmenu="
                             show(
                                 $event,
@@ -143,11 +142,10 @@
 
                 <!-- DRUHÝ INPUT RF2 -->
 
-                <v-col>
+                <v-col cols="12" sm="12" md="3" lg="3">
                     <v-card
                         flat
-                        color="#F5F5F7"
-                        width="330"
+                        color="white"
                         @contextmenu="
                             show(
                                 $event,
@@ -277,11 +275,10 @@
 
                 <!-- TŘETÍ INPUT RF3 -->
 
-                <v-col>
+                <v-col cols="12" sm="12" md="3" lg="3">
                     <v-card
                         flat
-                        color="#F5F5F7"
-                        width="330"
+                        color="white"
                         @contextmenu="
                             show(
                                 $event,
@@ -411,11 +408,10 @@
 
                 <!-- ČTVRTÝ INPUT RF4 -->
 
-                <v-col>
+                <v-col cols="12" sm="12" md="3" lg="3">
                     <v-card
                         flat
-                        color="#F5F5F7"
-                        width="330"
+                        color="white"
                         @contextmenu="
                             show(
                                 $event,

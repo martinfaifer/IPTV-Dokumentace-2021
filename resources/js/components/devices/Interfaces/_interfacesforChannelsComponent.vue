@@ -1,9 +1,9 @@
 <template>
     <v-main>
         <v-card
-            class="mr-10 mr-15"
+            class="pr-5 pt-1"
             flat
-            color="#F5F5F7"
+            color="white"
             v-if="deviceInterfaces != null"
             @contextmenu="show($event)"
         >

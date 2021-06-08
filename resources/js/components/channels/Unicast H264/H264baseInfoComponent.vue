@@ -1,7 +1,7 @@
 <template>
-    <v-main>
-        <v-container fluid class="ml-3">
-            <div class="mr-15">
+    <v-main style="background-color: #F1F5F9">
+        <v-container fluid class="pl-3">
+            <div class="pr-5">
                 <!-- Zobrazení názvu kanálu -->
                 <v-row>
                     <v-col cols="12" sm="1" md="1" lg="1" v-if="logo != null">
@@ -13,20 +13,8 @@
                         ></v-img>
                     </v-col>
                     <v-col cols="12" sm="11" md="11" lg="11">
-                        <h2 class="mt-6">
+                        <h2 class="pt-6">
                             {{ channelName }} - H264
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-icon
-                                        v-on="on"
-                                        @click="removeH264()"
-                                        small
-                                        color="red"
-                                        >mdi-delete</v-icon
-                                    >
-                                </template>
-                                <span>Odebrání H264</span>
-                            </v-tooltip>
                         </h2>
                     </v-col>
                 </v-row>
@@ -34,28 +22,28 @@
             </div>
 
             <div v-if="exist === 'exist'">
-                <v-row class="mt-4 mr-15">
+                <v-row class="pt-4 pr-5">
                     <v-col>
                         <!-- component pro získání chunk store id -->
                         <h264info-component></h264info-component>
                     </v-col>
                 </v-row>
 
-                <v-row class="mt-4 mr-15">
+                <v-row class="pt-4 pr-5">
                     <v-col>
                         <!-- transcoder component -->
                         <transcoder-component></transcoder-component>
                     </v-col>
-                </v-row>
 
-                <v-row class="mt-4 mr-15">
                     <v-col>
-                        <!-- dohled component -->
-                        <dohled-component></dohled-component>
+                        <!-- transcoder chart component -->
+                        <transcoderchart-component></transcoderchart-component>
                     </v-col>
                 </v-row>
+
+                <dohled-component></dohled-component>
             </div>
-            <div v-else-if="exist === 'notexist'" class="mt-4 mr-15">
+            <div v-else-if="exist === 'notexist'" class="pt-4 pr-5">
                 <v-alert type="warning" @contextmenu="show($event)">
                     Tento formát není nastaven
                 </v-alert>
@@ -173,6 +161,8 @@
 import H264InfoComponent from "./H264InfoCoomponent";
 import transcoderComponent from "./_unicastDeviceComponent";
 import DohledComponent from "../Dohled/DohledH264Component";
+import TranscoderChart from "../TranscoderChart/TranscoderChartComponent";
+// import BroadcastDohledComponent from "../Dohled/DohledBroadcastComponent";
 
 export default {
     data() {
@@ -196,7 +186,9 @@ export default {
     components: {
         "h264info-component": H264InfoComponent,
         "transcoder-component": transcoderComponent,
-        "dohled-component": DohledComponent
+        "dohled-component": DohledComponent,
+        "transcoderchart-component": TranscoderChart
+        // "broadcastdohled-component": BroadcastDohledComponent
     },
     created() {
         this.loadChannelNameById();
@@ -204,33 +196,33 @@ export default {
         this.loadChannelLogo();
     },
     methods: {
-         async loadChannelLogo() {
+        async loadChannelLogo() {
             await axios
                 .post("channel/logo", {
                     channelId: this.$route.params.id
                 })
                 .then(response => {
-                    if(response.data === 'not_exist') {
+                    if (response.data === "not_exist") {
                         this.logo = null;
                     } else {
                         this.logo = response.data;
                     }
                 });
         },
-        async removeH264() {
-            await axios
-                .post("h264/delete", {
-                    channelId: this.$route.params.id
-                })
-                .then(response => {
-                    this.$store.state.alerts = response.data.alert;
-                    if (response.data.status === "success") {
-                        this.$router
-                            .push("/channel/" + response.data.channelId)
-                            .catch(err => {});
-                    }
-                });
-        },
+        // async removeH264() {
+        //     await axios
+        //         .post("h264/delete", {
+        //             channelId: this.$route.params.id
+        //         })
+        //         .then(response => {
+        //             this.$store.state.alerts = response.data.alert;
+        //             if (response.data.status === "success") {
+        //                 this.$router
+        //                     .push("/channel/" + response.data.channelId)
+        //                     .catch(err => {});
+        //             }
+        //         });
+        // },
         async createOutput() {
             await axios.get("device/transcoders").then(response => {
                 this.transcoders = response.data;
@@ -245,7 +237,7 @@ export default {
                     transcoder: this.transcoder,
                     output1080: this.output1080,
                     output720: this.output720,
-                    output576: this.output576,
+                    output576: this.output576
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

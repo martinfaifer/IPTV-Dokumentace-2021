@@ -26,3 +26,13 @@ window.Echo = new Echo({
     cluster: "eu",
     forceTLS: true
 });
+
+// window.Echo_DOHLED = new Echo({
+//     broadcaster: "pusher",
+//     key: "TSanalyzerKey",
+//     wsHost: "iptvdoku.grapesc.cz",
+//     wsPort: 6001,
+//     cluster: "eu",
+//     forceTLS: true,
+//     // disableStats: true
+// });

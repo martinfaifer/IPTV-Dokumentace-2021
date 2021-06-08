@@ -1,6 +1,6 @@
 <template>
-    <v-main>
-        <v-list dense nav class="ml-12" color="#F5F5F7">
+    <v-main style="background-color: #F1F5F9">
+        <v-list dense nav class="ml-12" color="transparent">
             <v-list-item
                 class="ml-3"
                 link
@@ -90,6 +90,15 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         Přidat kontakt
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item @click="addNangu()">
+                    <v-list-item-icon>
+                        <v-icon x-small>mdi-account-box-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        Přidat vazbu na Nangu
                     </v-list-item-title>
                 </v-list-item>
 
@@ -444,7 +453,12 @@
                                         v-model="channelName"
                                         required
                                     ></v-text-field>
-                                    <small class="red--text" v-for="error in errors" :key="error">{{ error}}</small>
+                                    <small
+                                        class="red--text"
+                                        v-for="error in errors"
+                                        :key="error"
+                                        >{{ error }}</small
+                                    >
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -571,10 +585,18 @@
                                         v-model="channelName"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12">
+                                <v-col cols="12" sm="12" md="6" lg="6">
                                     <v-text-field
+                                        type="number"
                                         label="Chunk Store ID"
                                         v-model="chunkStoreId"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="6" lg="6">
+                                    <v-text-field
+                                        label="Nangu channel code"
+                                        v-model="nangu_channel_code"
+                                        hint="Získá se v app01"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6" md="4">
@@ -595,6 +617,7 @@
                                         dense
                                         v-model="multicast_ip"
                                         label="Multicastová IP"
+                                        placeholder="například 239.250.1.1"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -604,6 +627,7 @@
                                         dense
                                         v-model="stb_ip"
                                         label="IP k STB"
+                                        placeholder="například 239.250.1.1"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -625,9 +649,16 @@
                                     <v-text-field
                                         dense
                                         v-model="backup_multicast_ip"
-                                        label="Multicastová IP"
+                                        label="Záložní multicastová IP"
+                                        placeholder="například 239.250.1.1"
                                         required
                                     ></v-text-field>
+                                </v-col>
+                                 <v-col cols="12">
+                                    <v-checkbox
+                                        v-model="is_radio"
+                                        label="Jedná se o rádio"
+                                    ></v-checkbox>
                                 </v-col>
                                 <v-col cols="12">
                                     <v-switch
@@ -690,6 +721,8 @@
 export default {
     data() {
         return {
+            is_radio: false,
+            nangu_channel_code: "",
             chunkStoreId: "",
             contactDialog: false,
             fullName: null,
@@ -812,6 +845,7 @@ export default {
         async createNewChannelDialog() {
             await axios.get("sources").then(response => {
                 this.sources = response.data;
+                this.channelName = null;
                 this.createNewChannel = true;
             });
         },
@@ -821,6 +855,7 @@ export default {
                 .post("channel/create", {
                     channelName: this.channelName,
                     chunkStoreId: this.chunkStoreId,
+                    nangu_channel_code: this.nangu_channel_code,
                     multicastZdroj: this.multicastZdroj,
                     multicast_ip: this.multicast_ip,
                     stb_ip: this.stb_ip,
@@ -828,7 +863,8 @@ export default {
                     backup_multicast_ip: this.backup_multicast_ip,
                     dohledovat: this.dohledovat,
                     vytvaretNahled: this.vytvaretNahled,
-                    zalozitDoDohledu: this.zalozitDoDohledu
+                    zalozitDoDohledu: this.zalozitDoDohledu,
+                    is_radio: this.is_radio
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;
@@ -844,6 +880,9 @@ export default {
                         this.dohledovat = false;
                         this.vytvaretNahled = false;
                         this.zalozitDoDohledu = false;
+                        this.nangu_channel_code = null;
+                        this.chunkStoreId = null;
+                        this.is_radio = false;
                         this.$router
                             .push("/channel/" + response.data.channelId)
                             .catch(err => {});
@@ -1019,6 +1058,7 @@ export default {
             this.backup = null;
             this.event = null;
             this.file = "";
+            this.is_radio = false;
         },
 
         async loadchannels() {
@@ -1074,6 +1114,8 @@ export default {
                 this.deviceInformation = response.data;
             });
         },
+
+        async addNangu() {},
 
         removeChannelDialog() {
             this.deleteDialog = true;

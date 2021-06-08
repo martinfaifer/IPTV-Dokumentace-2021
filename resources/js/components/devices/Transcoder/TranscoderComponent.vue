@@ -1,12 +1,12 @@
 <template>
     <div>
-        <v-container>
+        <v-container fluid class="pl-6">
             <!-- konec zobrazeni nazvu encoderu -->
-            <v-row class="justify-center body-2" v-if="transcoderData != null">
+            <v-row class="justify-center body-2">
                 <!-- Využitá RAM -->
-                <v-spacer></v-spacer>
-                <v-row>
-                    <div v-if="ramPercent < '75'">
+                <!-- <v-spacer></v-spacer> -->
+                <v-col sm="12" md="2" lg="2">
+                    <div v-if="parseInt(ramPercent) < 75">
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -24,12 +24,17 @@
                             </small>
                         </v-progress-circular>
                     </div>
-                    <div v-if="ramPercent >= '75' && ramPercent < '88'">
+                    <div
+                        v-if="
+                            parseInt(ramPercent) >= 75 &&
+                                parseInt(ramPercent) < 88
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
                             :width="4"
-                            :value="ramPercent"
+                            :value="parseInt(ramPercent)"
                             color="orange"
                         >
                             <small>
@@ -42,12 +47,12 @@
                             </small></v-progress-circular
                         >
                     </div>
-                    <div v-if="ramPercent >= '88'">
+                    <div v-if="parseInt(ramPercent) >= 88">
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
                             :width="4"
-                            :value="ramPercent"
+                            :value="parseInt(ramPercent)"
                             color="red"
                         >
                             <small>
@@ -60,15 +65,24 @@
                             </small></v-progress-circular
                         >
                     </div>
-                </v-row>
+                </v-col>
                 <!-- Encoding -->
-                <v-spacer></v-spacer>
-                <v-row
+                <!-- <v-spacer></v-spacer> -->
+                <v-col
+                    sm="12"
+                    md="2"
+                    lg="2"
                     v-for="encoder in gpuStat.gpu"
                     v-bind:key="encoder.id"
                     v-show="encoder.encoder_util"
                 >
-                    <div v-if="encoder.encoder_util <= '75 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                encoder.encoder_util
+                            ) <= 75
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2 "
                             :size="150"
@@ -84,8 +98,12 @@
                     </div>
                     <div
                         v-if="
-                            encoder.encoder_util > '75 %' &&
-                                encoder.encoder_util < '88 %'
+                            convert_string_to_int_and_remove_percent(
+                                encoder.encoder_util
+                            ) > 75 &&
+                                convert_string_to_int_and_remove_percent(
+                                    encoder.encoder_util
+                                ) < 88
                         "
                     >
                         <v-progress-circular
@@ -100,7 +118,13 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                    <div v-if="encoder.encoder_util >= '88 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                encoder.encoder_util
+                            ) >= 88
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -113,15 +137,24 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                </v-row>
-                <v-spacer></v-spacer>
+                </v-col>
+                <!-- <v-spacer></v-spacer> -->
                 <!-- Decoder -->
-                <v-row
+                <v-col
+                    sm="12"
+                    md="2"
+                    lg="2"
                     v-for="decoder in gpuStat.gpu"
                     v-bind:key="decoder.id"
                     v-show="decoder.decoder_util"
                 >
-                    <div v-if="decoder.decoder_util <= '75 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                decoder.decoder_util
+                            ) <= 75
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -137,8 +170,12 @@
                     </div>
                     <div
                         v-if="
-                            decoder.decoder_util > '75 %' &&
-                                decoder.decoder_util < '88 %'
+                            convert_string_to_int_and_remove_percent(
+                                decoder.decoder_util
+                            ) > 75 &&
+                                convert_string_to_int_and_remove_percent(
+                                    decoder.decoder_util
+                                ) < 88
                         "
                     >
                         <v-progress-circular
@@ -154,7 +191,13 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                    <div v-if="decoder.decoder_util >= '88 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                decoder.decoder_util
+                            ) >= 88
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -168,16 +211,25 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                </v-row>
-                <v-spacer></v-spacer>
+                </v-col>
+                <!-- <v-spacer></v-spacer> -->
                 <!-- GPU -->
 
-                <v-row
+                <v-col
+                    sm="12"
+                    md="2"
+                    lg="2"
                     v-for="gpu in gpuStat.gpu"
                     v-bind:key="gpu.id"
                     v-show="gpu.gpu_util"
                 >
-                    <div v-if="gpu.gpu_util <= '75 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                gpu.gpu_util
+                            ) <= 75
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -188,7 +240,16 @@
                             <strong> GPU {{ gpu.gpu_util }} </strong>
                         </v-progress-circular>
                     </div>
-                    <div v-if="gpu.gpu_util > '75 %' && gpu.gpu_util < '88 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                gpu.gpu_util
+                            ) > 75 &&
+                                convert_string_to_int_and_remove_percent(
+                                    gpu.gpu_util
+                                ) < 88
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -201,7 +262,13 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                    <div v-if="gpu.gpu_util >= '88 %'">
+                    <div
+                        v-if="
+                            convert_string_to_int_and_remove_percent(
+                                gpu.gpu_util
+                            ) >= 88
+                        "
+                    >
                         <v-progress-circular
                             class="mt-2"
                             :size="150"
@@ -214,11 +281,14 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                </v-row>
-                <v-spacer></v-spacer>
+                </v-col>
+                <!-- <v-spacer></v-spacer> -->
                 <!-- Teplota GPU -->
 
-                <v-row
+                <v-col
+                    sm="12"
+                    md="2"
+                    lg="2"
                     v-for="gpuTemp in gpuStat.gpu"
                     v-bind:key="gpuTemp.id"
                     v-show="gpuTemp.gpu_temp"
@@ -268,11 +338,14 @@
                             </strong></v-progress-circular
                         >
                     </div>
-                </v-row>
-                <v-spacer></v-spacer>
+                </v-col>
+                <!-- <v-spacer></v-spacer> -->
                 <!-- Power -->
 
-                <v-row
+                <v-col
+                    sm="12"
+                    md="2"
+                    lg="2"
                     v-for="powerDraw in gpuStat.gpu"
                     v-bind:key="powerDraw.id"
                     v-show="powerDraw.power_draw"
@@ -286,7 +359,7 @@
                     >
                         <strong> Power {{ powerDraw.power_draw }} </strong>
                     </v-progress-circular>
-                </v-row>
+                </v-col>
             </v-row>
         </v-container>
     </div>
@@ -318,6 +391,12 @@ export default {
         this.loadTranscoderData();
     },
     methods: {
+        convert_string_to_int_and_remove_percent(string) {
+            if (string) {
+                string = string.replace(" %", "");
+                return parseInt(string);
+            }
+        },
         loadTranscoderData() {
             let currentObj = this;
             axios

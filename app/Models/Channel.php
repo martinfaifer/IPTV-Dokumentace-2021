@@ -12,6 +12,7 @@ class Channel extends Model
     protected $fillable = [
         'nazev',
         'status',
-        'logo'
+        'logo',
+        'is_radio'
     ];
 }

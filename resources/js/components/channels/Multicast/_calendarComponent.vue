@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card flat color="#F5F5F7" height="250">
+        <v-card flat color="white" height="250">
             <v-card-subtitle @contextmenu="show($event)">
                 <v-row class="ml-1 mr-1 mt-1">
                     <strong>
@@ -14,64 +14,21 @@
             </v-card-subtitle>
             <v-card-text class=" text--center">
                 <v-container v-if="events != null">
-                    <v-row>
-                        <v-col cols="12" sm="12" md="2">
-                            <strong>
-                                Den začátku
-                            </strong>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            <strong>
-                                Čas začátku
-                            </strong>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            <strong>
-                                Den konce
-                            </strong>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            <strong>
-                                Čas konce
-                            </strong>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            <strong>
-                                Popis
-                            </strong>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            <strong>
-                                Akce
-                            </strong>
-                        </v-col>
-                    </v-row>
-                    <v-row v-for="event in events" :key="event.id">
-                        <v-col cols="12" sm="12" md="2">
-                            {{ event.start_day }}
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            {{ event.start_time }}
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            {{ event.end_day }}
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            {{ event.end_time }}
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
-                            {{ event.note }}
-                        </v-col>
-                        <v-col cols="12" sm="12" md="2">
+                    <v-data-table
+                        dense
+                        :items-per-page="3"
+                        :headers="headers"
+                        :items="events"
+                    >
+                        <template v-slot:item.action="{ item }">
                             <v-icon
+                                @click="deleteEvent(item.id)"
                                 small
                                 color="red"
-                                @click="deleteEvent(event.id)"
+                                >mdi-delete</v-icon
                             >
-                                mdi-delete
-                            </v-icon>
-                        </v-col>
-                    </v-row>
+                        </template>
+                    </v-data-table>
                 </v-container>
                 <v-container v-else>
                     Neexistuje žádná událost
@@ -140,13 +97,34 @@
                                     required
                                 ></v-text-field>
                             </v-col>
-
                             <v-col cols="12">
                                 <v-text-field
-                                    label="Popis události"
-                                    v-model="event_note"
+                                    label="Název události"
+                                    v-model="event_title"
+                                    placeholder="například: Kanál bude ve výpadku"
                                     required
                                 ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <ckeditor
+                                    :editor="editor"
+                                    v-model="event_note"
+                                    placeholder="Popis události"
+                                    :config="editorConfig"
+                                ></ckeditor>
+                            </v-col>
+
+                            <v-col cols="12">
+                                <v-color-picker
+                                    v-model="event_color"
+                                    dot-size="18"
+                                    hide-inputs
+                                    hide-sliders
+                                    hide-canvas
+                                    mode="rgba"
+                                    show-swatches
+                                    swatches-max-height="200"
+                                ></v-color-picker>
                             </v-col>
 
                             <v-col cols="12">
@@ -182,9 +160,39 @@
 </template>
 
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
     data() {
         return {
+            headers: [
+                {
+                    text: "Den začátku",
+                    align: "start",
+                    value: "start_day"
+                },
+                { text: "Čas začátku", value: "start_time" },
+                { text: "Den konce", value: "end_day" },
+                { text: "Čas konce", value: "end_time" },
+                { text: "Popis", value: "title" },
+                { text: "Akce", value: "action" }
+            ],
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: {
+                    items: [
+                        "heading",
+                        "bold",
+                        "italic",
+                        "alignment",
+                        "bulletedList",
+                        "numberedList",
+                    ],
+                    shouldNotGroupWhenFull: true
+                },
+                language: "cs",
+                heading: {}
+            },
+            event_color: "",
             showMenu: false,
             x: 0,
             y: 0,
@@ -196,7 +204,8 @@ export default {
             event_note: "",
             vypadek: false,
             checkbox_create_to_dohled: false,
-            createEventDialog: false
+            createEventDialog: false,
+            event_title: ""
         };
     },
 
@@ -246,7 +255,9 @@ export default {
                     end_time: this.end_time,
                     event_note: this.event_note,
                     vypadek: this.vypadek,
-                    checkbox_create_to_dohled: this.checkbox_create_to_dohled
+                    checkbox_create_to_dohled: this.checkbox_create_to_dohled,
+                    event_color: this.event_color,
+                    event_title: this.event_title
                 })
                 .then(response => {
                     this.$store.state.alerts = response.data.alert;

@@ -1,9 +1,9 @@
 <template>
     <v-main>
         <v-card
-            class="mr-10 mr-15"
+            class="pr-5"
             flat
-            color="#F5F5F7"
+            color="white"
             v-if="deviceInformations != null"
             @contextmenu="
                 show(
@@ -13,7 +13,8 @@
                     deviceInformations.login_user,
                     deviceInformations.login_password,
                     deviceInformations.category,
-                    deviceInformations.vendor
+                    deviceInformations.vendor,
+                    deviceInformations.controller_ip
                 )
             "
         >
@@ -22,11 +23,28 @@
                     Informace o zařízení
                 </strong>
             </v-card-subtitle>
-
+            <!-- controller_ip -->
             <v-card-text class="ml-12 text--center">
-                <v-container>
+                <v-container fluid>
                     <v-row>
-                        <span class="ml-6" v-if="deviceInformations.ip != null">
+                        <span
+                            class="ml-1"
+                            v-if="deviceInformations.controller_ip != null"
+                        >
+                            <strong>IP kontroleru: </strong>
+                            <a
+                                target="_blank"
+                                :href="
+                                    'http://' + deviceInformations.controller_ip
+                                "
+                            >
+                                {{ deviceInformations.controller_ip }}
+                            </a>
+                        </span>
+                        <span
+                            class="ml-6"
+                            v-else-if="deviceInformations.ip != null"
+                        >
                             <strong>IP: </strong>
                             <a
                                 target="_blank"
@@ -101,6 +119,14 @@
                                         dense
                                         label="IP"
                                         v-model="ip"
+                                    ></v-text-field>
+                                </v-col>
+
+                                 <v-col cols="12">
+                                    <v-text-field
+                                        dense
+                                        label="IP kontroleru pokud zařízení má"
+                                        v-model="controller_ip"
                                     ></v-text-field>
                                 </v-col>
 
@@ -187,7 +213,8 @@ export default {
             category: "",
             vendor: "",
             categories: [],
-            vendors: []
+            vendors: [],
+            controller_ip: ""
         };
     },
 
@@ -195,13 +222,14 @@ export default {
         this.loadDeviceInformation();
     },
     methods: {
-        show(e, name, ip, login_user, login_password, category, vendor) {
+        show(e, name, ip, login_user, login_password, category, vendor, controller_ip) {
             this.name = name;
             this.ip = ip;
             this.login_user = login_user;
             this.login_password = login_password;
             this.category = category;
             this.vendor = vendor;
+            this.controller_ip = controller_ip;
             e.preventDefault();
             this.showMenu = false;
             this.x = e.clientX;
@@ -253,6 +281,7 @@ export default {
                     deviceId: this.$route.params.id,
                     name: this.name,
                     ip: this.ip,
+                    controller_ip: this.controller_ip,
                     login_user: this.login_user,
                     login_password: this.login_password,
                     category: this.category,

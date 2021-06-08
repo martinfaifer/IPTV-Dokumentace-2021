@@ -2,7 +2,7 @@
     <v-main>
         <v-card
             flat
-            color="#F5F5F7"
+            color="white"
             v-if="contact != null"
             @contextmenu="show($event)"
         >
@@ -59,7 +59,7 @@
 
                 <v-list-item @click="remove()">
                     <v-list-item-icon>
-                        <v-icon x-small>mdi-delete</v-icon>
+                        <v-icon color="red" x-small>mdi-delete</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
                         Odebrat

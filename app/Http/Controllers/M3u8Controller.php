@@ -9,21 +9,24 @@ use App\Models\Streamer;
 use App\Models\StreamerAndPortBound;
 use App\Models\StreamPort;
 use Illuminate\Http\Request;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class M3u8Controller extends Controller
 {
+    use NotificationTrait;
 
     public static function update_m3u8_h264(Request $request): array
     {
-        if (is_null($request->kdekoliv) || is_null($request->local) || is_null($request->mobile)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Musí být vše vyplněno"
-                )
-            ];
+        $validation = Validator::make($request->all(), [
+            'kdekoliv' => 'required',
+            'local' => 'required',
+            'mobile' => 'required'
+        ]);
+        if ($validation->fails()) {
+            return self::frontend_notification('error', 'error', 'Musí být vše vyplněno!');
         }
+
 
         $unicastId = H264::where('channelId', $request->channelId)->first()->id;
         M3u8::where('h264id', $unicastId)->update(
@@ -34,14 +37,7 @@ class M3u8Controller extends Controller
             ]
         );
 
-
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Upraveno"
-            )
-        ];
+        return self::frontend_notification('success', 'success', 'Upraveno!');
     }
 
     public static function return_m38u_by_id(Request $request): array

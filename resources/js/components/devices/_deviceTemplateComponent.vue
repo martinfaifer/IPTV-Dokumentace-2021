@@ -5,7 +5,7 @@
                 <v-col v-for="sablona in template" :key="sablona.id">
                     <v-card
                         flat
-                        color="#F5F5F7"
+                        color="#F7F7F7"
                         width="390"
                         @contextmenu="show($event, sablona)"
                     >
@@ -18,7 +18,7 @@
                         <v-card-text>
                             <v-container>
                                 <v-row>
-                                    <span class="ml-6">
+                                    <span class="pl-6">
                                         <ul>
                                             <li
                                                 v-for="(item, index) in sablona"

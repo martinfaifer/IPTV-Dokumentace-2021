@@ -97,25 +97,33 @@
             <v-dialog v-model="editDeviceDialog" persistent max-width="1000px">
                 <v-card>
                     <v-card-title>
-                        <span class="headline">Upravení zařízení</span>
+                        <span class="headline">Editace zařízení</span>
                     </v-card-title>
                     <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-col cols="12" sm="6" md="6">
+                                <v-col cols="12" sm="12" md="4" lg="4">
                                     <v-text-field
                                         label="Název zařízení*"
                                         v-model="editDeviceData.name"
                                         required
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6">
+                                <v-col cols="12" sm="12" md="4" lg="4">
                                     <v-text-field
                                         v-model="editDeviceData.ip"
                                         label="IP"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6">
+
+                                 <v-col cols="12" sm="12" md="4" lg="4">
+                                    <v-text-field
+                                        v-model="editDeviceData.controller_ip"
+                                        label="IP kontroleru pokud zařízení má"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" sm="12" md="6" lg="6">
                                     <v-text-field
                                         label="Uživatelské jméno"
                                         hint="slouží pro přístup do zařízení"
@@ -124,7 +132,7 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6">
+                                <v-col cols="12" sm="12" md="6" lg="6">
                                     <v-text-field
                                         label="Uživatelské heslo"
                                         hint="slouží pro přístup do zařízení"
@@ -206,20 +214,28 @@
                     <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-col cols="12" sm="6" md="6">
+                                <v-col cols="12" sm="12" md="4" lg="4">
                                     <v-text-field
                                         label="Název zařízení*"
                                         v-model="deviceName"
                                         required
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6">
+                                <v-col cols="12" sm="12" md="4" lg="4">
                                     <v-text-field
                                         v-model="deviceIp"
                                         label="IP"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6">
+                                
+                                <v-col cols="12" sm="12" md="4" lg="4">
+                                    <v-text-field
+                                        v-model="controller_ip"
+                                        label="IP kontroleru pokud zařízení má"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" sm="12" md="6" lg="6">
                                     <v-text-field
                                         label="Uživatelské jméno"
                                         hint="slouží pro přístup do zařízení"
@@ -228,7 +244,7 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6">
+                                <v-col cols="12" sm="12" md="6" lg="6">
                                     <v-text-field
                                         label="Uživatelské heslo"
                                         hint="slouží pro přístup do zařízení"
@@ -338,6 +354,7 @@ export default {
             vendor: "",
             devicePassword: "",
             deviceIp: "",
+            controller_ip: "",
             x: 0,
             y: 0
         };
@@ -392,6 +409,7 @@ export default {
                     deviceId: this.deviceId,
                     name: this.editDeviceData.name,
                     ip: this.editDeviceData.ip,
+                    controller_ip: this.editDeviceData.controller_ip,
                     login_password: this.editDeviceData.login_password,
                     login_user: this.editDeviceData.login_user,
 
@@ -462,6 +480,7 @@ export default {
                     vendor: this.vendor,
                     category: this.category,
                     deviceIp: this.deviceIp,
+                    controller_ip: this.controller_ip,
                     interfaces: this.interfaces,
                     addToTranscoderController: this.addToTranscoderController,
                     transcoderIp: this.transcoderIp

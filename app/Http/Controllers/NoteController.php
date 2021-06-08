@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+use App\Traits\NotificationTrait;
 
 class NoteController extends Controller
 {
+
+    use NotificationTrait;
+
     public static function delete_all_notes_by_channelId(string $channelId): void
     {
         if (Note::where('channelId', $channelId)->first()) {
@@ -29,56 +36,35 @@ class NoteController extends Controller
 
     public function create(Request $request): array
     {
-        if (
-            is_null($request->note) || empty($request->note) ||
-            is_null($request->id) || empty($request->id)
-        ) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Nepodařilo se založit poznámku"
-                )
-            ];
+        $validation = Validator::make($request->all(), [
+            'note' => ['required'],
+            'id' => ['required'],
+        ]);
+
+        if ($validation->fails()) {
+            return $this->frontend_notification("error", "error", "Nepodařilo se založit poznámku");
         }
 
         Note::create(
             [
                 'poznamka' => $request->note,
-                'channelId' => $request->id
+                'channelId' => $request->id,
+                'creator' => Auth::user()->email
             ]
         );
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Poznámka vytvořena"
-            )
-        ];
+        return $this->frontend_notification("success", "success", "Poznámka vytvořena");
     }
 
 
     public function delete(Request $request): array
     {
         if (!$note = Note::find($request->noteId)) {
-            return [
-                'status' => "error",
-                'alert' => array(
-                    'status' => "error",
-                    'msg' => "Poznámka neexistuje"
-                )
-            ];
+            $this->frontend_notification("error", "error", "Poznmka neexistuje!");
         }
         $note->delete();
 
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Poznámka odebrána"
-            )
-        ];
+        return $this->frontend_notification("success", "success", "Poznámka odebrána");
     }
 
 
@@ -110,6 +96,8 @@ class NoteController extends Controller
             $output[] = array(
                 'id' => $note->id,
                 'poznamka' => $note->poznamka,
+                'creator' => $note->creator,
+                'created_at' => $note->created_at
             );
         }
 

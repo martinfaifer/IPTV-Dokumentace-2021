@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChannelToDohled;
 use App\Models\H264;
 use App\Models\H265;
 use App\Models\UnicastKvalitaChannelOutput;
 use App\Models\UnicastKvality;
 use Illuminate\Http\Request;
+use App\Traits\NotificationTrait;
+use Illuminate\Support\Facades\Validator;
 
 class UnicastKvalitaChannelOutputController extends Controller
 {
+    use NotificationTrait;
 
     public static function h264_update(Request $request): array
     {
-
-        // validace
         if (
             is_null($request->p1080) &&
             is_null($request->p720) &&
@@ -22,7 +24,7 @@ class UnicastKvalitaChannelOutputController extends Controller
             is_null($request->p404)
         ) {
 
-            return NotificationController::notify("error", "error", "Musí být vyplněna aspoň jedna kvalita!");
+            return self::frontend_notification("error", "error", "Musí být vyplněna aspoň jedna kvalita!");
         }
 
         $h264 = H264::where('channelId', $request->channelId)->first();
@@ -124,13 +126,7 @@ class UnicastKvalitaChannelOutputController extends Controller
         }
 
         // ---------------------------------------------------------------------------
-        return [
-            'status' => "success",
-            'alert' => array(
-                'status' => "success",
-                'msg' => "Upraveny Kvality"
-            )
-        ];
+        return self::frontend_notification("success", "success", "Upraveno!");
     }
 
     public function return_h264_output_for_edit(Request $request): array
@@ -215,7 +211,8 @@ class UnicastKvalitaChannelOutputController extends Controller
             // $data->kvalitaId
             $output[] = array(
                 "format" => UnicastKvality::where('id', $data->kvalitaId)->first()->kvalita,
-                'output' => $data->output
+                'output' => $data->output,
+                'in_dohled' => ChannelToDohledController::check_if_exist($data->output)
             );
         }
 

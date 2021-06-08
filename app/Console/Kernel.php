@@ -25,14 +25,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('dohled:getStatuses_andTryToReboot')->runInBackground()->everyMinute(); // získání statusů streamů z dohledu, včetně uatomatického pokusu o restart
-        $schedule->command('events:delete')->dailyAt('01:00')->runInBackground();
+        // $schedule->command('events:delete')->dailyAt('01:00')->runInBackground();
         $schedule->command('channel:autoReboot')->dailyAt('04:00')->runInBackground(); // automatický restart specifických kanálů na transcoderech tyku q0x
 
-        $schedule->command('transcoder:fillStreamId')->hourly()->runInBackground(); // vyhledávání vazeb na transcoderech
-        $schedule->command('channels:fillIdFromDohled')->daily()->runInBackground(); // vyhledávání vazeb kanálů na dohledu
-        $schedule->command('tag:autoFill')->hourly()->runInBackground();
+        $schedule->command('dohled:try_find')->hourly()->runInBackground();
 
-        $schedule->command('unicast:findTranscoderAndCheckBound')->runInBackground()->hourly(); // kontrola vazeb
+        $schedule->command('transcoder:fillStreamId')->hourly()->runInBackground(); // vyhledávání vazeb na transcoderech
+        // $schedule->command('channels:fillIdFromDohled')->daily()->runInBackground(); // vyhledávání vazeb kanálů na dohledu
+        $schedule->command('tag:add_dohled_tag')->hourly()->runInBackground();
+
+        // $schedule->command('unicast:findTranscoderAndCheckBound')->runInBackground()->hourly(); // kontrola vazeb
     }
 
     /**

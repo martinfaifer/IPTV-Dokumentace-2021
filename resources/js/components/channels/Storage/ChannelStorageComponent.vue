@@ -1,5 +1,5 @@
 <template>
-    <v-main>
+    <v-main style="background-color: #F1F5F9">
         <v-container fluid class="ml-3">
             <div class="mr-15" @contextmenu="show($event)">
                 <v-row>
@@ -21,7 +21,7 @@
             <div>
                 <v-row class="mt-4 mr-15">
                     <v-container fluid>
-                        <v-card flat class="mr-15">
+                        <v-card flat class="mr-10" color="white">
                             <v-card-title>
                                 <v-text-field
                                     v-model="search"
@@ -37,6 +37,7 @@
                             </v-card-title>
                             <v-data-table
                                 no-data-text="Neexistují žádné soubory u kanálu"
+                                dense
                                 :headers="headers"
                                 :items="files"
                                 :search="search"

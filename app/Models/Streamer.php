@@ -9,7 +9,6 @@ class Streamer extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'streamer_name',
-        'streamer_ip'
+        'streamer_name', 'streamer_ip', 'local_ip'
     ];
 }

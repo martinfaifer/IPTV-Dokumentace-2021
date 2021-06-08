@@ -1,10 +1,10 @@
 <template>
-    <v-main>
-        <v-container fluid class="ml-3">
-            <div class="mr-15">
+    <v-main style="background-color: #F1F5F9">
+        <v-container fluid class="pl-3" style="background-color: #F1F5F9">
+            <div class="pr-5">
                 <!-- Zobrazení názvu kanálu -->
                 <v-row>
-                    <v-col cols="12" sm="4" md="1" lg="1" v-if="logo != null">
+                    <v-col cols="12" sm="1" md="1" lg="1" v-if="logo != null">
                         <v-img
                             :lazy-src="logo"
                             max-height="64"
@@ -12,48 +12,58 @@
                             :src="logo"
                         ></v-img>
                     </v-col>
-                    <v-col cols="12" sm="8" md="11" lg="11"
-                        ><h2 class="mt-6">
+                    <v-col cols="12" sm="11" md="11" lg="11">
+                        <h2 class="mt-6">
                             {{ channelName }}
-                        </h2></v-col
-                    >
+                        </h2>
+                    </v-col>
                 </v-row>
-                <v-divider inline> </v-divider>
+                <v-divider> </v-divider>
             </div>
 
-            <v-row class="mr-15 mt-6">
+            <v-row class="pr-5 pt-6">
                 <v-col cols="12" sm="12" lg="12" md="12">
                     <!-- component pro nacteni zdroje multicastu -->
                     <multicast-component></multicast-component>
                 </v-col>
             </v-row>
 
-            <v-row class="mt-6 mr-15">
-                <chunkstoreid-component></chunkstoreid-component>
+            <v-row class="pt-4 pr-5">
+                <v-col cols="12" sm="12" md="4" lg="4">
+                    <!-- komponent chunkstoreid uz nedává vylozene smysl, byl prejmenován na nangu komponent protoze udrzuje v sobe informace o chunkstoreId a channel_code, který slouzí k vyhledání kanálu v xml nangu -->
+                    <nangu-component></nangu-component>
+                </v-col>
+                <v-col cols="12" sm="12" md="8" lg="8">
+                    <history-component></history-component>
+                </v-col>
             </v-row>
 
-            <v-row class="mt-6 mr-15">
-                <!-- multiplexor component -->
-                <multiplexor-component></multiplexor-component>
-
-                <!-- source component -->
-                <source-component></source-component>
-
-                <!-- backup component -->
-                <backup-component></backup-component>
+            <v-row class="pr-5">
+                <v-col cols="12" sm="12" md="4" lg="4">
+                    <!-- multiplexor component -->
+                    <multiplexor-component></multiplexor-component>
+                </v-col>
+                <v-col cols="12" sm="12" md="4" lg="4">
+                    <!-- source component -->
+                    <source-component></source-component>
+                </v-col>
+                <v-col cols="12" sm="12" md="4" lg="4">
+                    <!-- backup component -->
+                    <backup-component></backup-component>
+                </v-col>
             </v-row>
 
-            <v-row class="mt-6 mr-15">
-                <v-col>
+            <v-row class="pt-4 pr-5">
+                <v-col cols="12" sm="12" md="6" lg="6">
                     <!-- kalendar component -->
                     <calendar-component></calendar-component>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="12" md="6" lg="6">
                     <!-- note component -->
                     <note-component></note-component>
                 </v-col>
             </v-row>
-            <v-row class="mr-15">
+            <v-row class="pr-5">
                 <v-col cols="12" sm="12" lg="12" md="12">
                     <!-- kontakt  -->
                     <contact-component></contact-component>
@@ -61,7 +71,7 @@
             </v-row>
 
             <!-- TEST napojení na dohled -->
-            <v-row class=" mt-6 mr-15">
+            <v-row class="pt-4 pr-5">
                 <v-col>
                     <dohled-component></dohled-component>
                 </v-col>
@@ -79,6 +89,7 @@ import NoteComponent from "./Multicast/_noteComponent";
 import ChunkStoreIdComponent from "./Multicast/_chunkStoreIdComponent";
 import ContactComponent from "../Contacts/ContactComponent";
 import TestDohledComponent from "./Dohled/TestDohledComponent";
+import HistoryComponent from "../History/HistoryComponent";
 export default {
     data() {
         return {
@@ -93,13 +104,17 @@ export default {
         "backup-component": BackupComponent,
         "calendar-component": CalendarComponent,
         "note-component": NoteComponent,
-        "chunkstoreid-component": ChunkStoreIdComponent,
+        "nangu-component": ChunkStoreIdComponent,
         "contact-component": ContactComponent,
-        "dohled-component": TestDohledComponent
+        "dohled-component": TestDohledComponent,
+        "history-component": HistoryComponent
     },
     created() {
         this.loadChannelNameById();
         this.loadChannelLogo();
+        this.$router
+            .push("/channel/" + this.$route.params.id + "/multicast")
+            .catch(err => {});
     },
     methods: {
         async loadChannelNameById() {
@@ -117,7 +132,7 @@ export default {
                     channelId: this.$route.params.id
                 })
                 .then(response => {
-                    if(response.data === 'not_exist') {
+                    if (response.data === "not_exist") {
                         this.logo = null;
                     } else {
                         this.logo = response.data;
@@ -129,6 +144,9 @@ export default {
         $route(to, from) {
             this.loadChannelNameById();
             this.loadChannelLogo();
+            this.$router
+                .push("/channel/" + this.$route.params.id + "/multicast")
+                .catch(err => {});
         }
     }
 };

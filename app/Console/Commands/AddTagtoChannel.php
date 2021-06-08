@@ -12,7 +12,7 @@ class AddTagtoChannel extends Command
      *
      * @var string
      */
-    protected $signature = 'tag:autoFill';
+    protected $signature = 'tag:add_dohled_tag';
 
     /**
      * The console command description.

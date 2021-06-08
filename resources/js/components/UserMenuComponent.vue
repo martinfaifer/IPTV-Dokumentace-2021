@@ -30,6 +30,11 @@ export default {
                     icon: "mdi-lock",
                     route: "/password"
                 },
+                {
+                    title: "Nahrát foto ",
+                    icon: "mdi-account",
+                    route: "/photo"
+                },
             ]
         };
     },

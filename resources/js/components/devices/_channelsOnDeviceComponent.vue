@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card flat v-if="channels != null" class="mr-10">
+        <v-card flat v-if="channels != null" class="pr-5">
             <v-card-text>
                 <v-text-field
                     v-model="search"

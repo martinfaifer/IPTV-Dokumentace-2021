@@ -22,11 +22,12 @@
                                         >
                                     </v-list-item-icon>
                                     <v-list-item-content>
-                                        <v-list-item-title
-                                            v-html="event.channel"
+                                        <v-list-item-title class="headline"
+                                            v-html="event.title"
                                         ></v-list-item-title>
+                                        <v-divider ></v-divider>
                                         <v-list-item-subtitle
-                                            class="pl-3"
+                                            class="pl-3 mt-3"
                                             v-html="event.note"
                                         ></v-list-item-subtitle>
                                     </v-list-item-content>

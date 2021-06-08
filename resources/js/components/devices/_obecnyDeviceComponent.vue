@@ -1,35 +1,35 @@
 <template>
-    <v-main>
-        <v-container fluid class="ml-3 mr-15">
-            <div class="mr-15">
+    <v-main style="background-color: #F1F5F9">
+        <v-container fluid class="pl-3 pr-5">
+            <div class="pr-5">
                 <!-- Zobrazení názvu zařízení -->
                 <h2>{{ deviceName }}</h2>
-                <v-divider class="mr-15" inline> </v-divider>
+                <v-divider class="pr-5" inline> </v-divider>
             </div>
 
-            <v-row class="mt-4 mr-15" v-if="deviceVendor === 'nVidia'">
+            <v-row class="pt-1 pr-5" v-if="deviceVendor === 'nVidia'">
                 <v-col cols="12">
                     <!-- informace o transcoerech / hw usage -->
                     <transcoder-compoennt></transcoder-compoennt>
                 </v-col>
             </v-row>
 
-            <v-row class=" mt-6 mr-15">
-                <v-col>
+            <v-row class="pt-5 pr-5">
+                <v-col cols="12">
                     <!-- component pro nacteni zobecných informací -->
                     <deviceinformation-component></deviceinformation-component>
                 </v-col>
             </v-row>
 
-            <v-row class=" mt-4 mr-15">
-                <v-col>
+            <v-row class="pt-1 pr-5">
+                <v-col cols="12">
                     <!-- component pro nacteni zobecných informací -->
                     <interfaces-component></interfaces-component>
                 </v-col>
             </v-row>
 
-            <v-row class="mt-4 mr-15">
-                <v-col>
+            <v-row class="pt-1 pr-5">
+                <v-col cols="12">
                     <!-- sablona component -->
                     <blankominputs-component
                         v-if="deviceVendor === 'Blankom'"
@@ -44,8 +44,8 @@
             </v-row>
 
             <!-- kanály na zarizení -->
-            <v-row class="mt-4 mr-15">
-                <v-col>
+            <v-row class="pt-1 pr-5">
+                <v-col cols="12">
                     <!-- channels component -->
                     <channelsondevice-component></channelsondevice-component>
                 </v-col>

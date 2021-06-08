@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-card flat class="mr-15">
+        <v-card flat class="pr-5">
             <v-card-title>
                 <v-text-field
                     v-model="search"
-                    append-icon="mdi-magnify"
+                    prepend-inner-icon="mdi-magnify"
                     label="Vyhledat endpoint"
                     single-line
                     hide-details

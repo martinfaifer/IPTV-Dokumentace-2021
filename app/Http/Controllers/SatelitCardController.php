@@ -7,9 +7,13 @@ use App\Models\Device;
 use App\Models\FteInterface;
 use App\Models\SatelitCard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Traits\NotificationTrait;
 
 class SatelitCardController extends Controller
 {
+    use NotificationTrait;
     public function return_all(): array
     {
         if (!SatelitCard::first()) {
@@ -73,12 +77,11 @@ class SatelitCardController extends Controller
 
     public function create(Request $request): array
     {
-        if (is_null($request->cardNumber) || empty($request->cardNumber)) {
-            return NotificationController::notify("error", "error", "Pole nesmí být prázdé");
-        }
-
-        if (SatelitCard::where('card_number', $request->cardNumber)->first()) {
-            return NotificationController::notify("error", "error", "Karta již je registrována");
+        $validation = Validator::make($request->all(), [
+            'cardNumber' => ['required', 'unique:App\Models\SatelitCard,card_number']
+        ]);
+        if ($validation->fails()) {
+            return $this->frontend_notification("error", "error", "Karta není vyplněna nebo již existuje!");
         }
 
         try {
@@ -87,9 +90,11 @@ class SatelitCardController extends Controller
                     'card_number' => $request->cardNumber
                 ]
             );
-            return NotificationController::notify("success", "success", "Založeno");
+
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "vytvořil kartu", $request->cardNumber);
+            return $this->frontend_notification("success", "success", "Založeno");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 
@@ -97,14 +102,15 @@ class SatelitCardController extends Controller
     public function remove(Request $request): array
     {
         if (!$card = SatelitCard::find($request->cardId)) {
-            return NotificationController::notify("error", "error", "Neexistuje karta s tímto ID");
+            return $this->frontend_notification("error", "error", "Neexistuje karta s tímto ID");
         }
 
         try {
             $card->delete();
-            return NotificationController::notify("success", "success", "Karta odebrána");
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral kartu", $card->card_number);
+            return $this->frontend_notification("success", "success", "Odebráno");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return $this->frontend_notification();
         }
     }
 }

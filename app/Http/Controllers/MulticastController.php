@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendNotificationJob;
+use App\Models\Channel;
 use App\Models\Multicast;
 use App\Models\MulticastSource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\NotificationTrait;
 
 class MulticastController extends Controller
 {
+    use NotificationTrait;
     public string $channelId;
     public array $result = [
         'status' => "empty"
@@ -229,7 +234,9 @@ class MulticastController extends Controller
             );
         }
 
-        return NotificationController::notify("success", "success", "Kanál byl upraven!", $request->channelId);
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "vytvořil ", Channel::find($request->channelId)->nazev);
+
+        return self::frontend_notification("success", "success", "Kanál byl  vytvořen!", $request->channelId);
     }
 
     public static function update(Request $request): array
@@ -239,7 +246,17 @@ class MulticastController extends Controller
             is_null($request->backup_multicast_ip) || empty($request->backup_multicast_ip)
         ) {
 
-            Multicast::where('channelId', $request->channelId)->where('isBackup', null)->update(
+            $multicast_without_backup = Multicast::where('channelId', $request->channelId)->where('isBackup', null)->first();
+
+            if ($multicast_without_backup->multicast_ip != $request->multicast_ip) {
+                LogController::create_new_log(Auth::user()->email, $request->channelId, null, null, null, "multicast IP změněna z " . $multicast_without_backup->multicast_ip, "na " . $request->multicast_ip);
+            }
+
+            if ($multicast_without_backup->stb_ip != $request->stb_ip) {
+                LogController::create_new_log(Auth::user()->email, $request->channelId, null, null, null, "STB IP změněna z " . $multicast_without_backup->stb_ip, "na " . $request->stb_ip);
+            }
+
+            $multicast_without_backup->update(
                 [
                     'stb_ip' => $request->stb_ip,
                     'multicast_ip' => $request->multicast_ip,
@@ -286,15 +303,15 @@ class MulticastController extends Controller
             }
         }
 
-        return NotificationController::notify("success", "success", "Kanál byl upraven!");
+        BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil", Channel::find($request->channelId)->nazev);
+
+        return self::frontend_notification("success", "success", "Upraveno!");
     }
 
 
     public static function update_multiplexor($multiplexorId, $channelId): array
     {
-
         try {
-
             // vyhledání záznamu pro update a aktualizace záznamu
             Multicast::where('channelId', $channelId)->where('isBackup', null)->update(
                 [
@@ -302,9 +319,11 @@ class MulticastController extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Kanál byl upraven!", $channelId);
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil", Channel::find($channelId)->nazev);
+
+            return self::frontend_notification("success", "success", "Upraveno!", $channelId);
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return self::frontend_notification();
         }
     }
 
@@ -317,7 +336,6 @@ class MulticastController extends Controller
      */
     public static function update_prijem(string $deviceId, string  $channelId, $interfaces): array
     {
-
         try {
 
             if (is_null($interfaces)) {
@@ -339,9 +357,11 @@ class MulticastController extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Kanál byl upraven!", $channelId);
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil", Channel::find($channelId)->nazev);
+
+            return self::frontend_notification("success", "success", "Upraveno!", $channelId);
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return self::frontend_notification();
         }
     }
 
@@ -369,9 +389,11 @@ class MulticastController extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Kanál byl upraven!", $channelId);
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "upravil", Channel::find($channelId)->nazev);
+
+            return self::frontend_notification("success", "success", "Upraveno!", $channelId);
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return self::frontend_notification();
         }
     }
 
@@ -391,9 +413,11 @@ class MulticastController extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Kanál byl upraven!");
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral multiplexor u ", Channel::find($request->channelId)->nazev);
+
+            return self::frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return self::frontend_notification();
         }
     }
 
@@ -408,9 +432,11 @@ class MulticastController extends Controller
                 ]
             );
 
-            return NotificationController::notify("success", "success", "Kanál byl upraven!");
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral přijímač u ", Channel::find($request->channelId)->nazev);
+
+            return self::frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return self::frontend_notification();
         }
     }
 
@@ -425,10 +451,11 @@ class MulticastController extends Controller
                 ]
             );
 
+            BroadcastController::broadcast_notification_when_user_change_something(Auth::user()->name, "odebral zálohu u ", Channel::find($request->channelId)->nazev);
 
-            return NotificationController::notify("success", "success", "Kanál byl upraven!");
+            return self::frontend_notification("success", "success", "Upraveno!");
         } catch (\Throwable $th) {
-            return NotificationController::notify();
+            return self::frontend_notification();
         }
     }
 

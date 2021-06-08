@@ -9,6 +9,14 @@ import Vue from "vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
 
+import VueApexCharts from "vue-apexcharts";
+Vue.use(VueApexCharts);
+Vue.component("apexchart", VueApexCharts);
+
+import CKEditor from "@ckeditor/ckeditor5-vue2";
+
+Vue.use(CKEditor);
+
 Vue.use(VueAxios, axios);
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -48,6 +56,10 @@ let routes = [
                         component: ChannelComponent
                     },
                     {
+                        path: "/channel/:id/multicast",
+                        component: ChannelComponent
+                    },
+                    {
                         path: "/channel/:id/h264",
                         component: ChannelComponent
                     },
@@ -61,6 +73,10 @@ let routes = [
                     },
                     {
                         path: "/channel/:id/storage",
+                        component: ChannelComponent
+                    },
+                    {
+                        path: "/channel/:id/nangu",
                         component: ChannelComponent
                     }
                 ]

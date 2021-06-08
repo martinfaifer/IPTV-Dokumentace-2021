@@ -44,21 +44,34 @@
         </v-tooltip>
 
         <v-dialog v-model="searchDialogInput" width="500">
-            <v-card>
+            <v-card class="pt-3">
                 <v-card-text>
-                    <v-autocomplete
+                    <v-text-field
+                        :loading="loading"
                         autofocus
+                        label="Vyhledávání"
                         v-model.lazy="model"
-                        :items.sync="entries"
-                        hide-no-data
-                        hide-selecte
-                        item-text="result"
-                        item-value="url"
-                        placeholder="Vyhledejte v dokumentaci ... "
-                        prepend-inner-icon="mdi-magnify"
-                        return-object
-                    >
-                    </v-autocomplete>
+                    ></v-text-field>
+                    <v-list v-if="results.length > 0">
+                        <v-list-item
+                            v-for="result in results"
+                            :key="result.id"
+                            link
+                            :to="result.url"
+                            @click="close_search()"
+                        >
+                            <v-list-item-avatar>
+                                <v-img :src="result.logo"></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title v-html="result.nazev">
+                                </v-list-item-title>
+                                <v-list-item-subtitle
+                                    v-html="result.description"
+                                ></v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -168,6 +181,7 @@ export default {
             filterData: [],
             filterByFilter: null,
             filteredResult: null,
+            results: [],
             searchInTable: "",
             headers: [
                 {
@@ -187,6 +201,7 @@ export default {
             descriptionLimit: 60,
             entries: [],
             isLoading: false,
+            loading: false,
             model: null,
             search: null
         };
@@ -194,13 +209,20 @@ export default {
     created() {},
     methods: {
         searchDialog() {
-            this.searchDialogInput = true;
-            this.search = null;
             this.model = null;
+            this.searchDialogInput = true;
+        },
 
-            axios.get("search").then(response => {
-                this.entries = response.data.entries;
-            });
+        fn_search() {
+            this.loading = true;
+            axios
+                .post("search", {
+                    search: this.model
+                })
+                .then(response => {
+                    this.loading = false;
+                    this.results = response.data;
+                });
         },
         searchForCurrentFilter() {
             axios
@@ -222,6 +244,9 @@ export default {
                 .then(response => {
                     this.filteredResult = response.data;
                 });
+        },
+        close_search() {
+            this.searchDialogInput = false;
         }
     },
     mounted() {
@@ -234,15 +259,8 @@ export default {
         });
     },
     watch: {
-        model() {
-            if (this.model == undefined) {
-                // nic
-            } else {
-                this.$router.push("/channel");
-                this.$router.push("/" + this.model.url);
-                this.searchDialogInput = false;
-                this.model = null;
-            }
+        model(after, before) {
+            this.fn_search();
         }
     }
 };

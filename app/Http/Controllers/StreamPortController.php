@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\StreamPort;
 use Illuminate\Http\Request;
+use App\Traits\NotificationTrait;
 
 class StreamPortController extends Controller
 {
+    use NotificationTrait;
+
     public function index(): array
     {
         return (!StreamPort::exists()) ? [] : StreamPort::all()->toArray();
@@ -21,28 +24,29 @@ class StreamPortController extends Controller
     public function destroy(Request $request): array
     {
         if (!$port = StreamPort::find($request->id)) {
-            return NotificationController::notify("error", "error", "Položka nenalezena!");
+            return $this->frontend_notification("error", "error", "Položka nenalezena!");
         }
 
         $port->delete();
 
-        return NotificationController::notify("success", "success", "Smazáno!");
+        return $this->frontend_notification("success", "success", "Odebráno!");
     }
 
     public function create(Request $request): array
     {
-
         if (
-            empty($request->port_nuber) || empty($request->port_desc) || empty($request->port_output)
+            empty($request->port_nuber) || empty($request->port_desc) || empty($request->port_output) || empty($request->device)
         ) {
-            return NotificationController::notify("error", "error", "Musí být vše vyplněno!");
+            return $this->frontend_notification("error", "error", "Musí být vše vyplněno!");
         }
 
-
         StreamPort::create([
-            $request->all()
+            'port_nuber' => $request->port_nuber,
+            'port_output' => $request->port_output,
+            'port_desc' => $request->port_desc,
+            'device' => $request->device
         ]);
 
-        return NotificationController::notify("success", "success", "Vytvořeno");
+        return $this->frontend_notification("success", "success", "Vytvořeno");
     }
 }

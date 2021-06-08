@@ -1,12 +1,12 @@
 <template>
     <v-main>
-        <div v-if="interfaces != null" class="mr-10 mr-15">
+        <div v-if="interfaces != null" class="pr-5 pt-1">
             <v-row>
                 <!-- PowerVu -->
                 <v-col>
                     <v-card
                         flat
-                        color="#F5F5F7"
+                        color="white"
                         @contextmenu="
                             show(
                                 $event,

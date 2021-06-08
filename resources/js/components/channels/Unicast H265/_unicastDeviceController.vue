@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card flat color="#F5F5F7" @contextmenu="show($event)">
+        <v-card flat color="white" @contextmenu="show($event)" height="350">
             <v-card-subtitle>
                 <strong>
                     Transcodér
@@ -11,17 +11,6 @@
                     <v-row v-if="transcoder != null">
                         <span class="ml-6">
                             {{ transcoder.name }}
-                            <!-- info -->
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on }">
-                                    <v-btn small icon>
-                                        <v-icon small v-on="on">
-                                            mdi-information
-                                        </v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Rychlá informace o zařízení</span>
-                            </v-tooltip>
                             <!-- hyperlink na device -->
                             <v-tooltip bottom v-if="transcoder.ip != null">
                                 <template v-slot:activator="{ on }">
@@ -83,7 +72,9 @@
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                             icon
-                                            @click="openInformationDialog('stop')"
+                                            @click="
+                                                openInformationDialog('stop')
+                                            "
                                         >
                                             <v-icon small color="red" v-on="on">
                                                 mdi-stop
@@ -110,7 +101,9 @@
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                             icon
-                                            @click="openInformationDialog('start')"
+                                            @click="
+                                                openInformationDialog('start')
+                                            "
                                         >
                                             <v-icon
                                                 small
@@ -132,6 +125,242 @@
                                     </strong>
                                 </span>
                             </span>
+                        </v-col>
+                        <v-col cols="12" class="ml-3" v-else>
+                            <span>
+                                <span class="red--text">
+                                    <strong>
+                                        Napodařilo se získat vzdálenou kontrolu
+                                    </strong>
+                                </span>
+                            </span>
+                        </v-col>
+                        <v-col v-if="transcoderData != null" class="mr-6">
+                            <v-row
+                                class="justify-center body-2 mt-3"
+                                v-if="transcoderData != null"
+                            >
+                                <v-col sm="12" md="3" lg="3">
+                                    <div v-if="ramPercent < '75'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="ramPercent"
+                                            color="green"
+                                        >
+                                            <small>
+                                                <strong>
+                                                    Volná RAM
+                                                    {{ ramUsage.free }}
+                                                </strong>
+                                            </small>
+                                        </v-progress-circular>
+                                    </div>
+                                    <div
+                                        v-if="
+                                            ramPercent >= '75' &&
+                                                ramPercent < '88'
+                                        "
+                                    >
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="ramPercent"
+                                            color="orange"
+                                        >
+                                            <small>
+                                                <strong>
+                                                    Volná RAM
+                                                    {{ ramUsage.free }}
+                                                </strong>
+                                            </small>
+                                        </v-progress-circular>
+                                    </div>
+                                    <div v-if="ramPercent >= '88'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="ramPercent"
+                                            color="red"
+                                        >
+                                            <small>
+                                                <strong>
+                                                    Volná RAM
+                                                    {{ ramUsage.free }}
+                                                </strong>
+                                            </small>
+                                        </v-progress-circular>
+                                    </div>
+                                </v-col>
+
+                                <v-col
+                                    sm="12"
+                                    md="3"
+                                    lg="3"
+                                    v-for="encoder in gpuStat.gpu"
+                                    v-bind:key="encoder.id"
+                                    v-show="encoder.encoder_util"
+                                >
+                                    <div v-if="encoder.encoder_util <= '75 %'">
+                                        <v-progress-circular
+                                            class="mt-2 "
+                                            :size="130"
+                                            :width="2"
+                                            :value="encoder.encoder_util"
+                                            color="green"
+                                        >
+                                            <strong>
+                                                Encoder
+                                                {{ encoder.encoder_util }}
+                                            </strong>
+                                        </v-progress-circular>
+                                    </div>
+                                    <div
+                                        v-if="
+                                            encoder.encoder_util > '75 %' &&
+                                                encoder.encoder_util < '88 %'
+                                        "
+                                    >
+                                        <v-progress-circular
+                                            class="mt-2 "
+                                            :size="130"
+                                            :width="2"
+                                            :value="encoder.encoder_util"
+                                            color="orange"
+                                            ><strong>
+                                                Encoder
+                                                {{ encoder.encoder_util }}
+                                            </strong></v-progress-circular
+                                        >
+                                    </div>
+                                    <div v-if="encoder.encoder_util >= '88 %'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="encoder.encoder_util"
+                                            color="red"
+                                            ><strong>
+                                                Encoder
+                                                {{ encoder.encoder_util }}
+                                            </strong></v-progress-circular
+                                        >
+                                    </div>
+                                </v-col>
+                                <!-- Decoder -->
+                                <v-col
+                                    sm="12"
+                                    md="3"
+                                    lg="3"
+                                    v-for="decoder in gpuStat.gpu"
+                                    v-bind:key="decoder.id"
+                                    v-show="decoder.decoder_util"
+                                >
+                                    <div v-if="decoder.decoder_util <= '75 %'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="decoder.decoder_util"
+                                            color="green"
+                                        >
+                                            <strong>
+                                                Decoder
+                                                {{ decoder.decoder_util }}
+                                            </strong>
+                                        </v-progress-circular>
+                                    </div>
+                                    <div
+                                        v-if="
+                                            decoder.decoder_util > '75 %' &&
+                                                decoder.decoder_util < '88 %'
+                                        "
+                                    >
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="decoder.decoder_util"
+                                            color="orange"
+                                        >
+                                            <strong>
+                                                Decoder
+                                                {{ decoder.decoder_util }}
+                                            </strong></v-progress-circular
+                                        >
+                                    </div>
+                                    <div v-if="decoder.decoder_util >= '88 %'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="decoder.decoder_util"
+                                            color="red"
+                                        >
+                                            <strong>
+                                                Decoder
+                                                {{ decoder.decoder_util }}
+                                            </strong></v-progress-circular
+                                        >
+                                    </div>
+                                </v-col>
+                                <v-col
+                                    sm="12"
+                                    md="3"
+                                    lg="3"
+                                    v-for="gpu in gpuStat.gpu"
+                                    v-bind:key="gpu.id"
+                                    v-show="gpu.gpu_util"
+                                >
+                                    <div v-if="gpu.gpu_util <= '75 %'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="gpu.gpu_util"
+                                            color="green"
+                                        >
+                                            <strong>
+                                                GPU {{ gpu.gpu_util }}
+                                            </strong>
+                                        </v-progress-circular>
+                                    </div>
+                                    <div
+                                        v-if="
+                                            gpu.gpu_util > '75 %' &&
+                                                gpu.gpu_util < '88 %'
+                                        "
+                                    >
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="gpu.gpu_util"
+                                            color="orange"
+                                        >
+                                            <strong>
+                                                GPU {{ gpu.gpu_util }}
+                                            </strong></v-progress-circular
+                                        >
+                                    </div>
+                                    <div v-if="gpu.gpu_util >= '88 %'">
+                                        <v-progress-circular
+                                            class="mt-2"
+                                            :size="130"
+                                            :width="2"
+                                            :value="gpu.gpu_util"
+                                            color="red"
+                                        >
+                                            <strong>
+                                                GPU {{ gpu.gpu_util }}
+                                            </strong></v-progress-circular
+                                        >
+                                    </div>
+                                </v-col>
+                            </v-row>
                         </v-col>
                     </v-row>
                     <v-row v-else>
@@ -257,14 +486,81 @@ export default {
             showMenu: false,
             outputDialog: false,
             x: 0,
-            y: 0
+            y: 0,
+            transcoderData: null,
+            gpuStat: "",
+            ramUsage: "",
+            ramTotal: "",
+            ramUsed: "",
+            ramPercent: "",
+            loadingInterval: null
         };
     },
     created() {
         this.loadTranscoder();
         this.loadStatusFromTramscoder();
     },
+    mounted() {
+        this.loadingInterval = setInterval(
+            function() {
+                this.loadTranscoder();
+            }.bind(this),
+            30000
+        );
+    },
+
     methods: {
+        loadTranscoderData(trasncoderId) {
+            axios
+                .post("device/transcoderData", {
+                    deviceId: trasncoderId
+                })
+                .then(response => {
+                    if (response.data != null) {
+                        this.transcoderData = "string";
+                        if (response.data.gpu) {
+                            if (
+                                typeof response.data.gpu.fb_memory_usage !==
+                                "undefined"
+                            ) {
+                                this.gpuStat = response.data;
+                                if (
+                                    typeof response.data.gpu.fb_memory_usage !==
+                                    "undefined"
+                                ) {
+                                    this.ramUsage =
+                                        response.data.gpu.fb_memory_usage;
+                                    this.ramTotal = this.ramUsage.total.replace(
+                                        " MiB",
+                                        ""
+                                    );
+                                    this.ramUsed = this.ramUsage.used.replace(
+                                        " MiB",
+                                        ""
+                                    );
+                                    this.ramPercent =
+                                        (this.ramUsed * 100) / this.ramTotal;
+                                }
+                            }
+                        } else {
+                            this.transcoderData = null;
+                        }
+                    }
+                });
+        },
+
+        percent(used, total) {
+            if (used && total) {
+                let ramUsage = used;
+                let ramTotal = total;
+                let ramPercent;
+                ramUsage = ramUsage.replace(" MiB", "");
+                ramTotal = ramTotal.replace(" MiB", "");
+
+                ramPercent = (parseInt(ramUsage) * 100) / parseInt(ramTotal);
+                return parseInt(ramPercent);
+            }
+        },
         openInformationDialog(akce) {
             this.InformationDialog = true;
             this.transcoderAction = akce;
@@ -274,14 +570,16 @@ export default {
             this.transcoderAction = null;
         },
         async sendInformationDialog() {
-            await axios.post('h265/transcoder/manageStream', {
-                channelId: this.$route.params.id,
-                transcoderAction: this.transcoderAction
-            }).then(response => {
-                this.$store.state.alerts = response.data;
-                this.InformationDialog = false;
-                this.loadStatusFromTramscoder();
-            })
+            await axios
+                .post("h265/transcoder/manageStream", {
+                    channelId: this.$route.params.id,
+                    transcoderAction: this.transcoderAction
+                })
+                .then(response => {
+                    this.$store.state.alerts = response.data;
+                    this.InformationDialog = false;
+                    this.loadStatusFromTramscoder();
+                });
         },
         createOutput() {
             axios.get("device/transcodersAndSatelits").then(response => {
@@ -324,6 +622,7 @@ export default {
                 .then(response => {
                     if (response.data.status === "success") {
                         this.transcoder = response.data.data;
+                        this.loadTranscoderData(this.transcoder.id);
                     } else {
                         this.transcoder = null;
                     }
